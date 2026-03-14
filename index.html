@@ -1,1 +1,212 @@
-Hello, world
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eric Suen - Senior Software Engineer</title>
+  <meta name="description" content="Senior software engineer with 10+ years of experience in Go and Python, building internal platforms and distributed systems at scale.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta property="og:title" content="Eric Suen - Senior Software Engineer">
+  <meta property="og:description" content="Senior software engineer with 10+ years of experience in Go and Python, building internal platforms and distributed systems at scale.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Eric Suen - Senior Software Engineer">
+  <meta name="twitter:description" content="Senior software engineer with 10+ years of experience in Go and Python, building internal platforms and distributed systems at scale.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --text-secondary: #555;
+      --text-tertiary: #888;
+      --accent: #2563eb;
+      --border: #e5e5e5;
+      --bg: #fafafa;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+    }
+
+    /* Header */
+    header {
+      margin-bottom: 56px;
+    }
+
+    h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 2.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 0.9rem;
+    }
+
+    .links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .links a:hover {
+      color: var(--accent);
+    }
+
+    .links .separator {
+      color: var(--border);
+      user-select: none;
+    }
+
+    /* Sections */
+    section {
+      margin-bottom: 48px;
+    }
+
+    h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Projects */
+    .project {
+      margin-bottom: 24px;
+    }
+
+    .project:last-child {
+      margin-bottom: 0;
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 2px;
+    }
+
+    .project-name {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .project-tech {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+    }
+
+    .project-description {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .container {
+        padding: 48px 20px 40px;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+      }
+
+      .project-header {
+        flex-direction: column;
+        gap: 0;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <header>
+      <h1>Eric Suen</h1>
+      <p class="tagline">Senior software engineer &middot; 10+ years in Go and Python &middot; Previously Block, Inc. (formerly Square)</p>
+      <div class="links">
+        <a href="mailto:esuen8@gmail.com">Email</a>
+        <span class="separator">/</span>
+        <a href="https://linkedin.com/in/sueneric" target="_blank" rel="noopener">LinkedIn</a>
+        <span class="separator">/</span>
+        <a href="https://github.com/esuen" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </header>
+
+    <section id="projects">
+      <h2>What I've been building lately</h2>
+
+      <div class="project">
+        <div class="project-header">
+          <span class="project-name"><a href="barbell-5x5.html" style="color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); transition: border-color 0.15s;">Barbell 5x5</a></span>
+          <span class="project-tech">Swift, SwiftUI, iOS, watchOS</span>
+        </div>
+        <p class="project-description">
+          I wanted a simple, opinionated barbell training app and couldn't find one I liked, so I'm building my own. It grew into a full-featured app with 8 built-in programs, HealthKit-powered readiness scoring, a standalone Apple Watch companion, iCloud sync, Live Activities, and 50+ exercises with animated form guides. <a href="barbell-5x5.html" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">See the project &rarr;</a>
+        </p>
+      </div>
+
+      <div class="project">
+        <div class="project-header">
+          <span class="project-name">Pickleball Rally Clipper</span>
+          <span class="project-tech">Python, YOLOv8, OpenCV</span>
+        </div>
+        <p class="project-description">
+          I play a lot of pickleball and got tired of scrubbing through hours of match footage to find key rallies. I'm building a computer vision pipeline that cuts dead time from recordings, identifies shot types (dinks, drives, drops, lobs, overheads, counters), measures ball velocity, and uses pose estimation to compare player form against professional technique. Built on a custom-trained YOLOv8 model with YOLOv8-Pose for joint tracking. In development&mdash;demo coming soon.
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      <p>San Francisco Bay Area</p>
+    </footer>
+
+  </div>
+</body>
+</html>
