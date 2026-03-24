@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astral Rift - Eric Suen</title>
-  <meta name="description" content="A real-time top-down space combat game built in Unreal Engine 5 C++ — 8 ship archetypes, AI bots, black hole physics, and a data-driven map system.">
+  <meta name="description" content="Your health is your ammo. Real-time multiplayer space combat where every shot makes you weaker. 8 ships, AI opponents, black holes, and fog-of-war.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta property="og:title" content="Astral Rift - Eric Suen">
-  <meta property="og:description" content="A real-time multiplayer space combat game built in Unreal Engine 5 — 8 ship archetypes, AI bots, black hole physics, and a data-driven map system.">
+  <meta property="og:description" content="Your health is your ammo. Real-time multiplayer space combat where every shot makes you weaker.">
   <meta property="og:type" content="website">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Astral Rift - Eric Suen">
-  <meta name="twitter:description" content="A real-time multiplayer space combat game built in Unreal Engine 5 — 8 ship archetypes, AI bots, black hole physics, and a data-driven map system.">
+  <meta name="twitter:description" content="Your health is your ammo. Real-time multiplayer space combat where every shot makes you weaker.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -130,6 +130,16 @@
     }
     .screenshot-caption { font-size: 0.8rem; color: var(--text-tertiary); margin-top: 10px; }
 
+    .quick-facts {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+      margin-top: 16px;
+    }
+    .quick-facts span { white-space: nowrap; }
+
     footer {
       margin-top: 48px;
       padding-top: 24px;
@@ -156,7 +166,7 @@
     <header>
       <div class="project-label">Project</div>
       <h1>Astral Rift</h1>
-      <p class="subtitle">A real-time top-down space combat game built in Unreal Engine 5 C++ using AI-assisted development.</p>
+      <p class="subtitle">Your health is your ammo. Real-time space combat where every shot makes you weaker and every decision could be your last.</p>
       <div class="tech-tags">
         <span class="tech-tag">Unreal Engine 5</span>
         <span class="tech-tag">C++</span>
@@ -165,29 +175,28 @@
         <span class="tech-tag">Niagara VFX</span>
         <span class="tech-tag">Gameplay Ability System</span>
       </div>
+      <div class="quick-facts">
+        <span>Top-down multiplayer</span>
+        <span>&middot;</span>
+        <span>1&ndash;8 players + AI</span>
+        <span>&middot;</span>
+        <span>10-minute matches</span>
+        <span>&middot;</span>
+        <span>In development</span>
+      </div>
     </header>
 
     <section>
-      <h2>Why I built this</h2>
-      <p>
-        In the early 2000s, Sony Online Entertainment released Cosmic Rift&mdash;a top-down spaceship combat game where your health and your ammo were the same resource. Every shot you fired made you more vulnerable. That tension&mdash;spend energy to kill, or save it to survive&mdash;produced some of the most compelling competitive gameplay I've experienced. The servers shut down years ago, and nothing replaced it.
-      </p>
-      <p>
-        I built Astral Rift with AI-assisted development. Starting from zero UE5 experience, I went from an empty project to a full combat game with 8 ship types, AI opponents, physics-based black holes, and a complete map system&mdash;all in pure C++, zero Blueprints.
-      </p>
-    </section>
-
-    <section>
       <h2>What it looks like</h2>
-      <p>Screenshots and gameplay video coming soon.</p>
-      <!-- Placeholder for screenshots
+      <p>Gameplay video coming soon.</p>
+      <!-- Placeholder for screenshots/video
       <div class="screenshots">
         <div class="screenshot">
-          <img src="images/astral-rift-combat.png" alt="Combat with black hole and nebula clouds">
+          <img src="images/astral-rift-combat.png" alt="Combat near a black hole">
           <div class="screenshot-caption">Combat near a black hole</div>
         </div>
         <div class="screenshot">
-          <img src="images/astral-rift-minimap.png" alt="Full arena minimap showing the 24K map layout">
+          <img src="images/astral-rift-minimap.png" alt="24K arena with fog-of-war">
           <div class="screenshot-caption">24K arena minimap</div>
         </div>
       </div>
@@ -195,74 +204,83 @@
     </section>
 
     <section>
-      <h2>Game design</h2>
+      <h2>The core tension</h2>
+      <p>
+        Your energy is everything. Health, ammo, and abilities all draw from the same pool. Fire a bullet and you lose health. Activate overdrive and you drain faster. Use a bomb and you might not survive the return fire.
+      </p>
+      <p>
+        This creates a decision loop that never stops: attack now and risk dying, or hold back and let your opponent grow stronger. There's no hiding behind a full health bar&mdash;if you're not spending energy, you're not fighting.
+      </p>
+    </section>
+
+    <section>
+      <h2>How it plays</h2>
       <div class="features">
         <div class="feature">
-          <div class="feature-title">Energy is everything</div>
-          <p class="feature-desc">A unified energy system where health, ammo, and abilities draw from the same pool. Fire a weapon and you lose health. Activate overdrive and you drain faster. Every decision has a cost.</p>
+          <div class="feature-title">Pick your ship</div>
+          <p class="feature-desc">Eight ships, eight playstyles. The Warbird is a precision duelist. The Shark has no guns&mdash;just six mines and a death wish. The Lancaster fires three bullets at once but can't hit anything at range. Each one forces you to fight differently.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">8 ship archetypes</div>
-          <p class="feature-desc">From the Warbird (precision duelist) to the Shark (no guns, six mines). Each ship has unique weapons&mdash;bouncing bombs, shrapnel explosions, EMP blasts that drain energy and suppress regen. Data-driven&mdash;all stats and abilities defined in asset files, not code.</p>
+          <div class="feature-title">The arena fights back</div>
+          <p class="feature-desc">Black holes warp your projectiles and teleport ships that get too close. Nebula clouds create fog-of-war where you can only see what's nearby. Asteroids provide cover&mdash;until someone blows them up.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Environmental hazards</div>
-          <p class="feature-desc">Black holes that curve projectiles and teleport ships. Nebula clouds that create fog-of-war&mdash;hidden ships can only see nearby. Procedural asteroids as destructible cover.</p>
+          <div class="feature-title">AI that adapts</div>
+          <p class="feature-desc">Bot opponents predict your movement, simulate bomb trajectories before firing, retreat into nebula clouds when losing, and set mine traps at chokepoints. They estimate your energy level and push when you're weak.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Bounty system</div>
-          <p class="feature-desc">Kill streaks increase your bounty, making you worth more points but also a bigger target. Natural rubber-banding that keeps matches competitive without artificial handicaps.</p>
+          <div class="feature-title">Risk and reward</div>
+          <p class="feature-desc">Kill streaks increase your bounty, making you worth more points&mdash;but also a bigger target. Pick up items to gain charges for devastating abilities like MIRV missiles and repulsor blasts. Every advantage paints a target on your back.</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>Technical highlights</h2>
+      <h2>The backstory</h2>
+      <p>
+        In the early 2000s, Sony Online Entertainment released Cosmic Rift&mdash;a top-down spaceship combat game where your health and your ammo were the same resource. Every shot you fired made you more vulnerable. That tension&mdash;spend energy to kill, or save it to survive&mdash;produced some of the most compelling competitive gameplay I've experienced. The servers shut down years ago, and nothing replaced it.
+      </p>
+      <p>
+        Astral Rift is my attempt to bring that feeling back. Same core tension, modern engine, new mechanics.
+      </p>
+    </section>
+
+    <section>
+      <h2>Under the hood</h2>
+      <p>
+        Built entirely in C++ on Unreal Engine 5.7&mdash;no Blueprints, no visual scripting. AI-assisted development let me operate at the pace of a small team while maintaining full control over architecture and design.
+      </p>
       <div class="features">
-        <div class="feature">
-          <div class="feature-title">Pure C++ on UE5</div>
-          <p class="feature-desc">Zero Blueprints. Full Gameplay Ability System integration&mdash;energy as a GAS attribute, weapons and items as GameplayAbilities, damage via GameplayEffects, state queries via GameplayTags.</p>
-        </div>
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">6-state utility AI with Reynolds steering behaviors, predictive aiming, bomb trajectory simulation, and enemy energy estimation. Environmentally aware&mdash;navigates around walls, avoids black holes, retreats into nebula clouds for cover, and uses the event horizon as an escape route when losing fights.</p>
+          <p class="feature-desc">Six behavioral states with predictive aiming, bomb trajectory simulation, energy estimation, environmental awareness (walls, black holes, nebula cover), and coordinated team tactics.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Custom HLSL shaders</div>
-          <p class="feature-desc">Black holes rendered with Schwarzschild-inspired spacetime distortion and Keplerian particle orbits. Nebula clouds use fractal Brownian motion with Kolmogorov turbulence. Asteroid surfaces generated with fBm noise and Voronoi crater patterns.</p>
+          <div class="feature-title">Custom shaders</div>
+          <p class="feature-desc">Black holes with Schwarzschild-inspired spacetime distortion and Keplerian particle orbits. Nebula clouds with Kolmogorov turbulence. Procedural asteroid surfaces with Voronoi crater patterns.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Data-driven architecture</div>
-          <p class="feature-desc">Ships, weapons, maps, and hazards all defined as UPrimaryDataAssets. Text grid map editor with a Python import pipeline. In-game editor with undo, JSON serialization, and chat commands.</p>
+          <div class="feature-title">Performance at scale</div>
+          <p class="feature-desc">Projectile object pooling with zero combat allocations, centralized actor registry, single-pass HUD rendering, tick budgeting, and material instance reuse&mdash;designed for 50+ concurrent players.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Performance engineering</div>
-          <p class="feature-desc">29 optimizations including projectile object pooling (zero allocations during combat), a centralized actor registry replacing per-frame world scans, tick budgeting, and material instance reuse across pooled actors.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Complete game systems</div>
-          <p class="feature-desc">Match flow (warmup, timed rounds, results), team assignment, kill feed, HUD with minimap, ship selection menu, options with key rebinding, bounty-based scoring, weighted item spawning, and an action-scoring spectator camera that auto-follows the most interesting combat.</p>
+          <div class="feature-title">Complete systems</div>
+          <p class="feature-desc">Match flow, team assignment, kill feed, HUD with minimap, ship selection, key rebinding, bounty scoring, weighted item spawning, data-driven map editor, and an auto-follow spectator camera.</p>
         </div>
       </div>
     </section>
 
     <section>
-      <h2>How it was built</h2>
+      <h2>About the developer</h2>
       <p>
-        This project was built with AI-assisted development. I drove all architecture, game design, and systems decisions while using AI tools for implementation&mdash;writing C++, HLSL shaders, Python tooling&mdash;and iterated through in-engine testing. The entire codebase is C++ with zero Blueprints, running on Unreal Engine 5.7.
-      </p>
-      <p>
-        Custom HLSL shaders, a 6-state AI system with environmental awareness, full GAS integration, ship-specific abilities, a data-driven map pipeline, and performance-optimized combat. AI-assisted development didn't lower the bar&mdash;it let me operate at a pace that would normally require a small team.
-      </p>
-      <p>
-        My background is a decade of backend engineering in Go and Python&mdash;distributed systems, internal platforms, CI/CD. This project proved that systems thinking transfers directly: the same principles that make a distributed backend resilient (separation of concerns, data-driven configuration, clear ownership boundaries) make a game codebase maintainable. The difference is your users notice latency in milliseconds, not seconds.
+        My background is a decade of backend engineering in Go and Python&mdash;distributed systems, internal platforms, CI/CD at Block (formerly Square). This project proved that systems thinking transfers directly: the same principles that make a distributed backend resilient make a game codebase maintainable.
       </p>
     </section>
 
     <section>
       <h2>Interested?</h2>
       <p>
-        Astral Rift is still in development. If you'd like to know when it launches, <a href="mailto:esuen8+waitlist@gmail.com?subject=Astral%20Rift%20Waitlist&body=I'd%20like%20to%20join%20the%20Astral%20Rift%20waitlist!" style="color: var(--accent); text-decoration: none; font-weight: 500;">send me an email</a> and I'll add you to the list.
+        Astral Rift is in active development. If you'd like to know when it's playable, <a href="mailto:esuen8+waitlist@gmail.com?subject=Astral%20Rift%20Waitlist&body=I'd%20like%20to%20join%20the%20Astral%20Rift%20waitlist!" style="color: var(--accent); text-decoration: none; font-weight: 500;">send me an email</a> and I'll add you to the list.
       </p>
     </section>
 
