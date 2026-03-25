@@ -219,7 +219,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">AI that adapts</div>
-          <p class="feature-desc">Bot opponents predict your movement, simulate bomb trajectories before firing, retreat into nebula clouds when losing, and set mine traps at chokepoints. They estimate your energy level, coordinate focus fire with teammates, and use A* pathfinding to navigate around walls.</p>
+          <p class="feature-desc">Bot opponents predict where you're going and fire ahead. They set mine traps and lure you into them, retreat into nebula clouds when outgunned, and coordinate focus fire with teammates. Each of the eight ship classes develops its own fighting style&mdash;evolved overnight through thousands of simulated matches.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Risk and reward</div>
@@ -250,7 +250,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Goal-driven AI with six tactical states, A* pathfinding, predictive aiming, bomb trajectory simulation, mine trap combos, and MIRV+repulsor flanking maneuvers. 36 behavior parameters per ship class are evolved by a genetic algorithm running headless at 30x speed. A separate Python physics simulation trains neural network agents via PPO reinforcement learning at 8,000+ fps&mdash;70x faster than the game engine&mdash;with automated evaluation gating each training generation.</p>
+          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments at 30x speed. A parallel Python physics simulation trains neural network agents via PPO at 8,000+ fps with automated evaluation gating each generation. 85 tests verify physics fidelity between the training sim and the game engine.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
