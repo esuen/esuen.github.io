@@ -250,7 +250,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Goal-driven AI with six tactical states, A* pathfinding around walls, predictive aiming, bomb trajectory simulation, per-ship energy estimation, and team coordination. 32 behavior parameters per ship class are evolved by a genetic algorithm running in a headless UE5 instance at 30x speed&mdash;automated monitoring detects training issues, tunes fitness functions, and advances through phases from 1v1 duels to team coordination.</p>
+          <p class="feature-desc">Goal-driven AI with six tactical states, A* pathfinding, predictive aiming, bomb trajectory simulation, mine trap combos, and MIRV+repulsor flanking maneuvers. 36 behavior parameters per ship class are evolved by a genetic algorithm running headless at 30x speed. A separate Python physics simulation trains neural network agents via PPO reinforcement learning at 8,000+ fps&mdash;70x faster than the game engine&mdash;with automated evaluation gating each training generation.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -262,7 +262,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">KOTH match flow with rotating zones, team assignment, kill feed, HUD with minimap, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor, auto-follow spectator camera, and 49 automated tests covering combat math, AI behavior, and balance validation.</p>
+          <p class="feature-desc">KOTH match flow with rotating zones, team assignment, kill feed, HUD with minimap, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor, auto-follow spectator camera, and 49 C++ automated tests plus 36 Python sim verification tests covering combat math, AI behavior, physics fidelity, and balance validation.</p>
         </div>
       </div>
     </section>
