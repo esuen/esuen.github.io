@@ -166,7 +166,7 @@
     <header>
       <div class="project-label">Project</div>
       <h1>Astral Rift</h1>
-      <p class="subtitle">Your health is your ammo. Real-time space combat where every shot makes you weaker and every decision could be your last.</p>
+      <p class="subtitle">Your health is your ammo. Real-time multiplayer space combat where every shot makes you weaker and every decision could be your last.</p>
       <div class="tech-tags">
         <span class="tech-tag">Unreal Engine 5</span>
         <span class="tech-tag">C++</span>
@@ -220,7 +220,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">AI that adapts</div>
-          <p class="feature-desc">Bot opponents predict where you're going and fire ahead. They set mine traps and lure you into them, retreat into nebula clouds when outgunned, and coordinate focus fire with teammates. Each of the eight ship classes develops its own fighting style&mdash;evolved overnight through thousands of simulated matches.</p>
+          <p class="feature-desc">Bot opponents predict where you're going and fire ahead. They set mine traps and lure you into them, retreat into nebula clouds when outgunned, and coordinate focus fire with teammates. Each of the eight ship classes develops its own fighting style&mdash;trained through billions of simulated combat steps.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Risk and reward</div>
@@ -229,6 +229,10 @@
         <div class="feature">
           <div class="feature-title">King of the Hill</div>
           <p class="feature-desc">Three teams fight over a rotating capture zone. Hold it to score&mdash;first to 100 wins. The zone moves between five locations: an open cross, a black hole, a nebula cloud, and two outposts. Each location changes how you fight.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Capture the Flag</div>
+          <p class="feature-desc">Two teams across a corridor-filled arena with procedurally varied layouts. Steal the enemy flag, navigate chokepoints back to your base. Your flag must be home to capture&mdash;so defense matters as much as offense. Bots autonomously assign roles: fast ships grab flags, escorts protect the carrier, defenders guard the base.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Rift Runners (single-player)</div>
@@ -255,7 +259,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments. A parallel Python physics simulation trains neural network agents via reinforcement learning across 1024 simultaneous fights with automated evaluation gating each generation. 85 tests verify physics fidelity between the training sim and the game engine.</p>
+          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments. A pure JAX physics simulation trains neural network agents via reinforcement learning across 1024 parallel arenas and one billion training steps. Bots learn to use all nine actions&mdash;bullets, bombs, mines, repulsors, missiles, overdrive&mdash;discovering combo strategies through reward shaping rather than hand-coded rules. Trained policies deploy to the game engine via ONNX, where an automated headless pipeline validates each generation before promotion. 77 tests verify physics fidelity between the training sim and the game engine.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -267,7 +271,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">KOTH match flow with rotating zones, team assignment, kill feed, HUD with minimap, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor, auto-follow spectator camera, and 49 C++ automated tests plus 36 Python sim verification tests covering combat math, AI behavior, physics fidelity, and balance validation.</p>
+          <p class="feature-desc">KOTH and CTF match flow, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and 64 C++ automated tests plus 13 JAX sim verification tests covering combat math, AI behavior, physics fidelity, wall collision, and balance validation.</p>
         </div>
       </div>
     </section>
