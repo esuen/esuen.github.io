@@ -228,7 +228,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">King of the Hill</div>
-          <p class="feature-desc">Three teams fight over a rotating capture zone. Hold it to score&mdash;first to 100 wins. The zone moves between five locations: an open cross, a black hole, a nebula cloud, and two outposts. Each location changes how you fight.</p>
+          <p class="feature-desc">Three teams fight over a rotating capture zone. Hold it to score&mdash;first to 100 wins. The zone moves between five locations: an open cross, a black hole, a nebula cloud, and two outposts. Each location changes how you fight. Capture the Flag pits two teams across a corridor-filled arena imported from SubSpace&mdash;steal the enemy flag, navigate chokepoints, and return to your base to score. Bots autonomously assign roles: seekers grab flags, carriers sprint home, escorts protect the carrier, defenders guard the base, and chasers hunt the enemy carrier.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Rift Runners (single-player)</div>
@@ -255,7 +255,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments. A parallel Python physics simulation trains neural network agents via reinforcement learning across 1024 simultaneous fights with automated evaluation gating each generation. 85 tests verify physics fidelity between the training sim and the game engine.</p>
+          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments. A pure JAX physics simulation trains neural network bots via PPO reinforcement learning at 570,000 fights per second on GPU&mdash;a 500M-step training run completes in 20 minutes. Trained policies export as ONNX and run in-engine via UE5's Neural Network Engine. An automated pipeline validates each generation via headless evaluation before promoting to production. 77 tests verify physics fidelity between the training sim and the game engine.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -267,7 +267,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">KOTH match flow with rotating zones, team assignment, kill feed, HUD with minimap, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor, auto-follow spectator camera, and 49 C++ automated tests plus 36 Python sim verification tests covering combat math, AI behavior, physics fidelity, and balance validation.</p>
+          <p class="feature-desc">KOTH and CTF match flow, team assignment, kill feed, HUD with minimap and flag status, ship selection, key rebinding, bounty scoring, data-driven map editor with SubSpace .lvl import, auto-follow spectator camera, and 64 C++ automated tests plus 13 JAX sim verification tests covering combat math, AI behavior, physics fidelity, wall collision, and balance validation.</p>
         </div>
       </div>
     </section>
