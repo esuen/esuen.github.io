@@ -219,8 +219,8 @@
           <p class="feature-desc">Black holes warp your projectiles and teleport ships that get too close. Nebula clouds create fog-of-war where you can only see what's nearby. Asteroids provide cover&mdash;until someone blows them up.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">AI that adapts</div>
-          <p class="feature-desc">Bot opponents predict where you're going and fire ahead. They set mine traps and lure you into them, retreat into nebula clouds when outgunned, and coordinate focus fire with teammates. Each of the eight ship classes develops its own fighting style&mdash;trained through billions of simulated combat steps.</p>
+          <div class="feature-title">AI that learns</div>
+          <p class="feature-desc">Neural network bots trained through billions of simulated combat steps learn to fight from scratch&mdash;no hand-coded strategies. They discover bullet timing, bomb placement, mine traps, and energy management through iterative reward shaping. Hand-tuned bots add variety with personality-driven behaviors: setting ambushes, retreating into nebula clouds, and coordinating team focus fire. Eight ship classes, each with distinct tactics.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Risk and reward</div>
@@ -259,7 +259,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Four-layer architecture: strategic goal stack, utility-based state machine, Reynolds steering behaviors, and predictive weapon system. A genetic algorithm evolves 36 parameters per ship class through headless mirror-match tournaments. A pure JAX physics simulation trains neural network agents via reinforcement learning across 1024 parallel arenas and one billion training steps. Bots learn to use all nine actions&mdash;bullets, bombs, mines, repulsors, missiles, overdrive&mdash;discovering combo strategies through reward shaping rather than hand-coded rules. Trained policies deploy to the game engine via ONNX, where an automated headless pipeline validates each generation before promotion. 77 tests verify physics fidelity between the training sim and the game engine.</p>
+          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 1024 parallel arenas. Three generations of reward shaping taught agents to switch from bomb-only aggression to bullet-primary combat (20% hit rate, 8 shots/round) with emerging mine usage and combo setups. A 44-metric per-round evaluation pipeline tracks weapon accuracy, engagement distance, energy management, combo execution, and time-to-kill across 50-round headless tournaments. Trained policies deploy via ONNX with automated eval-before-promotion. 89 tests verify physics fidelity, combat math, and AI behavior across both systems.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -271,7 +271,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">KOTH and CTF match flow, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and 64 C++ automated tests plus 13 JAX sim verification tests covering combat math, AI behavior, physics fidelity, wall collision, and balance validation.</p>
+          <p class="feature-desc">KOTH, CTF, and Duel match flow, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, checkpoint/resume for long training runs, multi-machine GPU training coordination, and networking foundation with server-authoritative movement and replicated ship state. 64 C++ automated tests plus 25 JAX sim verification tests covering combat math, AI behavior, per-ship physics, ability mechanics, and wall collision.</p>
         </div>
       </div>
     </section>
