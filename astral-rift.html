@@ -212,7 +212,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">Pick your ship</div>
-          <p class="feature-desc">Eight ships, each with unique abilities. The Specter goes invisible for stealth ambushes. The Titan fires bombs through walls. The Bastion carries allies as turrets and places team teleport beacons. The Comet rockets in at double speed, drops shrapnel bombs, and escapes before you can react.</p>
+          <p class="feature-desc">Eight ships with mode-specific ability loadouts. The Specter goes invisible for stealth ambushes. The Titan fires wall-piercing bombs and locks down chokepoints with Fortify. The Bastion deploys auto-targeting sentry turrets and barrier walls in FFA, or carries allies as turrets in team modes. The Comet rockets in at double speed, drops shrapnel bombs, and escapes before you can react. Every ship plays differently in FFA vs team modes.</p>
         </div>
         <div class="feature">
           <div class="feature-title">The arena fights back</div>
@@ -225,6 +225,10 @@
         <div class="feature">
           <div class="feature-title">Risk and reward</div>
           <p class="feature-desc">Kill streaks increase your bounty, making you worth more points&mdash;but also a bigger target. Pick up items to gain charges for devastating abilities like MIRV missiles and repulsor blasts. Every advantage paints a target on your back.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Free-For-All Deathmatch</div>
+          <p class="feature-desc">Every ship for itself. Green pickups scattered across nebula clouds and corridor intersections grant random ability charges&mdash;MIRV missiles, repulsor blasts, ripper fields. Ship-specific pools mean a Tempest gets burst charges where a Viper gets ripper. Mode-specific item spawn zones create contested hotspots that reward map control.</p>
         </div>
         <div class="feature">
           <div class="feature-title">King of the Hill</div>
@@ -259,7 +263,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 1024 parallel arenas. Three generations of reward shaping taught agents to switch from bomb-only aggression to bullet-primary combat (20% hit rate, 8 shots/round) with emerging mine usage and combo setups. A 44-metric per-round evaluation pipeline tracks weapon accuracy, engagement distance, energy management, combo execution, and time-to-kill across 50-round headless tournaments. Trained policies deploy via ONNX with automated eval-before-promotion. 89 tests verify physics fidelity, combat math, and AI behavior across both systems.</p>
+          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves a 78% win rate against hand-tuned opponents after 500M training steps. Iterative self-play produces increasingly strong opponents. 61 automated headless behavior tests verify every game mechanic in 6 seconds. Trained policies deploy via ONNX with automated eval-before-promotion.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -271,7 +275,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">KOTH, CTF, and Duel match flow, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, checkpoint/resume for long training runs, multi-machine GPU training coordination, and networking foundation with server-authoritative movement and replicated ship state. 64 C++ automated tests plus 25 JAX sim verification tests covering combat math, AI behavior, per-ship physics, ability mechanics, and wall collision.</p>
+          <p class="feature-desc">FFA Deathmatch, KOTH, CTF, and Duel match flow, mode-specific ability loadout system, per-mode item spawn zones, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and networking foundation with server-authoritative movement and replicated ship state. 199 total tests: 61 automated headless behavior tests, 30 JAX sim cross-checks, 34 networking tests, and 74 visual verification tests&mdash;with a 25-scenario auto-playing visual test mode for rapid QA.</p>
         </div>
       </div>
     </section>
