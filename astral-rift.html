@@ -212,7 +212,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">Pick your ship</div>
-          <p class="feature-desc">Eight ships with mode-specific ability loadouts. The Specter goes invisible for stealth ambushes. The Titan fires wall-piercing bombs and locks down chokepoints with Fortify. The Bastion deploys auto-targeting sentry turrets and barrier walls in FFA, or carries allies as turrets in team modes. The Comet rockets in at double speed, drops shrapnel bombs, and escapes before you can react. Every ship plays differently in FFA vs team modes.</p>
+          <p class="feature-desc">Eight ships with mode-specific ability loadouts. The Specter goes invisible for stealth ambushes. The Titan fires wall-piercing bombs and locks down chokepoints with Fortify. The Bastion deploys predictive-aiming sentry turrets and barrier walls in FFA, or carries allies as turrets in team modes. The Comet rockets in at double speed, drops shrapnel bombs, and escapes before you can react. Every ship plays differently in FFA vs team modes.</p>
         </div>
         <div class="feature">
           <div class="feature-title">The arena fights back</div>
@@ -263,7 +263,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves a 78% win rate against hand-tuned opponents after 500M training steps. Iterative self-play produces increasingly strong opponents. 61 automated headless behavior tests verify every game mechanic in 6 seconds. Trained policies deploy via ONNX with automated eval-before-promotion.</p>
+          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves a 90% win rate against hand-tuned opponents after iterative self-play (1B+ steps). 148 automated headless behavior tests verify every game mechanic. Trained policies deploy via ONNX with automated eval-before-promotion.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -275,7 +275,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">FFA Deathmatch, KOTH, CTF, and Duel match flow, mode-specific ability loadout system, per-mode item spawn zones, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and networking foundation with server-authoritative movement and replicated ship state. 199 total tests: 61 automated headless behavior tests, 30 JAX sim cross-checks, 34 networking tests, and 74 visual verification tests&mdash;with a 25-scenario auto-playing visual test mode for rapid QA.</p>
+          <p class="feature-desc">FFA Deathmatch, KOTH, CTF, and Duel match flow, mode-specific ability loadout system, per-mode item spawn zones, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and networking foundation with server-authoritative movement and replicated ship state. 258 total tests: 148 automated headless behavior tests, 30 JAX sim cross-checks, and 80 visual verification tests&mdash;with an auto-playing visual test mode for rapid QA.</p>
         </div>
       </div>
     </section>
