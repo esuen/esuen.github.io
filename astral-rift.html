@@ -263,7 +263,7 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves a 90% win rate against hand-tuned opponents after iterative self-play (1B+ steps). 148 automated headless behavior tests verify every game mechanic. Trained policies deploy via ONNX with automated eval-before-promotion.</p>
+          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves a 82% win rate with 92% decisiveness after iterative self-play across 9 training phases. 178 automated headless behavior tests verify every game mechanic. Trained policies deploy via ONNX with automated eval-before-promotion.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>
@@ -275,7 +275,7 @@
         </div>
         <div class="feature">
           <div class="feature-title">Complete systems</div>
-          <p class="feature-desc">FFA Deathmatch, KOTH, CTF, and Duel match flow, mode-specific ability loadout system, per-mode item spawn zones, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and networking foundation with server-authoritative movement and replicated ship state. 258 total tests: 148 automated headless behavior tests, 30 JAX sim cross-checks, and 80 visual verification tests&mdash;with an auto-playing visual test mode for rapid QA.</p>
+          <p class="feature-desc">FFA Deathmatch, KOTH, CTF, and Duel match flow, mode-specific ability loadout system, per-mode item spawn zones, team assignment, kill feed, HUD with minimap and flag status, ship selection with sprite previews, key rebinding, bounty scoring, data-driven map editor with procedural layout generation, auto-follow spectator camera, and full multiplayer networking with client-side prediction, server reconciliation, lag compensation (server-side rewind), and entity interpolation. 335 total tests: 178 headless behavior tests, 49 multi-process networking tests (including 3-client stress and latency simulation), 80 visual tests, and 31 JAX sim cross-checks.</p>
         </div>
       </div>
     </section>
