@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RL Training Pipeline - Astral Rift</title>
+  <meta name="description" content="Deep dive into Astral Rift's reinforcement learning pipeline: JAX simulation, PPO training, reward shaping, automated evaluation, and self-play.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --text-secondary: #555;
+      --text-tertiary: #888;
+      --accent: #2563eb;
+      --border: #e5e5e5;
+      --bg: #fafafa;
+      --code-bg: #f5f5f5;
+      --green: #16a34a;
+      --red: #dc2626;
+      --amber: #d97706;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 80px 24px 60px; }
+
+    .back {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: color 0.15s;
+    }
+    .back:hover { color: var(--accent); }
+
+    header { margin-bottom: 48px; }
+
+    .project-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .subtitle { font-size: 1rem; color: var(--text-secondary); margin-bottom: 24px; }
+
+    section { margin-bottom: 48px; }
+
+    h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 24px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    code {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.85rem;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .up { color: var(--green); font-weight: 500; }
+    .down { color: var(--red); font-weight: 500; }
+    .neutral { color: var(--amber); font-weight: 500; }
+
+    .callout {
+      background: #f0f4ff;
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+    }
+
+    .callout p { color: var(--text); margin: 0; font-size: 0.9rem; }
+
+    .callout-warning {
+      background: #fef3cd;
+      border-left-color: var(--amber);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .metric-value {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .metric-label {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .diagram {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .diagram pre {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .diagram-caption {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    footer a { color: var(--text-tertiary); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .container { padding: 48px 20px 40px; }
+      h1 { font-size: 1.6rem; }
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="astral-rift.html" class="back">&larr; Back to Astral Rift</a>
+
+    <header>
+      <div class="project-label">Deep Dive</div>
+      <h1>RL Training Pipeline</h1>
+      <p class="subtitle">How neural network bots learn to fight through billions of simulated rounds, with automated evaluation and reward shaping that adapts between training phases.</p>
+    </header>
+
+    <section>
+      <h2>The pipeline</h2>
+      <p>
+        Two machines work in parallel. A Mac runs game development, evaluation, and pushes training instructions. A Windows machine with an RTX 3090 trains models on GPU. They coordinate through git&mdash;the simplest protocol that works.
+      </p>
+
+      <div class="diagram">
+<pre>
+Train (GPU)  →  Push model  →  Eval (JAX/UE5)  →  Diagnose  →  Push instructions
+   ▲                                                                    │
+   └────────────────────── Poll for instructions ───────────────────────┘
+</pre>
+        <div class="diagram-caption">Fully automated loop. Each phase takes 2-7 hours depending on step count.</div>
+      </div>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <div class="metric-value">8,192</div>
+          <div class="metric-label">Parallel envs</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">570K</div>
+          <div class="metric-label">Steps/sec (GPU)</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">15+</div>
+          <div class="metric-label">Training phases</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">31</div>
+          <div class="metric-label">Cross-check tests</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>The simulation</h2>
+      <p>
+        Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 8,192 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and all 9 combat abilities.
+      </p>
+      <p>
+        The simulation must match the game exactly or the trained model won't transfer. 31 cross-check tests verify parity: thrust values, wall bouncing, bullet damage, bomb splash radius, mine proximity triggers, ship-specific stats, ability mechanics. When we change a value in C++, the same change must be made in Python.
+      </p>
+
+      <h3>Observation vector (96 floats)</h3>
+      <p>
+        The neural network sees the world as 96 numbers, matching what a human player could perceive:
+      </p>
+      <table>
+        <thead><tr><th>Feature</th><th>Size</th><th>What it encodes</th></tr></thead>
+        <tbody>
+          <tr><td>Self</td><td>22</td><td>Velocity, heading, energy, cooldowns, ability charges, ship type</td></tr>
+          <tr><td>Enemies (3 nearest)</td><td>27</td><td>Relative position, velocity, heading, energy, alive status, ship type</td></tr>
+          <tr><td>Zone</td><td>3</td><td>KOTH zone direction, inside/outside</td></tr>
+          <tr><td>Tactical</td><td>4</td><td>Round timer, speed, alive enemies, energy advantage</td></tr>
+          <tr><td>Walls</td><td>12</td><td>4 boundary distances + 8 interior wall raycasts</td></tr>
+          <tr><td>Mines</td><td>12</td><td>4 nearest mines (position, friendly/enemy)</td></tr>
+          <tr><td>Projectiles</td><td>10</td><td>5 nearest incoming bullets</td></tr>
+          <tr><td>Pickups</td><td>6</td><td>2 nearest item pickups (position, type)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Action space (9 discrete actions, 30 logits)</h3>
+      <table>
+        <thead><tr><th>Action</th><th>Bins</th><th>What it controls</th></tr></thead>
+        <tbody>
+          <tr><td>Rotation</td><td>11</td><td>Turn rate from hard-left to hard-right</td></tr>
+          <tr><td>Thrust</td><td>5</td><td>Reverse, brake, coast, half, full</td></tr>
+          <tr><td>Fire Bullet</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Fire Bomb</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Drop Mine</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Repulsor</td><td>2</td><td>On/off</td></tr>
+          <tr><td>MIRV</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Ripper</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Overdrive</td><td>2</td><td>On/off</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Reward shaping</h2>
+      <p>
+        The reward function has 9 tunable coefficients, each exposed as a CLI flag. The defaults were calibrated through iteration&mdash;the first 10 phases established which signals matter, and the eval pipeline tells us when to adjust.
+      </p>
+      <table>
+        <thead><tr><th>Signal</th><th>Default</th><th>What it encourages</th></tr></thead>
+        <tbody>
+          <tr><td>Damage dealt</td><td>/500</td><td>Base combat reward</td></tr>
+          <tr><td>Bullet bonus</td><td>0.8</td><td>Primary weapon accuracy (prevents bomb-only play)</td></tr>
+          <tr><td>Kill</td><td>1.0</td><td>Finishing kills</td></tr>
+          <tr><td>Death penalty</td><td>1.0</td><td>Staying alive</td></tr>
+          <tr><td>Engage distance</td><td>1.0</td><td>Approaching enemies (prevents passive kiting)</td></tr>
+          <tr><td>Mine/ability bonus</td><td>0.3/0.2</td><td>Using all weapons, not just bullets</td></tr>
+          <tr><td>Item pickup</td><td>0.05</td><td>Collecting green pickups for ability charges</td></tr>
+          <tr><td>Item proximity</td><td>0.1</td><td>Moving toward item spawns</td></tr>
+          <tr><td>Time pressure</td><td>0.002</td><td>Decisive play (penalizes stalling)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <p><strong>Key insight:</strong> The reward function is a hypothesis. Each coefficient is a bet about what behavior matters. The eval pipeline tests the hypothesis and recommends adjustments. "Changed X because eval showed Y, expect Z" is the discipline that prevents random tuning.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>The eval-diagnose-train loop</h2>
+      <p>
+        After each training phase, an automated evaluation runs the model against random opponents and frozen previous-generation models. A diagnosis script compares metrics against behavioral thresholds and recommends reward flag adjustments.
+      </p>
+
+      <h3>What we measure</h3>
+      <p>
+        Win rate alone can't distinguish a good fighter from a passive one that wins by not dying. The eval tracks 40+ metrics per bot:
+      </p>
+      <table>
+        <thead><tr><th>Category</th><th>Metrics</th></tr></thead>
+        <tbody>
+          <tr><td>Combat</td><td>Win rate, decisiveness, kills/min, avg round time</td></tr>
+          <tr><td>Accuracy</td><td>Hit rate per weapon type, damage dealt/taken ratio</td></tr>
+          <tr><td>Behavior</td><td>Ability usage (7 types), item pickups, engagement distance</td></tr>
+          <tr><td>Efficiency</td><td>Energy per kill, min energy reached, overdrive frames</td></tr>
+          <tr><td>Strategy</td><td>Bomb+bullet combos, repulsor+MIRV combos, mine kills, avg TTK</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Automated diagnosis</h3>
+<pre>$ python3 eval_diagnose.py
+
+  ISSUES FOUND:
+    - Low hit rate: 2.6% (threshold: 5%)
+    - Zero item pickups: 0
+    - High engage distance: 3575u (threshold: 3000u)
+
+  RECOMMENDED REWARD FLAGS:
+    --reward-bullet-bonus 0.2  (reduce spam incentive)
+    --reward-engage 1.0        (force closer engagement)
+    --reward-pickup 0.15       (reward item collection)
+
+  BEFORE ACTING ON THESE RECOMMENDATIONS:
+    1. Compare against previous phase
+    2. Pick 1-2 flags max
+    3. Check if root cause is structural
+    4. Form a hypothesis: "Changed X because Y, expect Z"</pre>
+      <p>
+        The script recommends but doesn't decide. The human reviews, picks 1-2 changes, forms a hypothesis, and pushes instructions. Changing many variables at once makes results unattributable.
+      </p>
+    </section>
+
+    <section>
+      <h2>Training history: what worked, what didn't</h2>
+      <p>
+        15+ training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
+      </p>
+
+      <table>
+        <thead><tr><th>Phase</th><th>WR</th><th>Change</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td>11</td><td>42%</td><td>Engage shaping 0.5&rarr;1.0</td><td>Baseline aggression established</td></tr>
+          <tr><td>12</td><td class="up">48%</td><td>+ Bullet bonus 0.5&rarr;0.8</td><td>Bullet usage doubled</td></tr>
+          <tr><td>13</td><td class="up">60%</td><td>Self-play vs Phase 12 (50% mix)</td><td><strong>Best model.</strong> All 7 abilities used.</td></tr>
+          <tr><td>14</td><td class="down">31%</td><td>Self-play vs Phase 13 (50% mix)</td><td><strong>Regression.</strong> Overspecialized.</td></tr>
+          <tr><td>15</td><td class="down">35%</td><td>Self-play vs Phase 13 (30% mix)</td><td>Lower mix didn't help. Still too narrow.</td></tr>
+          <tr><td>16</td><td class="neutral">???</td><td>5B steps from scratch, no opponent</td><td>Longer base training. Running now.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warning">
+        <p><strong>Lesson learned (Phase 14):</strong> One round of self-play works. Iterating self-play beyond that causes regression. At higher skill levels, training against a single frozen opponent causes the model to overfit to that opponent's weaknesses rather than developing general combat ability. WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is overspecializing.</p>
+      </div>
+
+      <h3>The Phase 13 breakthrough</h3>
+      <p>
+        Phase 13 was the first model to use all 7 combat abilities meaningfully. Prior models relied almost entirely on bullets and bombs. What changed:
+      </p>
+      <ul style="color: var(--text-secondary); font-size: 0.95rem; padding-left: 24px; margin: 12px 0; line-height: 2;">
+        <li>MIRV usage: 0 &rarr; 148/match (missiles launched at chokepoints)</li>
+        <li>Repulsor usage: 15 &rarr; 179/match (deflecting incoming projectiles)</li>
+        <li>Damage dealt: 76 &rarr; 102 avg (+30%)</li>
+        <li>Damage taken: 69 &rarr; 71 avg (held steady while being more aggressive)</li>
+        <li>Rounds: 22.4s &rarr; 19.6s avg (faster kills)</li>
+      </ul>
+      <p>
+        The recipe: strong base model (Phase 12, trained with engage + bullet shaping) + one round of self-play. The base model learned <em>what</em> to do. Self-play taught it <em>when</em>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Deployment</h2>
+      <p>
+        Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the 30-logit output into ship controls.
+      </p>
+
+      <div class="diagram">
+<pre>
+JAX Training        Export           UE5 Runtime
+┌──────────┐    ┌──────────┐    ┌──────────────────────┐
+│ Flax     │    │          │    │ RLBotController      │
+│ params   │───▶│  ONNX    │───▶│ ├─ BuildObservation() │
+│ .msgpack │    │  .onnx   │    │ ├─ NNE Inference      │
+└──────────┘    └──────────┘    │ └─ DecodeAction()     │
+                                └──────────────────────┘
+</pre>
+      </div>
+
+      <p>
+        Model size is ~130KB (two 128-unit hidden layers). Inference runs in &lt;0.1ms per bot per frame. The game supports mixing RL bots with hand-coded bots for opponent variety.
+      </p>
+    </section>
+
+    <section>
+      <h2>What I'd do differently</h2>
+      <p>
+        <strong>Population-based training:</strong> Instead of manually adjusting reward weights between phases, PBT would evolve reward configurations in parallel. Each phase currently takes 2-3 hours of wall time plus human analysis&mdash;PBT could explore the reward space automatically.
+      </p>
+      <p>
+        <strong>Diverse opponent pool:</strong> Self-play against a single frozen opponent caused Phase 14's regression. Training against a <em>pool</em> of 3-5 previous generations (weighted by recency) would prevent overspecialization while still pushing skill ceiling.
+      </p>
+      <p>
+        <strong>Accuracy reward:</strong> The current reward function rewards damage dealt but doesn't penalize missed shots. A hit-rate bonus would teach the model to choose <em>when</em> to fire, not just fire constantly. The challenge is measuring accuracy in a physics sim where "miss" is ambiguous (was it a dodge or a whiff?).
+      </p>
+    </section>
+
+    <footer>
+      <a href="astral-rift.html">Astral Rift</a> &middot;
+      <a href="astral-rift-networking.html">Networking Deep Dive</a> &middot;
+      <a href="index.html">Portfolio</a>
+    </footer>
+
+  </div>
+</body>
+</html>

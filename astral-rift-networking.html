@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Networking Architecture - Astral Rift</title>
+  <meta name="description" content="Deep dive into Astral Rift's multiplayer networking: client-side prediction, server reconciliation, lag compensation, and entity interpolation.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --text: #1a1a1a;
+      --text-secondary: #555;
+      --text-tertiary: #888;
+      --accent: #2563eb;
+      --border: #e5e5e5;
+      --bg: #fafafa;
+      --code-bg: #f5f5f5;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 80px 24px 60px; }
+
+    .back {
+      display: inline-block;
+      font-size: 0.9rem;
+      color: var(--text-tertiary);
+      text-decoration: none;
+      margin-bottom: 40px;
+      transition: color 0.15s;
+    }
+    .back:hover { color: var(--accent); }
+
+    header { margin-bottom: 48px; }
+
+    .project-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-tertiary);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .subtitle { font-size: 1rem; color: var(--text-secondary); margin-bottom: 24px; }
+
+    section { margin-bottom: 48px; }
+
+    h2 {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      margin-top: 24px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    code {
+      font-family: 'Source Code Pro', monospace;
+      font-size: 0.85rem;
+      background: var(--code-bg);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .diagram {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      margin: 20px 0;
+      overflow-x: auto;
+    }
+
+    .diagram pre {
+      background: none;
+      border: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .diagram-caption {
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.85rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 2px solid var(--border);
+      font-weight: 600;
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .callout {
+      background: #f0f4ff;
+      border-left: 3px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 20px 0;
+    }
+
+    .callout p { color: var(--text); margin: 0; font-size: 0.9rem; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .metric {
+      text-align: center;
+      padding: 16px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .metric-value {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      color: var(--text-tertiary);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 0.8rem;
+      color: var(--text-tertiary);
+    }
+    footer a { color: var(--text-tertiary); text-decoration: none; }
+    footer a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .container { padding: 48px 20px 40px; }
+      h1 { font-size: 1.6rem; }
+      .metric-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="astral-rift.html" class="back">&larr; Back to Astral Rift</a>
+
+    <header>
+      <div class="project-label">Deep Dive</div>
+      <h1>Networking Architecture</h1>
+      <p class="subtitle">Server-authoritative multiplayer with client-side prediction, server reconciliation, lag compensation, and entity interpolation.</p>
+    </header>
+
+    <section>
+      <h2>Architecture overview</h2>
+      <p>
+        Astral Rift uses a listen-server model where one player hosts and all others connect as clients. The server is authoritative on all game state&mdash;positions, health, projectile hits. Clients predict their own movement locally for responsive controls, then reconcile when the server corrects them.
+      </p>
+
+      <div class="diagram">
+<pre>
+ ┌─────────────────────────────────────────────────┐
+ │              LISTEN SERVER (Host)                │
+ │                                                  │
+ │  GameMode (server-only)   GameState (replicated) │
+ │  ShipPawn (Authority)                            │
+ │  ├─ ServerReceiveInput()  ← RPC from clients     │
+ │  ├─ ApplyInputFrame()     → authoritative sim    │
+ │  └─ ServerCorrection      → replicated to owner  │
+ └──────────────┬──────────────────────────────────┘
+                │ Replication
+     ┌──────────┼──────────┐
+     ▼          ▼          ▼
+ ┌────────┐ ┌────────┐ ┌────────┐
+ │Client A│ │Client B│ │Client C│
+ │(Owner) │ │(Proxy) │ │(Proxy) │
+ │Predict │ │Interp. │ │Interp. │
+ │+Replay │ │VInterpTo│ │VInterpTo│
+ └────────┘ └────────┘ └────────┘
+</pre>
+        <div class="diagram-caption">Three client roles: owning client predicts, other clients interpolate.</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Client-side prediction</h2>
+      <p>
+        The owning client applies input locally before sending it to the server, eliminating the round-trip delay for movement. Every input frame is buffered with a sequence number so the client can replay unacknowledged inputs after a server correction.
+      </p>
+
+      <h3>Input frame</h3>
+<pre>struct FShipInputFrame {
+    uint32 SequenceNumber;   // Monotonic, for ack tracking
+    float  DeltaTime;        // Frame delta (validated: 0 &lt; dt &lt; 0.5)
+    float  RotationInput;    // -1 to 1 (validated: |r| &lt;= 1.1)
+    bool   bThrusting;
+    bool   bReversing;
+    bool   bOverdrive;
+};</pre>
+
+      <p>
+        The client sends this to the server via an unreliable RPC every tick (<code>ServerReceiveInput</code>). Unreliable is correct here&mdash;if an input is lost, the next one supersedes it. The server validates inputs (clamping delta time, rotation range) to prevent cheating.
+      </p>
+
+      <div class="diagram">
+<pre>
+Player Input → Build FShipInputFrame (seq#, dt, thrust, rotation)
+                    │
+            ┌───────┼───────┐
+            ▼               ▼
+    Apply Locally       Send to Server
+    (instant feel)      (Unreliable RPC)
+            │               │
+            ▼               ▼
+    Buffer in           Server applies
+    PendingInputs       authoritatively
+</pre>
+      </div>
+    </section>
+
+    <section>
+      <h2>Server reconciliation</h2>
+      <p>
+        When the server processes an input, it sends back a correction containing the authoritative position, velocity, and the last processed sequence number. The client reconciles by:
+      </p>
+      <ol style="color: var(--text-secondary); font-size: 0.95rem; padding-left: 24px; margin: 12px 0;">
+        <li>Discarding all acknowledged inputs (seq &le; LastProcessedSequence)</li>
+        <li>Snapping to the server's authoritative position</li>
+        <li>Replaying all remaining unacknowledged inputs on top</li>
+        <li>Computing a visual smoothing offset to hide the snap</li>
+      </ol>
+
+      <h3>Correction struct</h3>
+<pre>struct FShipStateCorrection {
+    FVector_NetQuantize Position;    // Quantized for bandwidth
+    FVector_NetQuantize Velocity;
+    float Rotation;
+    uint32 LastProcessedSequence;    // Which input was last applied
+};</pre>
+
+      <h3>Smoothing</h3>
+      <p>
+        Input replay means most corrections are tiny (client and server ran the same deterministic physics). But when they diverge:
+      </p>
+
+      <div class="callout">
+        <p><strong>Correction &lt; 50 units:</strong> SmoothingOffset absorbs the delta, decaying at 10.0/s. Ship visually glides to the corrected position over ~100ms. The player never notices.</p>
+      </div>
+      <div class="callout">
+        <p><strong>Correction &gt; 50 units:</strong> Hard snap. This only happens on teleport, respawn, or severe desync. No point smoothing a 500-unit correction.</p>
+      </div>
+
+      <p>
+        This works because <code>SimulateMovement</code> is a pure static function&mdash;same inputs always produce the same outputs. Client and server run identical physics, so corrections are rare and small under normal conditions.
+      </p>
+    </section>
+
+    <section>
+      <h2>Entity interpolation</h2>
+      <p>
+        Other players' ships (SimulatedProxy) can't be predicted&mdash;we don't know their inputs. Instead, the server replicates their position and the client smoothly interpolates toward it.
+      </p>
+<pre>// Each frame for SimulatedProxy ships:
+CurrentPos = FMath::VInterpTo(CurrentPos, TargetPos, DeltaTime, 15.0f);
+CurrentRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, 15.0f);</pre>
+      <p>
+        The interpolation rate of 15.0 gives smooth movement without excessive lag. Higher values track more tightly but look jittery on lossy connections. 15.0 was tuned through PIE testing with simulated latency.
+      </p>
+    </section>
+
+    <section>
+      <h2>Lag compensation</h2>
+      <p>
+        The hardest networking problem: when you shoot where an enemy <em>was</em> on your screen, the server needs to validate that hit against where they <em>actually were</em> at the time you fired, not where they are now.
+      </p>
+
+      <div class="metric-grid">
+        <div class="metric">
+          <div class="metric-value">16</div>
+          <div class="metric-label">History snapshots</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">266ms</div>
+          <div class="metric-label">History window</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">200ms</div>
+          <div class="metric-label">Max rewind</div>
+        </div>
+      </div>
+
+      <p>
+        Every server tick, each ship records a position snapshot into a 16-entry ring buffer. When a projectile hits, the server:
+      </p>
+      <ol style="color: var(--text-secondary); font-size: 0.95rem; padding-left: 24px; margin: 12px 0;">
+        <li>Reads the shooter's ping from PlayerState</li>
+        <li>Computes the rewind timestamp: <code>ServerTime - (Ping / 2)</code></li>
+        <li>Interpolates the target's position from the history buffer at that timestamp</li>
+        <li>Validates the hit against the rewound position (1.5x tolerance)</li>
+      </ol>
+
+      <div class="diagram">
+<pre>
+Shooter fires at T=1.000 (client time)
+Bullet arrives at server at T=1.050 (50ms one-way latency)
+Server checks: where was target at T=1.000?
+  → History buffer: target at (498, 201) at T=0.983
+                    target at (503, 199) at T=1.000 (interpolated)
+  → Bullet is at (502, 198) — within hit radius
+  → HIT VALID
+</pre>
+        <div class="diagram-caption">Server rewinds time to validate the hit from the shooter's perspective.</div>
+      </div>
+
+      <p>
+        Bots (AIController) always have 0ms latency&mdash;no rewind needed. The 200ms max rewind supports up to 400ms round-trip time, which covers most internet connections.
+      </p>
+    </section>
+
+    <section>
+      <h2>RPC inventory</h2>
+      <table>
+        <thead>
+          <tr><th>RPC</th><th>Direction</th><th>Reliability</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>ServerReceiveInput</td><td>Client&rarr;Server</td><td>Unreliable</td><td>Send input frame every tick</td></tr>
+          <tr><td>MulticastWeaponFire</td><td>Server&rarr;All</td><td>Unreliable</td><td>Fire sound + muzzle flash</td></tr>
+          <tr><td>MulticastDeath</td><td>Server&rarr;All</td><td>Reliable</td><td>Death explosion VFX</td></tr>
+          <tr><td>MulticastRespawn</td><td>Server&rarr;All</td><td>Reliable</td><td>Respawn visual</td></tr>
+          <tr><td>MulticastHitFlash</td><td>Server&rarr;All</td><td>Unreliable</td><td>Damage feedback</td></tr>
+          <tr><td>MulticastKillFeed</td><td>Server&rarr;All</td><td>Unreliable</td><td>Kill notification</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Unreliable for cosmetic events (missing a fire sound is fine), reliable for state-changing events (a missed death would leave a ghost ship). This matches the standard UE5 networking pattern.
+      </p>
+    </section>
+
+    <section>
+      <h2>Why this matters</h2>
+      <p>
+        These are the same problems every multiplayer game solves&mdash;Valorant, Overwatch, Rocket League all use variations of this architecture. The tradeoffs are the interesting part: how much history to buffer, when to smooth vs snap, how much tolerance on lag-compensated hits. Each choice has a direct impact on how the game <em>feels</em> to play at different latencies.
+      </p>
+      <p>
+        The implementation is ~400 lines of C++ across ShipPawn and ProjectileBase, plus 49 automated networking tests that verify prediction, reconciliation, and rewind correctness under simulated latency.
+      </p>
+    </section>
+
+    <footer>
+      <a href="astral-rift.html">Astral Rift</a> &middot;
+      <a href="astral-rift-training.html">RL Training Deep Dive</a> &middot;
+      <a href="index.html">Portfolio</a>
+    </footer>
+
+  </div>
+</body>
+</html>
