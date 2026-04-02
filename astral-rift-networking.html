@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet">
   <style>
     :root {
       --text: #1a1a1a;
@@ -333,45 +335,43 @@
       </p>
 
       <h3>Input frame</h3>
-<pre>struct FShipInputFrame {
+<pre><code class="language-cpp">struct FShipInputFrame {
     uint32 SequenceNumber;   // Monotonic, for ack tracking
     float  DeltaTime;        // Frame delta (validated: 0 &lt; dt &lt; 0.5)
     float  RotationInput;    // -1 to 1 (validated: |r| &lt;= 1.1)
     bool   bThrusting;
     bool   bReversing;
     bool   bOverdrive;
-};</pre>
+};</code></pre>
 
       <p>
         The client sends this to the server via an unreliable RPC every tick (<code>ServerReceiveInput</code>). Unreliable is correct here&mdash;if an input is lost, the next one supersedes it. The server validates inputs (clamping delta time, rotation range) to prevent cheating.
       </p>
 
-      <div class="flow">
-        <div class="flow-node">
-          <div class="flow-node-label">Input</div>
+      <div class="flow-vertical flow" style="max-width: 400px;">
+        <div class="flow-node" style="width: 100%;">
+          <div class="flow-node-label">1. Input</div>
           <div class="flow-node-title">Player Action</div>
           <div class="flow-node-detail">thrust, rotate, fire</div>
         </div>
-        <div class="flow-arrow">&rarr;</div>
-        <div class="flow-node flow-node-accent">
-          <div class="flow-node-label">Build Frame</div>
-          <div class="flow-node-title">seq#, dt, inputs</div>
-          <div class="flow-node-detail">stamped + validated</div>
+        <div class="flow-arrow">&#8595;</div>
+        <div class="flow-node flow-node-accent" style="width: 100%;">
+          <div class="flow-node-label">2. Build Frame</div>
+          <div class="flow-node-title">Stamp with seq# + delta time</div>
+          <div class="flow-node-detail">validated, buffered in PendingInputs</div>
         </div>
-        <div class="flow-arrow">&rarr;</div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div class="flow-node" style="border-color: var(--accent);">
-            <div class="flow-node-detail">Apply locally (instant)</div>
+        <div class="flow-arrow">&#8595;</div>
+        <div style="display: flex; gap: 12px; width: 100%;">
+          <div class="flow-node" style="flex: 1; border-color: var(--accent);">
+            <div class="flow-node-label">3a. Local</div>
+            <div class="flow-node-title">Apply instantly</div>
+            <div class="flow-node-detail">no latency felt</div>
           </div>
-          <div class="flow-node">
-            <div class="flow-node-detail">Send to server (RPC)</div>
+          <div class="flow-node" style="flex: 1;">
+            <div class="flow-node-label">3b. Server</div>
+            <div class="flow-node-title">Send via RPC</div>
+            <div class="flow-node-detail">unreliable, every tick</div>
           </div>
-        </div>
-        <div class="flow-arrow">&rarr;</div>
-        <div class="flow-node">
-          <div class="flow-node-label">Buffer</div>
-          <div class="flow-node-title">Pending Inputs</div>
-          <div class="flow-node-detail">for replay on correction</div>
         </div>
       </div>
     </section>
@@ -389,12 +389,12 @@
       </ol>
 
       <h3>Correction struct</h3>
-<pre>struct FShipStateCorrection {
+<pre><code class="language-cpp">struct FShipStateCorrection {
     FVector_NetQuantize Position;    // Quantized for bandwidth
     FVector_NetQuantize Velocity;
     float Rotation;
     uint32 LastProcessedSequence;    // Which input was last applied
-};</pre>
+};</code></pre>
 
       <h3>Smoothing</h3>
       <p>
@@ -418,9 +418,9 @@
       <p>
         Other players' ships (SimulatedProxy) can't be predicted&mdash;we don't know their inputs. Instead, the server replicates their position and the client smoothly interpolates toward it.
       </p>
-<pre>// Each frame for SimulatedProxy ships:
+<pre><code class="language-cpp">// Each frame for SimulatedProxy ships:
 CurrentPos = FMath::VInterpTo(CurrentPos, TargetPos, DeltaTime, 15.0f);
-CurrentRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, 15.0f);</pre>
+CurrentRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, 15.0f);</code></pre>
       <p>
         The interpolation rate of 15.0 gives smooth movement without excessive lag. Higher values track more tightly but look jittery on lossy connections. 15.0 was tuned through PIE testing with simulated latency.
       </p>
@@ -525,5 +525,7 @@ CurrentRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, 15.0f);</pre>
     </footer>
 
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
 </body>
 </html>

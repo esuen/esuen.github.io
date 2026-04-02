@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
   <style>
     :root {
       --text: #1a1a1a;
@@ -477,7 +478,7 @@
       </table>
 
       <h3>Automated diagnosis</h3>
-<pre>$ python3 eval_diagnose.py
+<pre><code class="language-bash">$ python3 eval_diagnose.py
 
   ISSUES FOUND:
     - Low hit rate: 2.6% (threshold: 5%)
@@ -493,7 +494,7 @@
     1. Compare against previous phase
     2. Pick 1-2 flags max
     3. Check if root cause is structural
-    4. Form a hypothesis: "Changed X because Y, expect Z"</pre>
+    4. Form a hypothesis: "Changed X because Y, expect Z"</code></pre>
       <p>
         The script recommends but doesn't decide. The human reviews, picks 1-2 changes, forms a hypothesis, and pushes instructions. Changing many variables at once makes results unattributable.
       </p>
@@ -588,5 +589,7 @@
     </footer>
 
   </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
 </body>
 </html>
