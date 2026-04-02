@@ -184,29 +184,124 @@
       letter-spacing: 0.05em;
     }
 
-    .diagram {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin: 20px 0;
-      overflow-x: auto;
-    }
-
-    .diagram pre {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.75rem;
-      line-height: 1.5;
-    }
-
     .diagram-caption {
       font-size: 0.8rem;
       color: var(--text-tertiary);
-      margin-top: 8px;
+      margin-top: 12px;
       text-align: center;
+    }
+
+    /* Styled flow diagrams */
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .flow-node {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: center;
+      min-width: 120px;
+    }
+
+    .flow-node-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+    }
+
+    .flow-node-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .flow-node-detail {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-family: 'Source Code Pro', monospace;
+      line-height: 1.5;
+    }
+
+    .flow-node-accent {
+      border-color: var(--accent);
+      background: #f8faff;
+    }
+
+    .flow-arrow {
+      font-size: 1.2rem;
+      color: var(--text-tertiary);
+      padding: 0 12px;
+      flex-shrink: 0;
+    }
+
+    .flow-vertical {
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .flow-vertical .flow-arrow {
+      text-align: center;
+      padding: 6px 0;
+    }
+
+    /* Pipeline flow — horizontal with wrap */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px 16px;
+    }
+
+    .pipeline-step {
+      text-align: center;
+      padding: 8px 12px;
+    }
+
+    .pipeline-step-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .pipeline-step-desc {
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      margin-top: 2px;
+    }
+
+    .pipeline-arrow {
+      font-size: 1.1rem;
+      color: var(--accent);
+      padding: 0 8px;
+    }
+
+    .pipeline-loop {
+      display: block;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--accent);
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--border);
     }
 
     footer {
@@ -243,13 +338,32 @@
         Two machines work in parallel. A Mac runs game development, evaluation, and pushes training instructions. A Windows machine with an RTX 3090 trains models on GPU. They coordinate through git&mdash;the simplest protocol that works.
       </p>
 
-      <div class="diagram">
-<pre>
-Train (GPU)  →  Push model  →  Eval (JAX/UE5)  →  Diagnose  →  Push instructions
-   ▲                                                                    │
-   └────────────────────── Poll for instructions ───────────────────────┘
-</pre>
-        <div class="diagram-caption">Fully automated loop. Each phase takes 2-7 hours depending on step count.</div>
+      <div class="pipeline">
+        <div class="pipeline-step">
+          <div class="pipeline-step-label">Train</div>
+          <div class="pipeline-step-desc">GPU, 2-7 hrs</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-label">Push Model</div>
+          <div class="pipeline-step-desc">git, auto</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-label">Evaluate</div>
+          <div class="pipeline-step-desc">JAX + UE5</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-label">Diagnose</div>
+          <div class="pipeline-step-desc">40+ metrics</div>
+        </div>
+        <div class="pipeline-arrow">&rarr;</div>
+        <div class="pipeline-step">
+          <div class="pipeline-step-label">New Instructions</div>
+          <div class="pipeline-step-desc">reward tuning</div>
+        </div>
+        <span class="pipeline-loop">&larr; Windows agent polls, picks up new instructions, repeats</span>
       </div>
 
       <div class="metric-grid">
@@ -429,16 +543,24 @@ Train (GPU)  →  Push model  →  Eval (JAX/UE5)  →  Diagnose  →  Push inst
         Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the 30-logit output into ship controls.
       </p>
 
-      <div class="diagram">
-<pre>
-JAX Training        Export           UE5 Runtime
-┌──────────┐    ┌──────────┐    ┌──────────────────────┐
-│ Flax     │    │          │    │ RLBotController      │
-│ params   │───▶│  ONNX    │───▶│ ├─ BuildObservation() │
-│ .msgpack │    │  .onnx   │    │ ├─ NNE Inference      │
-└──────────┘    └──────────┘    │ └─ DecodeAction()     │
-                                └──────────────────────┘
-</pre>
+      <div class="flow">
+        <div class="flow-node">
+          <div class="flow-node-label">JAX Training</div>
+          <div class="flow-node-title">Flax Params</div>
+          <div class="flow-node-detail">.msgpack</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">
+          <div class="flow-node-label">Export</div>
+          <div class="flow-node-title">ONNX</div>
+          <div class="flow-node-detail">~130KB model</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node flow-node-accent">
+          <div class="flow-node-label">UE5 Runtime</div>
+          <div class="flow-node-title">Bot Controller</div>
+          <div class="flow-node-detail">96 obs &rarr; NNE &rarr; 30 logits</div>
+        </div>
       </div>
 
       <p>

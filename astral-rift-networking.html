@@ -109,29 +109,94 @@
       border-radius: 4px;
     }
 
-    .diagram {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 24px;
-      margin: 20px 0;
-      overflow-x: auto;
-    }
-
-    .diagram pre {
-      background: none;
-      border: none;
-      padding: 0;
-      margin: 0;
-      font-size: 0.75rem;
-      line-height: 1.5;
-    }
-
     .diagram-caption {
       font-size: 0.8rem;
       color: var(--text-tertiary);
-      margin-top: 8px;
+      margin-top: 12px;
       text-align: center;
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .flow-node {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .flow-node-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: 6px;
+    }
+
+    .flow-node-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .flow-node-detail {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .flow-node-accent {
+      border-color: var(--accent);
+      background: #f8faff;
+    }
+
+    .flow-node-server {
+      border-color: #16a34a;
+      background: #f0fdf4;
+    }
+
+    .flow-arrow {
+      font-size: 1.2rem;
+      color: var(--text-tertiary);
+      padding: 0 12px;
+      flex-shrink: 0;
+    }
+
+    .flow-group {
+      display: flex;
+      gap: 12px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .flow-group-label {
+      width: 100%;
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .flow-vertical {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .flow-vertical .flow-arrow {
+      padding: 6px 0;
     }
 
     table {
@@ -231,28 +296,33 @@
         Astral Rift uses a listen-server model where one player hosts and all others connect as clients. The server is authoritative on all game state&mdash;positions, health, projectile hits. Clients predict their own movement locally for responsive controls, then reconcile when the server corrects them.
       </p>
 
-      <div class="diagram">
-<pre>
- ┌─────────────────────────────────────────────────┐
- │              LISTEN SERVER (Host)                │
- │                                                  │
- │  GameMode (server-only)   GameState (replicated) │
- │  ShipPawn (Authority)                            │
- │  ├─ ServerReceiveInput()  ← RPC from clients     │
- │  ├─ ApplyInputFrame()     → authoritative sim    │
- │  └─ ServerCorrection      → replicated to owner  │
- └──────────────┬──────────────────────────────────┘
-                │ Replication
-     ┌──────────┼──────────┐
-     ▼          ▼          ▼
- ┌────────┐ ┌────────┐ ┌────────┐
- │Client A│ │Client B│ │Client C│
- │(Owner) │ │(Proxy) │ │(Proxy) │
- │Predict │ │Interp. │ │Interp. │
- │+Replay │ │VInterpTo│ │VInterpTo│
- └────────┘ └────────┘ └────────┘
-</pre>
-        <div class="diagram-caption">Three client roles: owning client predicts, other clients interpolate.</div>
+      <div>
+        <div style="display: flex; justify-content: center; margin: 24px 0;">
+          <div class="flow-node flow-node-server" style="min-width: 280px;">
+            <div class="flow-node-label">Listen Server (Host)</div>
+            <div class="flow-node-title">Authoritative Simulation</div>
+            <div class="flow-node-detail">Receives input RPCs &rarr; simulates &rarr; sends corrections</div>
+          </div>
+        </div>
+        <div style="text-align: center; color: var(--text-tertiary); font-size: 0.9rem; margin: 8px 0;">&#8595; Replication &#8595;</div>
+        <div class="flow-group">
+          <div class="flow-node flow-node-accent">
+            <div class="flow-node-label">Client A (Owner)</div>
+            <div class="flow-node-title">Predict + Replay</div>
+            <div class="flow-node-detail">Local input &rarr; buffer &rarr; reconcile</div>
+          </div>
+          <div class="flow-node">
+            <div class="flow-node-label">Client B (Proxy)</div>
+            <div class="flow-node-title">Interpolate</div>
+            <div class="flow-node-detail">VInterpTo @ 15.0/s</div>
+          </div>
+          <div class="flow-node">
+            <div class="flow-node-label">Client C (Proxy)</div>
+            <div class="flow-node-title">Interpolate</div>
+            <div class="flow-node-detail">VInterpTo @ 15.0/s</div>
+          </div>
+        </div>
+        <div class="diagram-caption">Owning client predicts locally, other clients interpolate replicated state.</div>
       </div>
     </section>
 
@@ -276,19 +346,33 @@
         The client sends this to the server via an unreliable RPC every tick (<code>ServerReceiveInput</code>). Unreliable is correct here&mdash;if an input is lost, the next one supersedes it. The server validates inputs (clamping delta time, rotation range) to prevent cheating.
       </p>
 
-      <div class="diagram">
-<pre>
-Player Input → Build FShipInputFrame (seq#, dt, thrust, rotation)
-                    │
-            ┌───────┼───────┐
-            ▼               ▼
-    Apply Locally       Send to Server
-    (instant feel)      (Unreliable RPC)
-            │               │
-            ▼               ▼
-    Buffer in           Server applies
-    PendingInputs       authoritatively
-</pre>
+      <div class="flow">
+        <div class="flow-node">
+          <div class="flow-node-label">Input</div>
+          <div class="flow-node-title">Player Action</div>
+          <div class="flow-node-detail">thrust, rotate, fire</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node flow-node-accent">
+          <div class="flow-node-label">Build Frame</div>
+          <div class="flow-node-title">seq#, dt, inputs</div>
+          <div class="flow-node-detail">stamped + validated</div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div class="flow-node" style="border-color: var(--accent);">
+            <div class="flow-node-detail">Apply locally (instant)</div>
+          </div>
+          <div class="flow-node">
+            <div class="flow-node-detail">Send to server (RPC)</div>
+          </div>
+        </div>
+        <div class="flow-arrow">&rarr;</div>
+        <div class="flow-node">
+          <div class="flow-node-label">Buffer</div>
+          <div class="flow-node-title">Pending Inputs</div>
+          <div class="flow-node-detail">for replay on correction</div>
+        </div>
       </div>
     </section>
 
@@ -373,18 +457,31 @@ CurrentRot = FMath::RInterpTo(CurrentRot, TargetRot, DeltaTime, 15.0f);</pre>
         <li>Validates the hit against the rewound position (1.5x tolerance)</li>
       </ol>
 
-      <div class="diagram">
-<pre>
-Shooter fires at T=1.000 (client time)
-Bullet arrives at server at T=1.050 (50ms one-way latency)
-Server checks: where was target at T=1.000?
-  → History buffer: target at (498, 201) at T=0.983
-                    target at (503, 199) at T=1.000 (interpolated)
-  → Bullet is at (502, 198) — within hit radius
-  → HIT VALID
-</pre>
-        <div class="diagram-caption">Server rewinds time to validate the hit from the shooter's perspective.</div>
+      <div class="flow-vertical flow" style="max-width: 480px;">
+        <div class="flow-node" style="width: 100%;">
+          <div class="flow-node-label">T = 1.000s (Client)</div>
+          <div class="flow-node-title">Shooter fires</div>
+          <div class="flow-node-detail">Bullet spawned at client position</div>
+        </div>
+        <div class="flow-arrow">&#8595;</div>
+        <div class="flow-node" style="width: 100%;">
+          <div class="flow-node-label">T = 1.050s (Server)</div>
+          <div class="flow-node-title">Hit detected on server</div>
+          <div class="flow-node-detail">50ms later &mdash; target has moved</div>
+        </div>
+        <div class="flow-arrow">&#8595;</div>
+        <div class="flow-node flow-node-accent" style="width: 100%;">
+          <div class="flow-node-label">Rewind</div>
+          <div class="flow-node-title">Where was the target at T=1.000?</div>
+          <div class="flow-node-detail">Interpolate history buffer &rarr; (503, 199)<br>Bullet at (502, 198) &rarr; within hit radius</div>
+        </div>
+        <div class="flow-arrow">&#8595;</div>
+        <div class="flow-node flow-node-server" style="width: 100%;">
+          <div class="flow-node-title">Hit Valid</div>
+          <div class="flow-node-detail">Damage applied from shooter's perspective</div>
+        </div>
       </div>
+      <div class="diagram-caption">Server rewinds time to validate the hit from the shooter's perspective.</div>
 
       <p>
         Bots (AIController) always have 0ms latency&mdash;no rewind needed. The 200ms max rewind supports up to 400ms round-trip time, which covers most internet connections.
