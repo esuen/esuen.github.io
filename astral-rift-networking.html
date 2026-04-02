@@ -417,7 +417,7 @@ Server checks: where was target at T=1.000?
         These are the same problems every multiplayer game solves&mdash;Valorant, Overwatch, Rocket League all use variations of this architecture. The tradeoffs are the interesting part: how much history to buffer, when to smooth vs snap, how much tolerance on lag-compensated hits. Each choice has a direct impact on how the game <em>feels</em> to play at different latencies.
       </p>
       <p>
-        The implementation is ~400 lines of C++ across ShipPawn and ProjectileBase, plus 12 automated behavior tests for prediction, reconciliation, and rewind correctness, and 49 multi-process headless networking tests that verify replication, input flow, and latency simulation with up to 3 simultaneous clients.
+        The implementation is ~400 lines of C++, plus 12 automated behavior tests for prediction, reconciliation, and rewind correctness, and 49 multi-process headless networking tests that verify replication, input flow, and latency simulation with up to 3 simultaneous clients.
       </p>
     </section>
 
