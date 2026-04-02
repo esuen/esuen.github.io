@@ -278,7 +278,7 @@ Train (GPU)  →  Push model  →  Eval (JAX/UE5)  →  Diagnose  →  Push inst
         Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 8,192 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and all 9 combat abilities.
       </p>
       <p>
-        The simulation must match the game exactly or the trained model won't transfer. 31 cross-check tests verify parity: thrust values, wall bouncing, bullet damage, bomb splash radius, mine proximity triggers, ship-specific stats, ability mechanics. When we change a value in C++, the same change must be made in Python.
+        The simulation must match the game exactly or the trained model won't transfer. 31 cross-check tests verify parity: thrust values, wall bouncing, bullet damage, bomb splash radius, mine proximity triggers, ship-specific stats, ability mechanics. When a value changes in C++, the same change must be made in Python. 189 behavior tests and 86 visual tests verify the UE5 side.
       </p>
 
       <h3>Observation vector (96 floats)</h3>
