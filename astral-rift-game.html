@@ -579,18 +579,13 @@
       box-shadow: 0 12px 40px -12px rgba(74, 142, 255, 0.2);
     }
 
-    .ship-icon {
-      width: 56px;
-      height: 56px;
-      background: linear-gradient(135deg, var(--bg-section), var(--bg-card));
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      margin-bottom: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-dim);
-      font-size: 0.65rem;
+    .ship-img {
+      width: 100%;
+      height: 160px;
+      object-fit: contain;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      filter: drop-shadow(0 0 8px rgba(74, 142, 255, 0.15));
     }
 
     .ship-name {
@@ -913,7 +908,8 @@
     <div class="ship-grid stagger-children">
       <!-- Foundry ships -->
       <div class="ship-card reveal" style="--i:0">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/viper.png" alt="Viper">
         <div class="ship-name">Viper</div>
         <div class="ship-role">Interceptor</div>
         <div class="ship-desc">Fast, agile, lethal. Mass-produced before the Collapse and still the most common frame in Rift space. Standard military loadout: MIRV missiles for area denial, ripper field for close engagements.</div>
@@ -921,7 +917,8 @@
       </div>
 
       <div class="ship-card reveal" style="--i:1">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/comet.png" alt="Comet">
         <div class="ship-name">Comet</div>
         <div class="ship-role">Fast Attack</div>
         <div class="ship-desc">Originally a courier, not a warship. The rocket boost is a transit afterburner repurposed for combat. Drops shard mines during retreats &mdash; by the time you realize a Comet was here, the corridor is already seeded.</div>
@@ -929,7 +926,8 @@
       </div>
 
       <div class="ship-card reveal" style="--i:2">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/hydra.png" alt="Hydra">
         <div class="ship-name">Hydra</div>
         <div class="ship-role">Suppression</div>
         <div class="ship-desc">Three-barrel suppression platform. Banned under the Kessler Accords after the Siege of Tethys. The MIRV launcher and ripper field were added after the Accords expired. The original Hydra didn't need them.</div>
@@ -938,7 +936,8 @@
 
       <!-- Lattice ships -->
       <div class="ship-card reveal" style="--i:3">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/titan.png" alt="Titan">
         <div class="ship-name">Titan</div>
         <div class="ship-role">Heavy Assault</div>
         <div class="ship-desc">Mineral-bonded hull plating from original pre-Collapse schematics. The hull itself absorbs and redistributes kinetic energy across the entire structure. Slow, dense, extraordinarily difficult to kill.</div>
@@ -946,7 +945,8 @@
       </div>
 
       <div class="ship-card reveal" style="--i:4">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/bastion.png" alt="Bastion">
         <div class="ship-name">Bastion</div>
         <div class="ship-role">Defensive Anchor</div>
         <div class="ship-desc">Mobile fortress with crystalline barrier walls and autonomous turrets bonded to mineral substrate. Both systems run on original pre-Collapse firmware. Bastion pilots don't fly their ship so much as deploy it.</div>
@@ -955,7 +955,8 @@
 
       <!-- Null ship -->
       <div class="ship-card reveal" style="--i:5">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/specter.png" alt="Specter">
         <div class="ship-name">Specter</div>
         <div class="ship-role">Stealth Assassin</div>
         <div class="ship-desc">The only ship class attributed to the Fourth. Cloaking that makes the ship <em>absent</em> from detection, not merely hidden. EMP discharge cripples nearby energy systems. The hull has no seams, no welds, no fasteners. Nobody knows what it's made of.</div>
@@ -964,7 +965,8 @@
 
       <!-- Choir ships -->
       <div class="ship-card reveal" style="--i:6">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/tempest.png" alt="Tempest">
         <div class="ship-name">Tempest</div>
         <div class="ship-role">Disruptor</div>
         <div class="ship-desc">Bio-organic hull produces living munitions &mdash; bombs that bounce off walls instead of detonating, ricocheting through corridors. The burst spray, a 360-degree discharge of bio-luminescent projectiles, is definitely intentional. Nothing in nature does that by accident.</div>
@@ -972,7 +974,8 @@
       </div>
 
       <div class="ship-card reveal" style="--i:7">
-        <div class="ship-icon">[ img ]</div>
+        
+        <img class="ship-img" src="images/ships/lurker.png" alt="Lurker">
         <div class="ship-name">Lurker</div>
         <div class="ship-role">Area Denial</div>
         <div class="ship-desc">Bio-organic deep-survey vessel. The weakest weapons of any modern frame, compensated by the largest energy reserves and mines that are closer to organisms than ordnance &mdash; they sense proximity, they wait, and they react.</div>
