@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Choir</title>
+  <meta name="description" content="Bio-organic ships grown in vats. Living munitions with nervous systems. The Choir didn't build — they cultivated.">
+  <meta property="og:title" content="Astral Rift — The Choir">
+  <meta property="og:description" content="Bio-organic ships grown in vats. Living munitions with nervous systems.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    /* Override accent to Choir orange */
+    :root {
+      --accent: #e06830;
+      --accent-secondary: #30c8a0;
+    }
+
+    /* ============================================================
+       HERO (page-specific)
+       ============================================================ */
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(224,104,48,0.8), 0 0 30px rgba(224,104,48,0.5),
+        0 0 60px rgba(224,104,48,0.3), 0 0 120px rgba(224,104,48,0.15);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 15px rgba(224,104,48,1), 0 0 40px rgba(224,104,48,0.6), 0 0 80px rgba(224,104,48,0.35); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(224,104,48,0.8), 0 0 30px rgba(224,104,48,0.5), 0 0 60px rgba(224,104,48,0.3), 0 0 120px rgba(224,104,48,0.15); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 550px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       NEBULA — Choir themed (orange/teal/purple)
+       ============================================================ */
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 60vw 40vh at 10% 8%, rgba(160, 50, 20, 0.35) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 35vh at 85% 15%, rgba(20, 120, 80, 0.3) 0%, transparent 55%),
+        radial-gradient(ellipse 70vw 40vh at 40% 30%, rgba(80, 20, 60, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 45vh at 75% 45%, rgba(30, 140, 100, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 65vw 35vh at 20% 55%, rgba(140, 40, 80, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 50vw 40vh at 90% 65%, rgba(160, 60, 30, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 70vw 45vh at 50% 80%, rgba(20, 100, 70, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 60vw 35vh at 15% 90%, rgba(100, 30, 70, 0.2) 0%, transparent 55%);
+      filter: blur(50px);
+    }
+
+    @keyframes nebula-drift {
+      0%   { transform: translate(0, 0); }
+      50%  { transform: translate(3%, -2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    /* Spore canvas */
+    #spore-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ============================================================
+       SHIP SHOWCASE
+       ============================================================ */
+    .ship-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+
+    .ship-showcase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .ship-showcase-card img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 12px rgba(224, 104, 48, 0.2));
+    }
+
+    .ship-showcase-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .ship-showcase-role {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .ship-showcase-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* Page-specific overrides for Choir accent in shared elements */
+    .lore-illustration {
+      box-shadow: 0 12px 60px -20px rgba(0,0,0,0.6), 0 0 80px -30px rgba(224, 104, 48, 0.08);
+    }
+
+    .lore-quote {
+      background: linear-gradient(135deg, rgba(224, 104, 48, 0.04), transparent);
+    }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .hero { min-height: 50vh; padding: 60px 20px 40px; }
+      .ship-showcase { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<canvas id="spore-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">The Archives &mdash; Faction Dossier</div>
+  <h1 class="hero-title">THE CHOIR</h1>
+  <p class="hero-subtitle">They didn't build ships. They grew them. In vats, from tissue, following genetic programs written by a civilization that no longer exists.</p>
+  <div id="lore-nav" data-current="choir"></div>
+</section>
+
+<!-- ==================== THE NEURAL TREE ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Intelligence</div>
+      <h2 class="section-title">Something is still running.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        At the center of every known Choir production site stands a structure the Compact
+        designates a "neural mass." Pilots call them trees. Trunk-like columns of neural
+        tissue, floor to ceiling, with thousands of tendrils reaching out to every growth
+        vat in the facility.
+      </p>
+      <p>
+        They metabolize nutrients. They respond to stimuli. They regulate production cycles
+        across hundreds of connected vats. Whether any of this constitutes awareness is a
+        question the Compact has been carefully not answering for decades.
+      </p>
+      <p>
+        Dr. Kael Vasik's team at Site 7 noticed that the light patterns on the trunk surface
+        changed when people entered the room. Not when instruments were brought in. When
+        <em>people</em> entered. The patterns returned to baseline when the room emptied.
+        Different researchers produced different patterns. Consistent patterns, visit after
+        visit, for the same person.
+      </p>
+      <p>
+        Vasik's paper was accepted, peer-reviewed, and quietly reclassified.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/neural_tree.png" alt="The neural tree at the center of a Choir production facility">
+      <div class="lore-illustration-caption">Neural mass, Site 7-Choir. The tendrils extend to 340+ active growth vats. Metabolic age estimate: pre-Collapse.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Day four. I walked in and the pattern changed before I crossed the sensor line. Same
+        pattern it showed me on day one. I checked the logs. It showed a different pattern for
+        Okafor on day two. A different one for Metz on day three. Consistent. Specific.
+        I don't know what to call that.</p>
+      <div class="attribution">Dr. Kael Vasik, personal log, unpublished. Status: classified.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Site 7 requisitioned twelve Tempest hulls. The vats produced fourteen. Two weeks later, two Tempests were lost in corridor 9-Kappa. Requisition was updated to fourteen.</p>
+</div>
+
+<!-- ==================== SHIP BIRTH ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Process</div>
+      <h2 class="section-title">Born, not built.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        A Choir ship starts as a genetic template transmitted from the neural tree to a
+        growth vat. The vat fills with nutrient fluid. Over eleven days, the ship assembles
+        itself: hull membrane first, then internal structure, propulsion organs, weapons
+        systems. Layer by layer, like an embryo following a developmental program.
+      </p>
+      <p>
+        The process runs on its own. Technicians learned early that it doesn't welcome
+        help. Any attempt to modify a ship mid-growth causes the vat to seal its nutrient
+        channels, pause, and restart the template from scratch. The process has opinions
+        about how it should go.
+      </p>
+      <p>
+        When the ship is complete, the umbilical tendrils release. The hull hardens in
+        vacuum. Bioluminescent veins flicker on. Experienced pilots say the ship's systems
+        come online in a specific sequence, always the same, and that the sequence looks
+        a lot like something waking up.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/ship_birth.png" alt="A Choir ship emerging from a growth vat">
+      <div class="lore-illustration-caption">Tempest-class vessel, 94% growth completion. Umbilical detachment in approximately 8 hours.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>There's a sound when the hull seals. Not mechanical. The old crews called it "the gasp."
+        New crews don't call it anything. Everyone remembers the first time they hear it.</p>
+      <div class="attribution">Dock Chief Maren Solace, Site 7-Choir, 14 years of service</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Eleven days. No rivets. No welds. The Foundry builds a Viper in nine and considers it a miracle of engineering.</p>
+</div>
+
+<!-- ==================== LIVING MUNITIONS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Weapons</div>
+      <h2 class="section-title">The ammunition is alive.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Choir munitions are organisms. The bouncing bombs have casings made of muscle
+        tissue that contracts on impact, redirecting kinetic energy into a new trajectory.
+        The proximity mines have rudimentary nervous systems. They don't detect energy
+        signatures or radar pings. They sense mass displacement the way a spider senses
+        vibration in a web.
+      </p>
+      <p>
+        Each munition type grows in specialized vats fed by the same neural tree. Production
+        never stops. Spent munitions decompose within hours, breaking down into compounds
+        the vats reabsorb for the next batch.
+      </p>
+      <p>
+        Compact weapons inspectors have tried to classify Choir munitions for thirty years.
+        The forms require a distinction between "weapon" and "organism" that the munitions
+        refuse to respect.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/munitions.png" alt="Bio-organic munitions growing in vats">
+      <div class="lore-illustration-caption">Munitions production array. Left to right: elastic bombs, proximity organisms, burst projectile clusters.</div>
+    </div>
+    <div class="section-text reveal reveal-delay-3">
+      <p>
+        The bouncing bomb is the signature Choir weapon. On contact with a wall, the casing
+        contracts and launches itself into a new trajectory. Compact researchers have
+        measured bounce efficiency at 94%, which shouldn't be possible unless the membrane
+        is burning metabolic reserves to add energy on each impact. The bombs get
+        <em>hungrier</em> as they bounce.
+      </p>
+      <p>
+        In a tight corridor, one bomb can ricochet six or seven times before detonating.
+        Foundry pilots call this "the pinball problem." It's the main reason experienced
+        pilots avoid narrow passages when a Tempest is in the area.
+      </p>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/choir/bouncing_bomb.png" alt="A bouncing bomb mid-ricochet in a corridor">
+      <div class="lore-illustration-caption">High-speed capture: elastic bomb, third ricochet. Note membrane deformation and energy trail. Ship at far end: 0.4s to impact.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE SHIPS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Fleet</div>
+      <h2 class="section-title">Two templates. Two philosophies.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The Choir neural trees produce exactly two ship templates. No variants have been
+        observed. No customization is possible. Pilots fly what the tree grows, or they
+        don't fly Choir at all.
+      </p>
+    </div>
+
+    <div class="ship-showcase reveal reveal-delay-2">
+      <div class="ship-showcase-card">
+        <img src="images/ships/tempest.png" alt="Tempest">
+        <div class="ship-showcase-name">Tempest</div>
+        <div class="ship-showcase-role">Disruptor</div>
+        <div class="ship-showcase-desc">
+          The aggressive template. Bio-organic hull produces bouncing bombs that ricochet
+          through corridors, and a burst spray that turns every engagement into chaos.
+          Tempest pilots don't aim &mdash; they create <em>weather</em>.
+        </div>
+      </div>
+      <div class="ship-showcase-card">
+        <img src="images/ships/lurker.png" alt="Lurker">
+        <div class="ship-showcase-name">Lurker</div>
+        <div class="ship-showcase-role">Area Denial</div>
+        <div class="ship-showcase-desc">
+          The patient template. Weakest weapons of any modern frame, compensated by the
+          largest energy reserves and mines that are closer to organisms than ordnance.
+          A Lurker doesn't fight you. It makes the <em>space</em> fight you.
+        </div>
+      </div>
+    </div>
+
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Compact Training Academy runs a simulation called "Empty Corridor." Foundry cadets
+        clear it in ninety seconds. Lattice cadets fortify and hold. Choir cadets take eleven
+        minutes and leave the corridor unusable for the next three classes.</p>
+      <div class="attribution">Compact Training Academy, after-action review, Cohort 19</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The casing is muscle. The mines have nerves. The ships heal. Call it engineering if you want.</p>
+</div>
+
+<!-- ==================== THE GRAVEYARD ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Cycle</div>
+      <h2 class="section-title">Nothing is wasted.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Destroyed Choir ships don't leave wreckage. They leave remains. The organic hull
+        decomposes within minutes. Near production sites, nutrient tendrils reach out from
+        the facility and draw the material back into the growth cycle. The dead ship becomes
+        the next ship.
+      </p>
+      <p>
+        Far from any production site, the decomposition goes differently. Small organisms
+        appear in the remains. They consume the wreckage and produce structures that
+        resemble miniature growth vats. Too small to build anything useful. Too organized
+        to be accidental. The genetic template seems to be trying to seed a new production
+        facility from whatever's left of a single ship.
+      </p>
+      <p>
+        The Compact monitors 23 such sites. None have progressed past the initial stage.
+        None have stopped.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/graveyard.png" alt="Decomposing Choir ships with new growth emerging">
+      <div class="lore-illustration-caption">Decomposition site, deep corridor 14-Rho. New growth structures visible on remains of Tempest-class vessel.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE LURKER'S DOMAIN ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Combat Doctrine</div>
+      <h2 class="section-title">The corridor is the weapon.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Foundry and Lattice pilots are trained to engage targets. Choir pilots are trained
+        to prepare rooms. A Lurker entering a corridor evaluates surfaces, distances, traffic
+        patterns. Then it starts seeding.
+      </p>
+      <p>
+        Lurker mines are spaced so their nervous systems overlap. Trigger one and it sends
+        a stress signal through the network. The rest wake up together. Experienced Lurker
+        pilots talk about their minefields the way farmers talk about crops: you plant them,
+        you tend them, you wait for the harvest.
+      </p>
+      <p>
+        Tempest pilots don't wait for anything. Bouncing bombs into a contested corridor
+        deny it to everyone, allies included. The burst spray at close range turns a fight
+        into a coin flip, except the Tempest's hull regenerates and yours doesn't.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/minefield.png" alt="Organic proximity mines in a dark corridor">
+      <div class="lore-illustration-caption">Lurker minefield, corridor 8-Gamma. 14 organisms detected. Estimated detection radius: total corridor coverage.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>A Lurker was here. You know this because you are currently on fire.</p>
+      <div class="attribution">Pilot saying. Origin unknown. Documented independently in 34 separate debriefs.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Maintenance schedule for Site 7-Choir: none. The facility maintains itself. Budget allocation: none. The facility was never budgeted for. It simply runs.</p>
+</div>
+
+<!-- ==================== THE QUESTION ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Open File</div>
+      <h2 class="section-title">Is the Choir still alive?</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The neural trees have been running continuously since before the Collapse. They
+        maintain their own nutrient supply. They adjust output based on demand. And on at
+        least one occasion, a tree at Site 12-Choir modified a ship template in a way that
+        doesn't appear in any recovered pre-Collapse genetic archive.
+      </p>
+      <p>
+        The change was small. A 3% increase in hull membrane elasticity on Tempest-class
+        vessels. It appeared after a string of engagements where several Tempests were
+        destroyed by their own ricocheting bombs. The updated membrane reduced self-damage.
+      </p>
+      <p>
+        A tree noticed its ships were dying a specific way and changed the blueprint.
+      </p>
+      <p>
+        The Compact's official position: "autonomous template optimization within
+        pre-programmed parameters." Dr. Vasik's response, found in his personal files
+        after his reassignment:
+      </p>
+      <p>
+        <em>"No."</em>
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/choir/the_question.png" alt="Close-up of the neural tree surface showing patterns">
+      <div class="lore-illustration-caption">Neural surface pattern analysis, Site 7-Choir. Pattern classification: inconclusive. Recommendation: continued observation.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+    <a href="astral-rift-game.html">Game</a>
+    <a href="astral-rift.html">Technical Deep Dive</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="astral-rift-shared.js"></script>
+<script>
+  // Bioluminescent spores
+  (function() {
+    const canvas = document.getElementById('spore-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const COLORS = [
+      [224, 104, 48],   // orange
+      [224, 120, 60],   // warm orange
+      [48, 200, 160],   // teal
+      [40, 180, 140],   // dark teal
+      [180, 60, 100],   // magenta hint
+    ];
+
+    class Spore {
+      constructor() { this.reset(true); }
+
+      reset(randomY) {
+        this.x = Math.random() * canvas.width;
+        this.y = randomY ? Math.random() * canvas.height : canvas.height + 10;
+        this.size = 2 + Math.random() * 4;
+        this.speed = 4 + Math.random() * 8;
+        this.wobbleAmp = 15 + Math.random() * 25;
+        this.wobbleFreq = 0.3 + Math.random() * 0.6;
+        this.phase = Math.random() * Math.PI * 2;
+        this.pulsePhase = Math.random() * Math.PI * 2;
+        this.pulseSpeed = 0.5 + Math.random() * 1.5;
+        const c = COLORS[Math.floor(Math.random() * COLORS.length)];
+        this.r = c[0]; this.g = c[1]; this.b = c[2];
+      }
+
+      update(dt) {
+        this.y -= this.speed * dt;
+        this.phase += this.wobbleFreq * dt;
+        this.pulsePhase += this.pulseSpeed * dt;
+        if (this.y < -20) this.reset(false);
+      }
+
+      draw(ctx) {
+        const wx = this.x + Math.sin(this.phase) * this.wobbleAmp;
+        const alpha = (0.2 + 0.25 * Math.sin(this.pulsePhase)) * (this.size / 6);
+        const glowSize = this.size * (3.5 + 1.0 * Math.sin(this.pulsePhase));
+
+        // Outer glow
+        const grad = ctx.createRadialGradient(wx, this.y, 0, wx, this.y, glowSize);
+        grad.addColorStop(0, `rgba(${this.r}, ${this.g}, ${this.b}, ${alpha})`);
+        grad.addColorStop(0.4, `rgba(${this.r}, ${this.g}, ${this.b}, ${alpha * 0.4})`);
+        grad.addColorStop(1, `rgba(${this.r}, ${this.g}, ${this.b}, 0)`);
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(wx, this.y, glowSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Bright core
+        ctx.fillStyle = `rgba(${Math.min(255, this.r + 60)}, ${Math.min(255, this.g + 60)}, ${Math.min(255, this.b + 60)}, ${alpha * 1.5})`;
+        ctx.beginPath();
+        ctx.arc(wx, this.y, this.size * 0.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const spores = [];
+    for (let i = 0; i < 40; i++) spores.push(new Spore());
+
+    let lastTime = performance.now();
+
+    function loop(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const s of spores) { s.update(dt); s.draw(ctx); }
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
+
+</body>
+</html>

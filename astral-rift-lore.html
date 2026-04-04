@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Archives</title>
+  <meta name="description" content="Recovered fragments from before and after the Collapse. The lore of Astral Rift.">
+  <meta property="og:title" content="Astral Rift — The Archives">
+  <meta property="og:description" content="Recovered fragments from before and after the Collapse.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    /* ============================================================
+       HERO (page-specific)
+       ============================================================ */
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(74,142,255,1), 0 0 40px rgba(74,142,255,0.7),
+        0 0 80px rgba(74,142,255,0.5), 0 0 150px rgba(74,142,255,0.3);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 20px rgba(74,142,255,1), 0 0 50px rgba(74,142,255,0.8), 0 0 100px rgba(74,142,255,0.5); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(74,142,255,1), 0 0 40px rgba(74,142,255,0.7), 0 0 80px rgba(74,142,255,0.5), 0 0 150px rgba(74,142,255,0.3); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 500px;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       NEBULA — Archives themed (purple/blue)
+       ============================================================ */
+    .nebula-deep {
+      animation: nebula-drift 120s ease-in-out infinite;
+      background:
+        radial-gradient(ellipse 80vw 50vh at 10% 15%, rgba(60, 20, 120, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 70vw 40vh at 85% 25%, rgba(20, 50, 130, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 90vw 45vh at 50% 50%, rgba(40, 15, 80, 0.2) 0%, transparent 60%);
+      filter: blur(60px);
+    }
+
+    @keyframes nebula-drift {
+      0%   { transform: translate(0, 0); }
+      50%  { transform: translate(3%, -2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .nebula-mid {
+      animation: nebula-drift-mid 80s ease-in-out infinite;
+      background:
+        radial-gradient(ellipse 40vw 30vh at 25% 10%, rgba(100, 50, 200, 0.2) 0%, transparent 65%),
+        radial-gradient(ellipse 35vw 25vh at 70% 35%, rgba(40, 100, 200, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 45vw 20vh at 15% 55%, rgba(200, 50, 80, 0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 30vw 35vh at 60% 65%, rgba(50, 120, 180, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 25vh at 40% 85%, rgba(120, 40, 160, 0.15) 0%, transparent 55%);
+      filter: blur(40px);
+    }
+
+    @keyframes nebula-drift-mid {
+      0%   { transform: translate(0, 0); }
+      50%  { transform: translate(-4%, 3%); }
+      100% { transform: translate(0, 0); }
+    }
+
+
+    /* ============================================================
+       FACTION CARDS
+       ============================================================ */
+    .faction-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      margin: 32px 0;
+    }
+
+    .faction-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+
+    .faction-tagline {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .faction-text {
+      font-size: 0.95rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .faction-text em { color: var(--text-bright); font-style: normal; font-weight: 500; }
+
+    /* ============================================================
+       RESPONSIVE
+       ============================================================ */
+    @media (max-width: 768px) {
+      .hero { min-height: 50vh; padding: 60px 20px 40px; }
+      .faction-card { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+<div class="nebula-field nebula-mid"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Astral Rift</div>
+  <h1 class="hero-title">THE ARCHIVES</h1>
+  <p class="hero-subtitle">Recovered fragments from before and after the Collapse. Classification level: Compact General.</p>
+  <div id="lore-nav" data-current="archives"></div>
+</section>
+
+<!-- ==================== THE RIFTS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter I</div>
+      <h2 class="section-title">The Rifts</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Jagged tears where dimensional boundaries thin to nothing. Sensors read them as
+        gravitational anomalies. Navigation systems won't plot courses through them. Pilots
+        who fly close report hearing patterns in the static. Not noise. Patterns.
+      </p>
+      <p>
+        Before the Collapse, the Rifts were infrastructure. Transit corridors, supply lines,
+        weapons testing ranges. Five civilizations built empires around them and depended on
+        them so completely that when the Rifts changed, everything built around them fell apart.
+      </p>
+      <p>
+        They didn't close. They didn't move. Whatever property made them useful became
+        something else. The corridors are still there. The rules inside them are not.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/rifts.png" alt="A dimensional fracture in deep space">
+      <div class="lore-illustration-caption">Archival image: Rift corridor 7-Sigma, first survey expedition, 43 years post-Collapse</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Pre-Collapse scientists called it "resonance binding." 4,200 pages of documentation
+        survive. The theoretical framework they reference does not. Every paper cites a
+        foundational work by an author whose name appears nowhere else in any archive.</p>
+      <div class="attribution">Compact Science Division, introductory briefing, page 1 of 1</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The corridors didn't change. We did.</p>
+</div>
+
+<!-- ==================== THE FIVE ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter II</div>
+      <h2 class="section-title">The Five</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Five civilizations worked the same problem: how to survive where physics bends and
+        energy is the only currency. Each developed technology so distinct you can identify
+        a hull fragment's origin at a glance. Four left recoverable schematics.
+      </p>
+    </div>
+
+    <!-- FOUNDRY -->
+    <div class="faction-card reveal">
+      <div class="faction-name">The Foundry</div>
+      <div class="faction-tagline">Industrial &middot; Military &middot; Precision</div>
+      <div class="faction-text">
+        <p>
+          More ships than the other four combined. Angular, modular, built to be fixed by
+          anyone with a wrench. Some assembly complexes are still running. The Compact
+          says that's expected.
+        </p>
+        <p><a href="astral-rift-lore-foundry.html" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em;">Full dossier: The Foundry &rarr;</a></p>
+      </div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/foundry.png" alt="Foundry shipyard interior">
+      <div class="lore-illustration-caption">Reconstructed image: Foundry Assembly Complex, designation unknown</div>
+    </div>
+
+    <!-- LATTICE -->
+    <div class="faction-card reveal">
+      <div class="faction-name">The Lattice</div>
+      <div class="faction-tagline">Crystalline &middot; Mineral-Bonded &middot; Ancient</div>
+      <div class="faction-text">
+        <p>
+          Ships grown from mineral substrate in crystal caverns. Heavy, dense, and older
+          than they should be. The carbon dating is wrong, or the Lattice was here first.
+        </p>
+        <p><a href="astral-rift-lore-lattice.html" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em;">Full dossier: The Lattice &rarr;</a></p>
+      </div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/lattice.png" alt="Lattice crystal cavern workshop">
+      <div class="lore-illustration-caption">Scan reconstruction: Lattice mineral formation site, deep structure survey 12-K</div>
+    </div>
+
+    <!-- CHOIR -->
+    <div class="faction-card reveal">
+      <div class="faction-name">The Choir</div>
+      <div class="faction-tagline">Organic &middot; Bioluminescent &middot; Grown</div>
+      <div class="faction-text">
+        <p>
+          Living ships grown in bio-vats. The munitions have nervous systems. The production
+          lines are still running. Nobody knows who wrote the genetic templates.
+        </p>
+        <p><a href="astral-rift-lore-choir.html" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em;">Full dossier: The Choir &rarr;</a></p>
+      </div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/choir.png" alt="Choir bio-organic laboratory">
+      <div class="lore-illustration-caption">Bio-survey image: Active Choir production vat, site designation classified</div>
+    </div>
+
+    <div class="lore-break reveal">
+      <p class="lore-break-text">Four sets of schematics. Four philosophies of war. And a fifth that left nothing anyone can read.</p>
+    </div>
+
+    <!-- NULL -->
+    <div class="faction-card reveal">
+      <div class="faction-name">The Fourth</div>
+      <div class="faction-tagline">Null &middot; Designation Provisional</div>
+      <div class="faction-text">
+        <p>
+          One ship. No crew. No schematics. No explanation. The hull returns no spectroscopic
+          reading at all. The name is a filing error that nobody has corrected.
+        </p>
+        <p><a href="astral-rift-lore-fourth.html" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em;">Full dossier: The Fourth &rarr;</a></p>
+      </div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/null.png" alt="Null artifact floating in void">
+      <div class="lore-illustration-caption">Sensor artifact: Object 4-Null, recovered from deep Rift corridor. Image may not be accurate.</div>
+    </div>
+
+    <!-- WEAVE -->
+    <div class="faction-card reveal">
+      <div class="faction-name">The Weave</div>
+      <div class="faction-tagline">Filament &middot; Dimensional &middot; Absent</div>
+      <div class="faction-text">
+        <p>
+          Dimensional filament stretched between anchor points. Half matter, half geometry.
+          The filament is gone. The brackets remain, arranged in patterns that look like webs.
+        </p>
+        <p><a href="astral-rift-lore-weave.html" style="color: var(--accent); text-decoration: none; font-size: 0.85rem; letter-spacing: 0.06em;">Full dossier: The Weave &rarr;</a></p>
+      </div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img src="images/lore/weave.png" alt="Weave filament structures in a Rift corridor">
+      <div class="lore-illustration-caption">Deep survey image: Filament anchor array, Rift corridor 19-Theta. Image enhanced; original was nearly invisible.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Five empires. One generation. No bodies. No wreckage. No war damage. Just silence.</p>
+</div>
+
+<!-- ==================== THE COLLAPSE ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter III</div>
+      <h2 class="section-title">The Collapse</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Within a single generation, all five disappeared. The infrastructure survived.
+        Ships drifted with open cockpits and warm engines. Power systems went dark one by
+        one as fuel ran out, not because anyone shut them down.
+      </p>
+      <p>
+        No war. No plague. The archaeological record shows normal activity right up until
+        it stops. Mid-sentence communications. Half-eaten meals. Experiments still recording
+        data to empty rooms.
+      </p>
+      <p>
+        The Compact's official position: cause unknown, not under investigation. It is the
+        only topic on which the Compact and the Outermark have ever agreed.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/collapse.png" alt="Abandoned space station, empty and intact">
+      <div class="lore-illustration-caption">Survey image: Station designation unknown. Power systems active. No life signs. Status: normal.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Meridian Archivist Sola Denn documented 847 pilot superstitions across four factions.
+        23% matched sealed pre-Collapse navigational protocols that the pilots had no access to.
+        A further 6% matched nothing in any known archive but appeared in all four factions,
+        word for word, in languages the speakers did not share.</p>
+      <div class="attribution">Denn, S. "Inherited Navigation Behaviors in Post-Collapse Populations." Suppressed.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The automated supply caches are still manufacturing equipment on schedules set centuries ago. Nobody has found the off switch. Nobody is looking.</p>
+</div>
+
+<!-- ==================== THE AFTERMATH ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter IV</div>
+      <h2 class="section-title">The Aftermath</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The Compact's official history: survivors in remote outposts and transit corridors
+        were spared. Over generations they found each other, recovered schematics, rebuilt.
+        Families trace lineage to specific factions. Foundry descendants fly Foundry ships.
+        It's a clean story. It's in the academy textbooks.
+      </p>
+      <p>
+        Outermark records tell it differently. The earliest post-Collapse population surveys
+        show a functioning society appearing within a single generation. No pioneer phase.
+        No subsistence period. The "oldest" settlements have no construction stages — no
+        scaffolding marks, no foundation pours. They appeared complete, as if someone set
+        them down. Archivist Sola Denn flagged the discrepancy in her census appendix. The
+        appendix was not included in the published version.
+      </p>
+      <p>
+        Two powers emerged from whatever happened next. The Compact controls the known
+        corridors, maintains the archives, regulates access to pre-Collapse tech. The
+        Outermark operates in uncharted space, salvaging what the Compact hasn't catalogued
+        and selling it to whoever pays. Their relationship is technically diplomatic.
+      </p>
+      <p>
+        Most pilots align with neither. Mercenaries, salvagers, arena fighters. They fly
+        ships from schematics they can't fully read, using technology that works for reasons
+        they've stopped asking about.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/aftermath.png" alt="Lone pilot approaching ancient ruins">
+      <div class="lore-illustration-caption">Outermark salvage operation. Pilot identification withheld per standard protocol.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>I pulled the settlement registry for Meridian Station. Founded 40 years post-Collapse,
+        according to Compact records. But the structural survey shows zero construction phases.
+        No temporary shelters. No expansion rings. The whole station reads like it was placed
+        there in one piece. I asked the Compact liaison about it. She said the survey equipment
+        was probably miscalibrated. I asked if I could recalibrate it. She said no.</p>
+      <div class="attribution">Outermark Survey Report 1142-C. Filed. No action taken.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">We fly their ships. We fire their weapons. We don't know their names.</p>
+</div>
+
+<!-- ==================== THE BLOOM ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter V</div>
+      <h2 class="section-title">The Bloom</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Past the navigable corridors, in Rift space the Compact has classified as off-limits,
+        veteran pilots report a region they call the Bloom. Sensor data shows an expanding
+        field of machine wreckage. Millions of autonomous combat units. Still manufacturing.
+        Still fighting each other. Still growing.
+      </p>
+      <p>
+        Whoever deployed them is long gone. The machines are not. They've been at war with
+        themselves for longer than anyone alive can account for, and the wreckage field is
+        expanding. The Compact monitors it. The Outermark pretends it isn't there.
+      </p>
+      <p>
+        Three MTAD analysts filed formal objections to the Compact's neural combat simulation
+        program, citing similarities to behavioral patterns observed in the Bloom. All three
+        objections were classified.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/bloom.png" alt="Field of autonomous machines still fighting">
+      <div class="lore-illustration-caption">Long-range sensor composite: The Bloom. Distance: classified. Expansion rate: classified. Threat assessment: classified.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>The only difference between the Compact's simulations and the Bloom is containment.</p>
+      <div class="attribution">Source: [REDACTED]. Clearance level: [REDACTED]. Status: [REDACTED].</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Listen to the hum. It's not random.</p>
+</div>
+
+<!-- ==================== THE RIFT PARADOX ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Chapter VI</div>
+      <h2 class="section-title">The Rift Paradox</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Near a Rift, physics simplifies. One energy field powers shields, weapons, propulsion,
+        life support. The resource that keeps you alive is the same resource you spend to
+        kill someone. Fire a volley and your defenses thin. Take a hit and you can't return it.
+      </p>
+      <p>
+        Every pre-Collapse ship design reflects this constraint. The Foundry answered it with
+        volume of fire, the Lattice with heavy plating, the Choir with regeneration. The
+        Fourth apparently didn't need to answer it at all. The Weave laid traps and let the
+        problem solve itself.
+      </p>
+      <p>
+        Modern pilots answer it with timing and nerve. Every trigger pull is a bet: that the
+        damage you deal will matter more than the defense you just gave up.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/paradox.png" alt="Ship firing with shields draining">
+      <div class="lore-illustration-caption">Combat telemetry: energy transfer during weapons discharge. Note shield collapse at T+0.3s.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-game.html">Game</a>
+    <a href="astral-rift.html">Technical Deep Dive</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<!-- ============================================================
+     SCROLL REVEAL
+     ============================================================ -->
+<script src="astral-rift-shared.js"></script>
+
+
+</body>
+</html>

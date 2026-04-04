@@ -11,40 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
   <style>
-    /* ============================================================
-       DESIGN TOKENS
-       ============================================================ */
-    :root {
-      --bg-void: #050510;
-      --bg-deep: #0a0a16;
-      --bg-section: #0c0c1e;
-      --bg-card: #12122a;
-      --bg-card-hover: #181840;
-      --text: #c8c8dc;
-      --text-dim: #a0a0b8;
-      --text-bright: #eeeef6;
-      --accent: #4a8eff;
-      --accent-glow: rgba(74, 142, 255, 0.35);
-      --accent-secondary: #8b5cf6;
-      --accent-warm: #ff6b4a;
-      --border: #1e1e3a;
-      --border-hover: #4a8eff60;
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    html { overflow-x: hidden; scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Exo 2', 'Inter', -apple-system, sans-serif;
-      color: var(--text);
-      background: var(--bg-void);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
 
     /* ============================================================
        STARFIELD (box-shadow technique, 3 depth layers + twinkle)
@@ -196,130 +164,6 @@
       margin: 0 auto;
       line-height: 1.8;
       opacity: 0.8;
-    }
-
-    /* ============================================================
-       BLACK HOLE (Interstellar / Gargantua style)
-       Disk split into back/front halves, void sandwiched between.
-       ============================================================ */
-    .blackhole {
-      position: fixed;
-      pointer-events: none;
-      z-index: 0;
-      width: 500px; height: 500px;
-      right: -60px; top: 25%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .bh-bloom {
-      position: absolute;
-      width: 460px; height: 130px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse at center,
-        rgba(255, 180, 80, 0.35) 0%, rgba(255, 120, 30, 0.18) 40%, transparent 70%);
-      filter: blur(25px);
-      z-index: 1;
-      animation: bh-bloom-pulse 8s ease-in-out infinite alternate;
-    }
-
-    @keyframes bh-bloom-pulse {
-      0%   { opacity: 0.7; transform: scaleX(1); }
-      100% { opacity: 1; transform: scaleX(1.05); }
-    }
-
-    /* Full disk behind the void — no clip-path split */
-    .bh-disk-back {
-      position: absolute;
-      width: 340px; height: 340px;
-      border-radius: 50%;
-      background: conic-gradient(from 0deg,
-        rgba(255,106,0,0.7), rgba(255,160,40,0.85), rgba(255,224,160,0.95), rgba(255,245,230,1),
-        rgba(255,224,160,0.95), rgba(255,160,40,0.85), rgba(255,106,0,0.7));
-      mask: radial-gradient(circle, transparent 14%, black 18%, black 44%, transparent 48%);
-      -webkit-mask: radial-gradient(circle, transparent 14%, black 18%, black 44%, transparent 48%);
-      transform: rotateX(78deg);
-      filter: blur(4px);
-      box-shadow: 0 0 50px 15px rgba(255,150,50,0.25), 0 0 100px 40px rgba(255,100,0,0.1);
-      z-index: 5;
-      animation: bh-disk-spin 15s linear infinite;
-    }
-
-    /* Void sits on top of the full disk */
-    .bh-void {
-      position: absolute;
-      width: 65px; height: 65px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #000 60%, rgba(0,0,0,0.95) 80%, rgba(0,0,0,0.7) 100%);
-      box-shadow:
-        0 0 15px 8px rgba(0,0,0,0.98),
-        0 0 30px 15px rgba(0,0,0,0.8),
-        0 0 50px 25px rgba(0,0,0,0.5);
-      z-index: 10;
-    }
-
-    .bh-void::after {
-      content: '';
-      position: absolute;
-      top: -2px; left: -2px;
-      width: calc(100% + 4px); height: calc(100% + 4px);
-      border-radius: 50%;
-      box-shadow:
-        0 0 3px 1px rgba(255,220,150,0.35),
-        0 0 6px 2px rgba(255,160,60,0.2);
-    }
-
-    /* Front arc — thin bright sliver in front of the void, simulates front-of-disk */
-    .bh-disk-front {
-      position: absolute;
-      width: 200px; height: 30px;
-      border-radius: 50%;
-      background: linear-gradient(90deg,
-        transparent 0%, rgba(255,180,80,0.6) 20%, rgba(255,220,150,0.8) 50%,
-        rgba(255,180,80,0.6) 80%, transparent 100%);
-      transform: translateY(18px);
-      filter: blur(2px);
-      z-index: 15;
-    }
-
-    /* Lensing — vertical oval glow, masked to show only top/bottom arcs */
-    .bh-lens-top {
-      position: absolute;
-      width: 80px; height: 120px;
-      border-radius: 50%;
-      border: 2px solid rgba(255, 220, 150, 0.5);
-      box-shadow: 0 0 8px 2px rgba(255,180,80,0.3), 0 0 20px 5px rgba(255,140,50,0.15);
-      z-index: 12;
-      mask: linear-gradient(to bottom, black 0%, black 30%, transparent 45%, transparent 55%, black 70%, black 100%);
-      -webkit-mask: linear-gradient(to bottom, black 0%, black 30%, transparent 45%, transparent 55%, black 70%, black 100%);
-      filter: blur(1px);
-      animation: bh-lens-glow 5s ease-in-out infinite alternate;
-    }
-
-    /* No separate bottom lens needed — the masked oval covers both arcs */
-    .bh-lens-bottom { display: none; }
-
-    @keyframes bh-disk-spin {
-      from { transform: rotateX(75deg) rotateZ(0deg); }
-      to   { transform: rotateX(75deg) rotateZ(360deg); }
-    }
-
-    @keyframes bh-lens-glow {
-      0%   { opacity: 0.8; }
-      100% { opacity: 1; }
-    }
-
-    /* ============================================================
-       BACKGROUND COMBAT CANVAS
-       ============================================================ */
-    #combat-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      pointer-events: none;
-      opacity: 0.4;
     }
 
     /* ============================================================
@@ -550,7 +394,7 @@
     }
 
     .lore-quote p {
-      color: var(--text);
+      color: var(--text-bright);
       font-size: 0.95rem;
       font-style: italic;
       line-height: 1.9;
@@ -840,8 +684,8 @@
 </head>
 <body>
 
-<!-- Background combat simulation -->
-<canvas id="combat-canvas"></canvas>
+<!-- Background effects -->
+<canvas id="rift-canvas"></canvas>
 
 <!-- Nebula gas layers (parallax, spread across full page height) -->
 <div class="nebula-field nebula-deep" data-parallax="0.04"></div>
@@ -855,6 +699,13 @@
 <div id="stars-twinkle" data-parallax="0.04"></div>
 
 
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+
 <div class="page-content">
 
 <!-- ==================== HERO ==================== -->
@@ -864,9 +715,9 @@
   <p class="hero-tagline">Your shields are your weapons.</p>
   <p class="hero-description">
     Fight in the ruins of a collapsed civilization, where dimensional fractures
-    bend the laws of physics. Every shot drains your defenses. Every hit brings
-    you closer to destruction. Eight ships. Twenty abilities. AI opponents that
-    learned to fight by playing a billion rounds.
+    bend the laws of physics and every trigger pull costs you the shields that
+    keep you alive. Eight ships. Twenty abilities. AI opponents that learned
+    to fight by playing billions of rounds.
   </p>
   <video autoplay loop muted playsinline controls style="width: 100%; max-width: 900px; border-radius: 16px; box-shadow: 0 20px 80px -20px rgba(0,0,0,0.8), 0 0 120px -40px rgba(74,142,255,0.15); opacity: 0; animation: hero-fade 1s 0.8s forwards;">
     <source src="images/astral-rift-highlight.mp4" type="video/mp4">
@@ -899,10 +750,13 @@
     </div>
     <div class="lore-quote reveal reveal-delay-2">
       <p>Meridian Archivist Sola Denn documented 847 pilot superstitions across four factions.
-        23% matched sealed pre-Collapse navigational protocols. A further 6% matched nothing
-        in any known archive &mdash; but appeared simultaneously in all four factions, word for word.
-        Her monograph remains the least-cited publication in the Compact archives.</p>
-      <div class="attribution">The warnings survived. Nobody knows how.</div>
+        23% matched sealed pre-Collapse navigational protocols that the pilots had no access to.
+        A further 6% matched nothing in any known archive but appeared in all four factions,
+        word for word, in languages the speakers did not share.</p>
+      <div class="attribution">Denn, S. "Inherited Navigation Behaviors in Post-Collapse Populations." Suppressed.</div>
+    </div>
+    <div class="reveal reveal-delay-3" style="text-align: center; margin-top: 40px;">
+      <a href="astral-rift-lore.html" class="lore-nav-link" style="font-size: 0.75rem; padding: 10px 24px; color: var(--accent);">Read the Archives &rarr;</a>
     </div>
   </div>
 </section>
@@ -981,7 +835,7 @@
         <img class="ship-img" src="images/ships/specter.png" alt="Specter">
         <div class="ship-name">Specter</div>
         <div class="ship-role">Stealth Assassin</div>
-        <div class="ship-desc">The only ship class attributed to the Fourth. Cloaking that makes the ship <em>absent</em> from detection, not merely hidden. EMP discharge cripples nearby energy systems. The hull has no seams, no welds, no fasteners. Nobody knows what it's made of.</div>
+        <div class="ship-desc">The only ship class attributed to the Fourth. Modern Specters use a reverse-engineered cloak &mdash; sensor and visual stealth. The original did something else entirely. EMP discharge cripples nearby systems. The hull is a copy; the original returns no spectroscopic reading at all.</div>
         <div class="ship-flavor">"Specter pilots report a persistent low hum in the cockpit that doesn't match any known system. Pilots say they've grown to like it."</div>
       </div>
 
@@ -991,7 +845,7 @@
         <img class="ship-img" src="images/ships/tempest.png" alt="Tempest">
         <div class="ship-name">Tempest</div>
         <div class="ship-role">Disruptor</div>
-        <div class="ship-desc">Bio-organic hull produces living munitions &mdash; bombs that bounce off walls instead of detonating, ricocheting through corridors. The burst spray, a 360-degree discharge of bio-luminescent projectiles, is definitely intentional. Nothing in nature does that by accident.</div>
+        <div class="ship-desc">Bio-organic hull produces living munitions. Bombs with muscle-membrane casings that bounce off walls and ricochet through corridors. The burst spray &mdash; a 360-degree discharge of bioluminescent projectiles &mdash; is triggered by stress hormones in the hull.</div>
         <div class="ship-flavor">"It's not a ship. It's a weather system with an attitude."</div>
       </div>
 
@@ -1000,7 +854,7 @@
         <img class="ship-img" src="images/ships/lurker.png" alt="Lurker">
         <div class="ship-name">Lurker</div>
         <div class="ship-role">Area Denial</div>
-        <div class="ship-desc">Bio-organic deep-survey vessel. The weakest weapons of any modern frame, compensated by the largest energy reserves and mines that are closer to organisms than ordnance &mdash; they sense proximity, they wait, and they react.</div>
+        <div class="ship-desc">Bio-organic deep-survey vessel. Weakest weapons of any modern frame, largest energy reserves. Its mines are closer to organisms than ordnance &mdash; they have nervous systems and they know when you're close.</div>
         <div class="ship-flavor">"A Lurker was here. You know this because you are currently on fire."</div>
       </div>
     </div>
@@ -1008,7 +862,7 @@
 </section>
 
 <div class="lore-break reveal">
-  <p class="lore-break-text">Four factions are represented in the modern fleet. The fifth &mdash; the Weave &mdash; built ships from dimensional filament, structures that were half matter and half geometry. Their schematics resist reconstruction. The filament decays outside Rift space. But in the deep corridors, pilots still find anchor points &mdash; perfectly preserved mounting brackets for technology that no longer exists, arranged in patterns that look uncomfortably like webs.</p>
+  <p class="lore-break-text">Four factions left recoverable schematics. The fifth &mdash; the Weave &mdash; left empty brackets in deep corridors, arranged in patterns that look like webs. The threads are gone.</p>
 </div>
 
 <!-- ==================== COMBAT ==================== -->
@@ -1021,14 +875,14 @@
     </div>
     <div class="section-text reveal reveal-delay-1">
       <p>
-        Near a Rift, a single energy field powers both your shields and your weapons.
-        Fire a volley and your defenses drop. Take a hit and you can't shoot back.
-        <em>The more dangerous you become, the more vulnerable you are.</em>
+        Near a Rift, one energy field powers everything. Shields, weapons, propulsion.
+        The resource that keeps you alive is the same resource you spend to kill someone.
+        Every engagement is a bet on which of you runs out first.
       </p>
       <p>
         Twenty abilities &mdash; bullets, bombs, mines, MIRV missiles, repulsor blasts,
-        energy fields, warp teleports, deployable turrets &mdash; each drawing from that
-        same shared resource. Victory goes to the pilot who manages the paradox best.
+        energy fields, warp teleports, deployable turrets &mdash; all drawing from
+        that same pool.
       </p>
     </div>
     <div class="screenshot-grid reveal reveal-delay-2">
@@ -1040,7 +894,7 @@
 </section>
 
 <div class="lore-break reveal">
-  <p class="lore-break-text">Pre-Collapse scientists called it "resonance binding." They documented it thoroughly. They never explained it.</p>
+  <p class="lore-break-text">Pre-Collapse scientists called it "resonance binding." 4,200 pages of documentation survive. The theoretical framework they reference does not.</p>
 </div>
 
 <!-- ==================== GAME MODES ==================== -->
@@ -1110,15 +964,14 @@
     <div class="section-text reveal reveal-delay-1">
       <p>
         The Meridian Threat Assessment Division runs the most advanced combat prediction
-        system in the sector. Neural models trained on <em>billions of simulated engagements</em>
+        system in the sector. Neural models trained on <em>tens of billions of simulated engagements</em>
         generate tactical forecasts, discovering strategies no human pilot has attempted &mdash;
         mine traps, ability combos, aggressive pursuit patterns, energy management techniques.
       </p>
       <p>
         Each generation is evaluated not just on win rate, but on <em>how</em> it fights:
         aggression, accuracy, ability usage, energy efficiency. Models that win by playing
-        passively are discarded. The result is AI that fights like a human opponent &mdash;
-        unpredictable, adaptive, and dangerous.
+        passively are discarded. The result is AI that doesn't play like a bot.
       </p>
       <p>
         Three MTAD analysts have filed formal objections to the program. All three
@@ -1158,9 +1011,9 @@
       </div>
 
       <div class="feature-card reveal" style="--i:2">
-        <div class="feature-number">2B</div>
+        <div class="feature-number">50B+</div>
         <div class="feature-title">Training Steps</div>
-        <div class="feature-desc">Neural network bots trained across 8,192 parallel environments. Discovers combat strategies autonomously. Evaluated on behavioral quality, not just win rate.</div>
+        <div class="feature-desc">Neural network bots trained across 4,096 parallel environments. Discovers combat strategies autonomously. Evaluated on behavioral quality, not just win rate.</div>
       </div>
 
       <div class="feature-card reveal" style="--i:3">
@@ -1216,6 +1069,7 @@
   <div class="footer-title">ASTRAL RIFT</div>
   <div class="footer-text">Built by Eric Suen</div>
   <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
     <a href="astral-rift.html">Technical Deep Dive</a>
     <a href="index.html">Portfolio</a>
     <a href="https://github.com/esuen">GitHub</a>
@@ -1227,16 +1081,9 @@
 <!-- ============================================================
      PARALLAX + SCROLL REVEAL
      ============================================================ -->
+<script src="astral-rift-shared.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Scroll reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('visible');
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
     // Parallax scroll — each [data-parallax] layer moves at speed × scrollY
     const layers = document.querySelectorAll('[data-parallax]');
     let ticking = false;
@@ -1715,7 +1562,7 @@
   const ships = [];
   const bullets = [];
   const explosions = [];
-  const NUM_SHIPS = 8; // One of each archetype
+  const NUM_SHIPS = 4;
 
   for (let i = 0; i < NUM_SHIPS; i++) ships.push(new Ship(i));
 

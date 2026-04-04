@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Weave</title>
+  <meta name="description" content="Dimensional filament stretched between anchor points. Half matter, half geometry. The threads are gone. The brackets remain.">
+  <meta property="og:title" content="Astral Rift — The Weave">
+  <meta property="og:description" content="The threads are gone. The brackets remain.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    :root {
+      --accent: #30c8c0;
+      --accent-secondary: #208880;
+    }
+
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(48,200,192,1), 0 0 40px rgba(48,200,192,0.7),
+        0 0 80px rgba(48,200,192,0.5), 0 0 150px rgba(48,200,192,0.3);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 20px rgba(48,200,192,1), 0 0 50px rgba(48,200,192,0.8), 0 0 100px rgba(48,200,192,0.5); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(48,200,192,1), 0 0 40px rgba(48,200,192,0.7), 0 0 80px rgba(48,200,192,0.5), 0 0 150px rgba(48,200,192,0.3); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 15% 20%, rgba(10, 60, 60, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 80% 35%, rgba(15, 50, 55, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 65vw 35vh at 45% 60%, rgba(5, 40, 45, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 45vh at 20% 80%, rgba(10, 55, 50, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    .lore-illustration {
+      box-shadow: 0 12px 60px -20px rgba(0,0,0,0.6), 0 0 80px -30px rgba(48, 200, 192, 0.08);
+    }
+
+    .lore-quote {
+      background: linear-gradient(135deg, rgba(48, 200, 192, 0.04), transparent);
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: auto; padding: 60px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">The Archives — Faction Dossier</div>
+  <h1 class="hero-title">THE WEAVE</h1>
+  <p class="hero-subtitle">They built with dimensional filament. The filament is gone. The architecture isn't.</p>
+  <div id="lore-nav" data-current="weave"></div>
+</section>
+
+<!-- ==================== THE FILAMENT ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Technology</div>
+      <h2 class="section-title">Half matter, half geometry.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Dimensional filament. The Compact has a name for it but no definition. The
+        material exists at the boundary between physical matter and spatial geometry —
+        structures that are partly solid and partly a shape that space is holding. Weave
+        ships weren't objects. They were patterns held in tension between anchor points,
+        frameworks that moved through Rift corridors the way a spider moves through silk.
+      </p>
+      <p>
+        Outside Rift space, the filament decays. Every attempt to stabilize a sample in
+        a laboratory has failed. The material doesn't break down. It stops being material.
+        One moment the instruments register mass and structure. The next, the sample space
+        is empty and the instruments show no transition. The sample didn't dissolve. It
+        simply stopped being there.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/weave/filament_decay.png" alt="Decaying filament in a containment unit">
+      <div class="lore-illustration-caption">Containment log: Weave filament sample W-7. Frame 1: sample present. Frame 2 (0.03s later): sample absent. No transition detected.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>It didn't decay. Decay implies a process. This was more like the material
+        forgot it existed.</p>
+      <div class="attribution">Dr. Tova Rin, Compact Dimensional Studies. Research suspended pending review.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Filament sample retention time outside Rift space: 4 to 11 seconds. Inside Rift space: indefinite. Nobody has explained the threshold.</p>
+</div>
+
+<!-- ==================== THE ANCHORS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Field Evidence</div>
+      <h2 class="section-title">The brackets are still there.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        In deep Rift corridors, pilots find anchor points. Metallic brackets mounted to
+        walls, ceilings, and free-floating in void space, arranged in geometric patterns.
+        The brackets are perfectly preserved. The filaments they held are gone.
+      </p>
+      <p>
+        The patterns look like webs. Not metaphorically — the spatial arrangement matches
+        orb-weaver geometry at a structural level. Compact mathematicians mapped 14 anchor
+        arrays and found consistent ratios between radial and spiral elements. The Weave
+        used the same engineering principles as biological web construction, scaled up to
+        corridor-spanning infrastructure.
+      </p>
+      <p>
+        What the infrastructure did is unknown. The brackets show no energy residue, no
+        data storage, no mechanical function. They held filament. The filament is gone.
+        The brackets hold nothing and wait.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img src="images/lore/weave/anchor_points.png" alt="Empty mounting brackets in a web pattern">
+      <div class="lore-illustration-caption">Survey image: Anchor array, Corridor 19-Theta. 47 brackets documented. 0 filaments remaining. Pattern classification: orb-weaver radial, scale factor 400x.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE QUESTION ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Open File</div>
+      <h2 class="section-title">No ships. No schematics. One question.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The Weave is the only faction with no recoverable ship designs. The Foundry left
+        manuals. The Lattice left growth chambers. The Choir left running production lines.
+        The Fourth left a ship. The Weave left brackets.
+      </p>
+      <p>
+        Compact engineers have proposed reconstructing Weave technology by analyzing the
+        anchor point geometry and inferring filament properties from the bracket mountings.
+        The proposal has been approved, funded, and staffed three times. All three teams
+        reported that the geometry implies properties that cannot exist in conventional
+        materials science. All three recommended the same thing: study actual filament
+        inside Rift space, where it persists.
+      </p>
+      <p>
+        The Compact has not authorized in-Rift filament research. The reason given is
+        budget. The Outermark, which has no budget process, has also not attempted it.
+        When asked why, an Outermark salvage captain offered a one-word answer that the
+        interviewer did not include in the published transcript.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The brackets are waiting for something. This is not a metaphor. The mounting tension in the hardware is oriented inward, toward the empty center. They are mechanically configured to hold.</p>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+    <a href="astral-rift-game.html">Game</a>
+    <a href="astral-rift.html">Technical Deep Dive</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="astral-rift-shared.js"></script>
+
+</body>
+</html>
