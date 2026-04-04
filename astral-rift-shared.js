@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const current = nav.dataset.current;
 
   const factionLinks = [
-    { id: 'foundry', label: 'Foundry', href: 'astral-rift-lore-foundry.html', color: '#4a8eff' },
-    { id: 'lattice', label: 'Lattice', href: 'astral-rift-lore-lattice.html', color: '#d4940a' },
-    { id: 'choir', label: 'Choir', href: 'astral-rift-lore-choir.html', color: '#e06830' },
+    { id: 'foundry', label: 'The Foundry', href: 'astral-rift-lore-foundry.html', color: '#4a8eff' },
+    { id: 'lattice', label: 'The Lattice', href: 'astral-rift-lore-lattice.html', color: '#d4940a' },
+    { id: 'choir', label: 'The Choir', href: 'astral-rift-lore-choir.html', color: '#e06830' },
     { id: 'fourth', label: 'The Fourth', href: 'astral-rift-lore-fourth.html', color: '#9060e0' },
     { id: 'weave', label: 'The Weave', href: 'astral-rift-lore-weave.html', color: '#30c8c0' },
     { id: 'bloom', label: 'The Bloom', href: 'astral-rift-lore-bloom.html', color: '#ff4444' },
