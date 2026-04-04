@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 2</title>
+  <meta name="description" content="The Seat. Test Pilot 3. Sixty seconds in the cockpit of Object 4-Null.">
+  <meta property="og:title" content="Astral Rift — Signal: The Seat">
+  <meta property="og:description" content="Sixty seconds in the cockpit of Object 4-Null.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    :root {
+      --accent: #9060e0;
+    }
+
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: hero-fade 1s 0.4s forwards;
+    }
+
+    .hero-chapter {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: hero-fade 1s 0.3s forwards;
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 400px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 25% 30%, rgba(30, 15, 50, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 70% 55%, rgba(20, 10, 40, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    .story-section {
+      background: transparent;
+      padding: 40px 24px;
+    }
+
+    .story-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .story-text {
+      font-family: 'Exo 2', 'Inter', sans-serif;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--text);
+    }
+
+    .story-text p {
+      margin-bottom: 20px;
+    }
+
+    .story-text p.short {
+      margin-bottom: 28px;
+    }
+
+    .story-break {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      letter-spacing: 0.5em;
+      opacity: 0.3;
+    }
+
+    .story-end {
+      text-align: center;
+      padding: 60px 0 20px;
+    }
+
+    .story-end-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .story-nav {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 0;
+    }
+
+    .story-nav a, .story-nav span {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+
+    .story-nav a:hover {
+      border-color: currentColor;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 80px 20px 30px; }
+      .story-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter Two</div>
+  <h1 class="hero-title">The Seat</h1>
+  <p class="hero-subtitle">Test Pilot 3<br>Compact Evaluation Division</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        The briefing was short. Sit in the seat. Don't touch anything. Report what
+        you experience. Sixty seconds. The timer starts when you sit down.
+      </p>
+      <p>
+        Test Pilot 3 — they used numbers, not names, for this program — nodded and
+        walked through the inspection bay door. She'd read the file. One ship, found
+        drifting, no crew, no explanation. The hull that returned no readings. The
+        cloaking event. She'd read all of it and none of it prepared her for the room.
+      </p>
+      <p class="short">
+        It was wrong the way silence is wrong when you expect sound.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The cockpit was smaller than she expected. The reports said "featureless" and
+        she'd imagined empty — a big blank space. It wasn't. The room was close. The
+        walls curved into the floor and ceiling with no seam, no corner, no edge where
+        one surface became another. Like being inside a closed hand.
+      </p>
+      <p>
+        The seat was in the center. It looked human-compatible. This was, according to
+        the file, "the single most discussed detail." She understood why. A chair built
+        for a body shaped like hers, inside a ship built by something that left no trace
+        of what it looked like.
+      </p>
+      <p>
+        She sat down. The timer started.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The first ten seconds: nothing. The seat was comfortable. Not ergonomic —
+        comfortable the way a shape is comfortable when it already knows what shape
+        you are. She adjusted her weight and the seat didn't adjust with her. It
+        didn't need to. It was already right.
+      </p>
+      <p>
+        The violet light had no source. She'd been told this. Seeing it was different
+        from being told. The light wasn't coming from the walls. It wasn't ambient. It
+        was just present the way air is present. She couldn't identify its direction
+        because it didn't have one.
+      </p>
+      <p>
+        Second fifteen. The hum started.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Not through her ears. She was sure of that immediately and spent the next
+        ten seconds trying to be less sure. She pressed her palms flat on the armrests.
+        No vibration. She held her breath. Still there. She covered her ears. Louder,
+        if anything.
+      </p>
+      <p>
+        It wasn't sound. It was in her head the way a memory of a sound is in your
+        head — present, clear, but produced by nothing external. Except a memory
+        fades when you focus on it. This didn't. It got more detailed.
+      </p>
+      <p>
+        A low tone. Steady. And under the tone, a pattern.
+      </p>
+      <p class="short">
+        She stopped trying to identify it and started listening.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The pattern was short. Three cycles, repeating. It had a structure she couldn't
+        name — not musical, not mathematical, not linguistic. Something adjacent to all
+        three. Like a sentence in a language where the grammar is spatial instead of
+        sequential.
+      </p>
+      <p>
+        She thought: I've heard this before.
+      </p>
+      <p>
+        She hadn't. She was certain she hadn't. But the thought arrived fully formed,
+        like the hum itself — not generated by her, just present. The pattern felt
+        familiar the way a face you've never seen can feel familiar. Recognition without
+        source.
+      </p>
+      <p>
+        Second forty-five. She realized she wasn't counting anymore. The timer on her
+        wrist was counting. She had stopped caring about the timer on her wrist.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Something shifted. Not the room. Not the light. Something in the pattern.
+        A fourth element, brief, that she felt more than heard — a directional
+        component, as if the pattern were pointing somewhere. Not at her. Past her.
+        Through the hull, through the inspection bay, through the facility, toward
+        something far away.
+      </p>
+      <p>
+        For a fraction of a second she felt what it was pointing at. Not saw. Not
+        understood. Felt, the way you feel the size of a dark room before your eyes
+        adjust. Something vast. Something occupied. Something that was doing the same
+        thing she was doing right now.
+      </p>
+      <p class="short">
+        Listening.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        "Time."
+      </p>
+      <p>
+        The voice came from outside the cockpit. The technician, reading the clock.
+        Sixty seconds. Session complete. Please exit the vehicle.
+      </p>
+      <p>
+        She sat for two more seconds. The hum was still there. The pattern was still
+        repeating. The directional component was gone — or she'd lost the thread. She
+        wasn't sure which.
+      </p>
+      <p>
+        She stood up. The hum stopped. Not faded. Stopped, the way a conversation
+        stops when you leave the room.
+      </p>
+      <p>
+        She walked out of the cockpit, through the inspection bay, past the technician,
+        to the debriefing room. She sat down at the table and picked up the form.
+      </p>
+      <p>
+        The form asked: "Describe your experience."
+      </p>
+      <p class="short">
+        She wrote: "Persistent low-frequency hum. No identified source. Duration:
+        continuous from approximately T+15 to session end."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She did not write about the pattern. She did not write about the recognition.
+        She did not write about the directional component or the thing at the other end
+        of it.
+      </p>
+      <p>
+        She didn't decide not to write it. The form asked her to describe her experience
+        and she wrote what she experienced. The hum was an experience. The rest was
+        something else. She didn't have a word for what it was. The form didn't have a
+        field for it.
+      </p>
+      <p>
+        That evening she submitted a request to repeat the session. The request was
+        filed at 19:42. The timestamp mattered because later, when the program was
+        reviewed, someone would note that 19:42 was less than three hours after her
+        first session. The average gap between session and repeat request for the other
+        six test pilots was four days.
+      </p>
+      <p>
+        She filed six more requests over the following weeks. All denied.
+      </p>
+      <p>
+        She is currently assigned to active combat operations, flying a Specter-class
+        vessel. The reproduction. The hull that scans differently from the original.
+        The cloaking system that hides instead of removes.
+      </p>
+      <p class="short">
+        She says the hum is there. The engineers say it shouldn't be. She says she's
+        grown to like it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        At 03:41 on the morning after her session, she woke from a dream she couldn't
+        remember. She reached for her datapad and typed a single line before falling
+        back asleep.
+      </p>
+      <p>
+        The line read: "Something is counting."
+      </p>
+      <p class="short">
+        She deleted it the next morning. She doesn't remember typing it.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Two</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="astral-rift-story-1.html">&larr; Chapter One</a>
+      <a href="astral-rift-lore.html">The Archives</a>
+      <a href="astral-rift-story-3.html">Chapter Three &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+    <a href="astral-rift-game.html">Game</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="astral-rift-shared.js"></script>
+
+</body>
+</html>

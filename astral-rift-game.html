@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Astral Rift</title>
   <meta name="description" content="Your shields are your weapons. Fight in the ruins of a collapsed civilization where every shot makes you vulnerable. 8 ships. 20 abilities. Neural network AI that learned to fight by playing a billion rounds.">
@@ -729,7 +731,7 @@
     keep you alive. Eight ships. Twenty abilities. AI opponents that learned
     to fight by playing billions of rounds.
   </p>
-  <video autoplay loop muted playsinline controls style="width: 100%; max-width: 900px; border-radius: 16px; box-shadow: 0 20px 80px -20px rgba(0,0,0,0.8), 0 0 120px -40px rgba(74,142,255,0.15); opacity: 0; animation: hero-fade 1s 0.8s forwards;">
+  <video autoplay loop muted playsinline controls style="width: 100%; max-width: 900px; border-radius: 6px; box-shadow: 0 20px 80px -20px rgba(0,0,0,0.8), 0 0 120px -40px rgba(74,142,255,0.15); opacity: 0; animation: hero-fade 1s 0.8s forwards;">
     <source src="images/astral-rift-highlight.mp4" type="video/mp4">
   </video>
   <div class="hero-scroll-hint">SCROLL TO EXPLORE</div>
@@ -826,7 +828,7 @@
         <img class="ship-img" src="images/ships/titan.png" alt="Titan">
         <div class="ship-name">Titan</div>
         <div class="ship-role">Heavy Assault</div>
-        <div class="ship-desc">Mineral-bonded hull plating from original pre-Collapse schematics. The hull itself absorbs and redistributes kinetic energy across the entire structure. Slow, dense, extraordinarily difficult to kill.</div>
+        <div class="ship-desc">Mineral-bonded hull plating from original pre-Collapse schematics. The hull absorbs and redistributes kinetic energy across the entire structure. Slow, dense, and very hard to kill.</div>
         <div class="ship-flavor">"I've hit that thing with everything I have. It just keeps coming."</div>
       </div>
 
@@ -895,11 +897,6 @@
         that same pool.
       </p>
     </div>
-    <div class="screenshot-grid reveal reveal-delay-2">
-      <div class="screenshot-placeholder">[ Combat screenshot ]</div>
-      <div class="screenshot-placeholder">[ Ability showcase ]</div>
-      <div class="screenshot-placeholder">[ Arena overview ]</div>
-    </div>
   </div>
 </section>
 
@@ -960,7 +957,7 @@
 </section>
 
 <div class="lore-break reveal">
-  <p class="lore-break-text">There are no combat drones in Rift space. This is not law. It is instinct.</p>
+  <p class="lore-break-text">The Compact trains its simulations on data from pilots who trained against the last generation of simulations. Nobody remembers who taught the first one.</p>
 </div>
 
 <!-- ==================== AI ==================== -->
@@ -979,9 +976,9 @@
         mine traps, ability combos, aggressive pursuit patterns, energy management techniques.
       </p>
       <p>
-        Each generation is evaluated not just on win rate, but on <em>how</em> it fights:
-        aggression, accuracy, ability usage, energy efficiency. Models that win by playing
-        passively are discarded. The result is AI that doesn't play like a bot.
+        Each generation is evaluated on <em>how</em> it fights — aggression, accuracy,
+        ability usage, energy efficiency. Models that win by playing passively are
+        discarded. The result is AI that doesn't play like a bot.
       </p>
       <p>
         Three MTAD analysts have filed formal objections to the program. All three
@@ -1049,29 +1046,6 @@
 
 <div class="lore-break reveal">
   <p class="lore-break-text">The Rifts are doors. They were left open.</p>
-</div>
-
-<!-- ==================== SCREENSHOTS ==================== -->
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-divider"></div>
-    <div class="reveal">
-      <div class="section-label">Gallery</div>
-      <h2 class="section-title">From the Rift.</h2>
-    </div>
-    <div class="screenshot-grid stagger-children">
-      <div class="screenshot-placeholder reveal" style="--i:0">[ Duel arena ]</div>
-      <div class="screenshot-placeholder reveal" style="--i:1">[ CTF match ]</div>
-      <div class="screenshot-placeholder reveal" style="--i:2">[ FFA Proving Grounds ]</div>
-      <div class="screenshot-placeholder reveal" style="--i:3">[ Ship select screen ]</div>
-      <div class="screenshot-placeholder reveal" style="--i:4">[ Rift Run deep zone ]</div>
-      <div class="screenshot-placeholder reveal" style="--i:5">[ Nebula combat ]</div>
-    </div>
-  </div>
-</section>
-
-<div class="lore-break reveal">
-  <p class="lore-break-text">Listen to the hum. It's not random.</p>
 </div>
 
 <!-- ==================== FOOTER ==================== -->
@@ -1370,9 +1344,19 @@
 
   function drawBullets(ctx, bullets) {
     for (const b of bullets) {
-      ctx.fillStyle = b.isBomb
-        ? b.color
-        : `rgba(255, 255, 255, ${0.5 + b.life * 0.2})`;
+      if (b.isBomb) {
+        // Radial gradient — bright center fading to ship color to dark edge
+        const grad = ctx.createRadialGradient(
+          b.x - b.size * 0.25, b.y - b.size * 0.25, b.size * 0.1,
+          b.x, b.y, b.size
+        );
+        grad.addColorStop(0, '#fff');
+        grad.addColorStop(0.3, b.color);
+        grad.addColorStop(1, '#000');
+        ctx.fillStyle = grad;
+      } else {
+        ctx.fillStyle = `rgba(255, 255, 255, ${0.5 + b.life * 0.2})`;
+      }
       ctx.beginPath();
       ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
       ctx.fill();

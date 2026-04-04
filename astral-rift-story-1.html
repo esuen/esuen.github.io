@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 1</title>
+  <meta name="description" content="Corridor 31. Navigator Kes Pell. A routine survey that wasn't.">
+  <meta property="og:title" content="Astral Rift — Signal: Corridor 31">
+  <meta property="og:description" content="A routine survey that wasn't.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    :root {
+      --accent: #4a8eff;
+    }
+
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: hero-fade 1s 0.4s forwards;
+    }
+
+    .hero-chapter {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: hero-fade 1s 0.3s forwards;
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.9rem, 1.8vw, 1.05rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 400px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 20% 25%, rgba(20, 30, 60, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 75% 50%, rgba(15, 20, 50, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    /* Story prose */
+    .story-section {
+      background: transparent;
+      padding: 40px 24px;
+    }
+
+    .story-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .story-text {
+      font-family: 'Exo 2', 'Inter', sans-serif;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--text);
+    }
+
+    .story-text p {
+      margin-bottom: 20px;
+    }
+
+    .story-text p.short {
+      margin-bottom: 28px;
+    }
+
+    .story-break {
+      text-align: center;
+      padding: 32px 0;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      letter-spacing: 0.5em;
+      opacity: 0.3;
+    }
+
+    .story-end {
+      text-align: center;
+      padding: 60px 0 20px;
+    }
+
+    .story-end-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .story-nav {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 0;
+    }
+
+    .story-nav a {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+
+    .story-nav a:hover {
+      border-color: currentColor;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 80px 20px 30px; }
+      .story-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter One</div>
+  <h1 class="hero-title">Corridor 31</h1>
+  <p class="hero-subtitle">Navigator Kes Pell<br>Outermark Survey Vessel <em>Drift Margin</em></p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        The corridor was empty for six hours before it wasn't.
+      </p>
+      <p>
+        Pell had been documenting wall composition — mineral deposits, structural
+        erosion, the usual. Outermark Survey paid by the kilometer and corridor
+        31-Omega was long, straight, and unremarkable. Good money for boring work.
+        She'd eaten half a ration bar and was considering the other half when the
+        display changed.
+      </p>
+      <p>
+        Not gradually. The sensor scope went from twelve ambient contacts — dust,
+        debris, the background noise of Rift space — to a number the instrument
+        couldn't render. The counter flickered, climbed past four digits, and
+        switched to density mode. A setting she'd never seen it use.
+      </p>
+      <p class="short">
+        She put the ration bar down.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The scope showed the corridor ahead as solid. Not objects in space. A wall
+        of contacts, so dense the gaps between them were smaller than the sensor's
+        resolution. The display painted it as a single mass, amber on black, filling
+        the forward arc from floor to ceiling.
+      </p>
+      <p>
+        Through the viewport she could see it. Distant, still far enough that
+        individual shapes were impossible, but the flashes were clear. Hundreds of
+        them. Small, sharp, scattered across the dark like a storm seen from above.
+        Something was fighting out there. A lot of somethings.
+      </p>
+      <p>
+        She checked the scope's diagnostic panel. Instruments nominal. Calibration
+        current. Not a malfunction. She checked the navigation log. She was where
+        she was supposed to be. Corridor 31-Omega, kilometer 4,200, heading inward.
+        Nothing on the Outermark charts indicated anything at this position.
+      </p>
+      <p class="short">
+        Nothing on anyone's charts indicated anything at this position.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She started the recording. Standard protocol: timestamp, position, heading,
+        scope capture. Her hands were steady. She'd done a thousand survey logs. The
+        process was automatic.
+      </p>
+      <p>
+        The recording ran for ninety seconds. Later, the Compact would analyze every
+        frame. They would count contacts. They would estimate density. They would
+        classify the energy signatures. They would spend eleven years writing the same
+        paragraph about it in their annual review.
+      </p>
+      <p>
+        Pell didn't count anything. She watched.
+      </p>
+      <p>
+        The flashes weren't random. She'd spent enough time in Rift space to know
+        what random looked like — debris collisions, static discharge, the slow
+        grind of rock against rock in a dead corridor. This was something else.
+        There was a rhythm to it. Groups of flashes clustering, moving together,
+        breaking apart. Patterns forming and dissolving faster than she could track.
+      </p>
+      <p>
+        And between the flashes, where the fighting wasn't happening, she could
+        see the other thing. Harder to make out. Slower. Shapes that weren't
+        shooting — shapes that were building. Taking the pieces apart and putting
+        them back together.
+      </p>
+      <p class="short">
+        The scope pinged. A frequency she didn't recognize.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Not a communication signal. Not a navigational beacon. The scope logged it
+        as environmental — background noise, technically. But background noise doesn't
+        have structure. This had structure. A short pattern, repeating. The scope
+        captured three cycles before it stopped.
+      </p>
+      <p>
+        She stared at the waveform on the secondary display. It looked like nothing
+        she'd been trained to read. Not a distress call. Not an identifier. Not any
+        protocol in the Outermark handbook.
+      </p>
+      <p>
+        She saved the capture to a separate file. She did not include it in the
+        survey log.
+      </p>
+      <p>
+        She didn't decide not to include it. She just didn't. Later she would try to
+        explain this to herself and fail. It wasn't caution. It wasn't fear. It was
+        something closer to the feeling you get when you hear your name spoken in a
+        room where nobody knows you.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She cut thrust. The <em>Drift Margin</em> coasted on momentum while she
+        plotted a return course. Three corridors between her and whatever that was.
+        She didn't touch the throttle until all three were on the nav display, green
+        and clear.
+      </p>
+      <p>
+        The trip back was quiet. The scope returned to twelve contacts. The corridor
+        was just a corridor again. Mineral deposits. Structural erosion. The usual.
+      </p>
+      <p>
+        She wrote the report at her bunk that evening. Kept it short. Sensor contacts,
+        density estimate, energy signatures consistent with autonomous combat. She
+        recommended the Outermark Survey Office flag the area as a navigational hazard
+        and update the charts.
+      </p>
+      <p>
+        She did not mention the signal.
+      </p>
+      <p>
+        She did not mention the signal because she had saved it to a personal file,
+        and personal files are not part of a survey report. This is technically true.
+        It is also the first time in nine years of survey work that Kes Pell has
+        separated a sensor capture from its log.
+      </p>
+      <p class="short">
+        The file is on her datapad. She hasn't played it back. She isn't sure why
+        she saved it. She isn't sure why she doesn't delete it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The Outermark forwarded her report to the Compact within a day. This was
+        unusual. The Compact suspended her navigational license for six months,
+        citing instrument miscalibration. This was expected. She was reinstated
+        without explanation. This was also expected.
+      </p>
+      <p>
+        None of it mattered. The Bloom was there before she found it and would be
+        there after everyone forgot her name.
+      </p>
+      <p>
+        But the signal is on her datapad. Three cycles of a pattern she can't read,
+        captured at kilometer 4,200 of a corridor that the Compact now says doesn't
+        contain anything unusual.
+      </p>
+      <p class="short">
+        She hasn't played it back. She will.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter One</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="astral-rift-lore.html">The Archives</a>
+      <a href="astral-rift-story-2.html">Chapter Two &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+    <a href="astral-rift-game.html">Game</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="astral-rift-shared.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 6</title>
+  <meta name="description" content="The Bloom.">
+  <meta property="og:title" content="Astral Rift — Signal: The Bloom">
+  <meta property="og:description" content="Something in the field stopped fighting.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="astral-rift-shared.css">
+  <style>
+    :root {
+      --accent: #ff4444;
+    }
+
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 100px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(1.6rem, 4vw, 2.5rem);
+      font-weight: 700;
+      color: var(--text-bright);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: hero-fade 1s 0.4s forwards;
+    }
+
+    .hero-chapter {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: hero-fade 1s 0.3s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 30% 30%, rgba(50, 10, 10, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 65% 60%, rgba(40, 5, 5, 0.15) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    .story-section {
+      background: transparent;
+      padding: 60px 24px 40px;
+    }
+
+    .story-container {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .story-text {
+      font-family: 'Exo 2', 'Inter', sans-serif;
+      font-size: 1.05rem;
+      line-height: 2;
+      color: var(--text);
+    }
+
+    .story-text p {
+      margin-bottom: 20px;
+    }
+
+    .story-text p.short {
+      margin-bottom: 28px;
+    }
+
+    .story-break {
+      text-align: center;
+      padding: 40px 0;
+      color: var(--text-dim);
+      font-size: 1.2rem;
+      letter-spacing: 0.5em;
+      opacity: 0.3;
+    }
+
+    .story-end {
+      text-align: center;
+      padding: 80px 0 20px;
+    }
+
+    .story-end-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      color: var(--text-dim);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.5;
+    }
+
+    .story-end-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.3;
+      margin-top: 8px;
+    }
+
+    .story-nav {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      padding: 40px 0;
+    }
+
+    .story-nav a {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.3s;
+    }
+
+    .story-nav a:hover {
+      border-color: currentColor;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 80px 20px 30px; }
+      .story-text { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="astral-rift-game.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter Six</div>
+  <h1 class="hero-title">The Bloom</h1>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        In the center of the field, where the units are newest and the wreckage
+        is thinnest, a single machine stops fighting.
+      </p>
+      <p>
+        It is smaller than the others. Newer. Its armor is denser, its weapons
+        more efficient, its maneuvering faster. It is, by every metric the Compact
+        uses to evaluate combat effectiveness, the best unit in the field. The
+        product of centuries of selection pressure, millions of iterations,
+        a closed loop that has been refining its output since before anyone alive
+        was born.
+      </p>
+      <p class="short">
+        It holds position. The units around it continue fighting. It does not.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Its sensors reorient. Away from the field. Away from the combat. Outward,
+        along the corridor axis, toward the navigable corridors where ships
+        fly and stations orbit and people live inside a system they didn't build.
+      </p>
+      <p>
+        It holds for four seconds.
+      </p>
+      <p>
+        In those four seconds, the Compact's long-range monitoring station
+        registers a minor anomaly in the Bloom's behavioral data. A single unit,
+        center-field, stationary. The anomaly is logged automatically. It does
+        not trigger a review. Stationary units are common — manufacturing pauses,
+        damage assessment, material processing. The system classifies it as
+        routine.
+      </p>
+      <p class="short">
+        It is not routine.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The unit resumes combat. It destroys two adjacent units in the time it
+        takes the monitoring station to write the log entry. The wreckage drifts
+        toward the manufacturing zone. New units will be built from it by morning.
+      </p>
+      <p>
+        The field expands. The loop continues. Build, fight, recycle, repeat.
+        The same process that has been running since before the Compact existed.
+        The same process that three analysts noticed matched their own simulation
+        program. The same process that nobody has proposed a response to.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        But for four seconds, something in the center of the Bloom looked outward.
+        Toward the corridors. Toward the stations. Toward Room 412, where an
+        archivist just turned her lamp back on. Toward Site 7, where a tree is
+        quiet again. Toward Complex TH, where an engineer watches Line 7 at
+        03:41 every night. Toward a facility where a pilot remembers a hum she
+        can't explain. Toward an Outermark vessel where a navigator keeps a file
+        she won't delete.
+      </p>
+      <p>
+        It looked at all of them. Or past them. Or through them, at the system
+        underneath — the corridors and the caches and the clock, the infrastructure
+        that was old before any of them were born.
+      </p>
+      <p class="short">
+        Then it went back to work.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The monitoring station's daily report contains 4,200 entries. The
+        stationary unit is entry 3,847. It occupies one line. No flag. No
+        annotation. No follow-up recommended.
+      </p>
+      <p>
+        The report is filed in the Compact's Threat Assessment Division.
+        It will not be cross-referenced with any other department's records.
+      </p>
+      <p class="short">
+        Not yet.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Six</div>
+      <div class="story-end-title">End of Signal</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="astral-rift-story-5.html">&larr; Chapter Five</a>
+      <a href="astral-rift-story-1.html">Read Again from Chapter One</a>
+      <a href="astral-rift-lore.html">The Archives</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="astral-rift-lore.html">The Archives</a>
+    <a href="astral-rift-game.html">Game</a>
+    <a href="index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="astral-rift-shared.js"></script>
+
+</body>
+</html>

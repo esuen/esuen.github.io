@@ -166,7 +166,7 @@
     <header>
       <div class="project-label">Project</div>
       <h1>Astral Rift</h1>
-      <p class="subtitle">Your shields are your weapons. Real-time multiplayer space combat where every shot drains your defenses and every decision could be your last.</p>
+      <p class="subtitle">Your shields are your weapons. Real-time multiplayer space combat where every trigger pull costs you the defenses that keep you alive.</p>
       <div class="tech-tags">
         <span class="tech-tag">Unreal Engine 5</span>
         <span class="tech-tag">C++</span>
@@ -185,63 +185,28 @@
         <span>&middot;</span>
         <span>In development</span>
       </div>
+      <div style="margin-top: 16px;">
+        <a href="astral-rift-game.html" style="color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 500;">View Product Page &rarr;</a>
+      </div>
     </header>
 
     <section>
       <h2>What it looks like</h2>
       <div style="margin-top: 16px;">
-        <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 12px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);">
+        <video autoplay loop muted playsinline controls style="width: 100%; border-radius: 6px; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);">
           <source src="images/astral-rift-highlight.mp4" type="video/mp4">
         </video>
         <div class="screenshot-caption">King of the Hill &mdash; three teams fight for control as the zone rotates between a black hole that warps projectiles, nebula clouds with fog-of-war, and open corridors.</div>
       </div>
-    </section>
-
-    <section>
-      <h2>The core tension</h2>
-      <p>
-        Near a Rift, a single energy field powers both your shields and your weapons. Fire a bullet and your defenses drop. Activate overdrive and you drain faster. Launch a bomb and you might not survive the return fire.
-      </p>
-      <p>
-        Pilots call it the Rift Paradox: the more dangerous you become, the more vulnerable you are. There's no hiding behind a full shield bar&mdash;if you're not spending energy, you're not fighting.
-      </p>
-    </section>
-
-    <section>
-      <h2>How it plays</h2>
-      <div class="features">
-        <div class="feature">
-          <div class="feature-title">Pick your ship</div>
-          <p class="feature-desc">Eight ships with mode-specific ability loadouts. The Specter goes invisible for stealth ambushes. The Titan fires wall-piercing bombs and locks down chokepoints with Fortify. The Bastion deploys predictive-aiming sentry turrets and barrier walls in FFA, or carries allies as turrets in team modes. The Comet rockets in at double speed, drops shrapnel bombs, and escapes before you can react. Every ship plays differently in FFA vs team modes.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">The arena fights back</div>
-          <p class="feature-desc">Black holes warp your projectiles and teleport ships that get too close. Nebula clouds create fog-of-war where you can only see what's nearby. Asteroids provide cover&mdash;until someone blows them up.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">AI that learns</div>
-          <p class="feature-desc">Neural network bots trained through billions of simulated combat steps learn to fight from scratch&mdash;no hand-coded strategies. They discover bullet timing, bomb placement, mine traps, and energy management through iterative reward shaping. Hand-tuned bots add variety with personality-driven behaviors: setting ambushes, retreating into nebula clouds, and coordinating team focus fire. Eight ship classes, each with distinct tactics.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Risk and reward</div>
-          <p class="feature-desc">Kill streaks increase your bounty, making you worth more points&mdash;but also a bigger target. Pick up items to gain charges for devastating abilities like MIRV missiles and repulsor blasts. Every advantage paints a target on your back.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Free-For-All Deathmatch</div>
-          <p class="feature-desc">Every ship for itself. Green pickups scattered across nebula clouds and corridor intersections grant random ability charges&mdash;MIRV missiles, repulsor blasts, ripper fields. Ship-specific pools mean a Tempest gets burst charges where a Viper gets ripper. Mode-specific item spawn zones create contested hotspots that reward map control.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">King of the Hill</div>
-          <p class="feature-desc">Three teams fight over a rotating capture zone. Hold it to score&mdash;first to 100 wins. The zone moves between five locations: an open cross, a black hole, a nebula cloud, and two outposts. Each location changes how you fight.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Capture the Flag</div>
-          <p class="feature-desc">Two teams across a corridor-filled arena with procedurally varied layouts. Steal the enemy flag, navigate chokepoints back to your base. Your flag must be home to capture&mdash;so defense matters as much as offense. Bots autonomously assign roles: fast ships grab flags, escorts protect the carrier, defenders guard the base.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Rift Runners (single-player)</div>
-          <p class="feature-desc">A roguelike mode with procedurally generated arenas, escalating enemy waves, and build-defining upgrade choices between each rift. Pick from 13+ upgrades across four tiers&mdash;stack damage for a glass cannon run, or build tanky and outlast everything. Ten rifts, two bosses, twenty minutes per run.</p>
-        </div>
+      <div style="display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap;">
+        <a href="astral-rift-training.html" style="flex: 1; min-width: 240px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s;">
+          <div style="font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 4px;">RL Training Pipeline &rarr;</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">JAX simulation, reward shaping, automated evaluation across 23 training phases.</div>
+        </a>
+        <a href="astral-rift-networking.html" style="flex: 1; min-width: 240px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s;">
+          <div style="font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 4px;">Networking Architecture &rarr;</div>
+          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Client prediction, server reconciliation, lag compensation with server-side rewind.</div>
+        </a>
       </div>
     </section>
 
@@ -251,7 +216,7 @@
         In the early 2000s, Sony Online Entertainment released Cosmic Rift&mdash;a top-down spaceship combat game where a single energy resource powered both your shields and your weapons. Every shot you fired weakened your defenses. That tension&mdash;spend energy to kill, or save it to survive&mdash;produced some of the most compelling competitive gameplay I've experienced. The servers shut down years ago, and nothing replaced it.
       </p>
       <p>
-        Astral Rift is my attempt to bring that feeling back. Same core tension, modern engine, new mechanics. Set centuries after a cataclysmic event called the Collapse, pilots fight in the ruins of four lost civilizations&mdash;scavenging technology they can't replicate, following traditions they don't fully understand.
+        Astral Rift is my attempt to bring that feeling back. Same core tension, modern engine, new mechanics. Eight ships across five factions, five game modes, neural network AI, and a world built around the ruins of five lost civilizations. <a href="astral-rift-game.html" style="color: var(--accent); text-decoration: none;">See the full product page &rarr;</a>
       </p>
     </section>
 
@@ -260,20 +225,10 @@
       <p>
         Built entirely in C++ on Unreal Engine 5.7&mdash;no Blueprints, no visual scripting.
       </p>
-      <div style="display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap;">
-        <a href="astral-rift-training.html" style="flex: 1; min-width: 240px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s;">
-          <div style="font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 4px;">RL Training Pipeline &rarr;</div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">JAX simulation, reward shaping, self-play, automated evaluation across 15+ phases.</div>
-        </a>
-        <a href="astral-rift-networking.html" style="flex: 1; min-width: 240px; padding: 20px; background: #fff; border: 1px solid var(--border); border-radius: 10px; text-decoration: none; transition: border-color 0.15s, box-shadow 0.15s;">
-          <div style="font-weight: 600; font-size: 0.95rem; color: var(--text); margin-bottom: 4px;">Networking Architecture &rarr;</div>
-          <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Client prediction, server reconciliation, lag compensation with server-side rewind.</div>
-        </a>
-      </div>
       <div class="features">
         <div class="feature">
           <div class="feature-title">AI combat system</div>
-          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 8,192 parallel environments. The latest generation achieves 60% win rate with 93% decisiveness after iterative self-play with tunable reward shaping across 15+ training phases. Automated evaluation diagnoses behavioral gaps and recommends reward adjustments for the next phase. 275 automated tests verify every game mechanic. Trained policies deploy via ONNX with eval-before-promotion gating. <a href="astral-rift-training.html" style="color: var(--accent); text-decoration: none;">Deep dive &rarr;</a></p>
+          <p class="feature-desc">Two parallel AI systems. Hand-tuned bots use a four-layer architecture: goal stack, utility-based state machine, Reynolds steering, and predictive weapons&mdash;with a genetic algorithm evolving 36 parameters per ship class. Neural network bots train via PPO reinforcement learning in a pure JAX physics simulation across 4,096 parallel environments. The latest generation achieves 60% win rate with 93% decisiveness after iterative reward shaping across 23 training phases. Automated evaluation diagnoses behavioral gaps and recommends reward adjustments for the next phase. 275 automated tests verify every game mechanic. Trained policies deploy via ONNX with eval-before-promotion gating. <a href="astral-rift-training.html" style="color: var(--accent); text-decoration: none;">Deep dive &rarr;</a></p>
         </div>
         <div class="feature">
           <div class="feature-title">Custom shaders</div>

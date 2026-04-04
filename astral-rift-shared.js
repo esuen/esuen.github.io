@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 'choir', label: 'Choir', href: 'astral-rift-lore-choir.html', color: '#e06830' },
     { id: 'fourth', label: 'The Fourth', href: 'astral-rift-lore-fourth.html', color: '#9060e0' },
     { id: 'weave', label: 'The Weave', href: 'astral-rift-lore-weave.html', color: '#30c8c0' },
+    { id: 'bloom', label: 'The Bloom', href: 'astral-rift-lore-bloom.html', color: '#ff4444' },
+    { id: 'denn', label: 'Sola Denn', href: 'astral-rift-lore-denn.html', color: '#c8a060' },
   ];
 
   function makeLink(item) {
@@ -42,10 +44,36 @@ document.addEventListener('DOMContentLoaded', () => {
     return a;
   }
 
+  // Label + faction links
+  const factionLabel = document.createElement('div');
+  factionLabel.textContent = 'Faction Dossiers';
+  factionLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.6rem; color: rgba(160,160,184,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;';
+  nav.appendChild(factionLabel);
+
   const factionRow = document.createElement('div');
   factionRow.style.cssText = 'display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;';
   factionLinks.forEach(item => factionRow.appendChild(makeLink(item)));
   nav.appendChild(factionRow);
+
+  // Stories row
+  const storyLinks = [
+    { id: 'signal-1', label: 'Signal: Ch.1', href: 'astral-rift-story-1.html', color: '#a0a0b8' },
+    { id: 'signal-2', label: 'Ch.2', href: 'astral-rift-story-2.html', color: '#a0a0b8' },
+    { id: 'signal-3', label: 'Ch.3', href: 'astral-rift-story-3.html', color: '#a0a0b8' },
+    { id: 'signal-4', label: 'Ch.4', href: 'astral-rift-story-4.html', color: '#a0a0b8' },
+    { id: 'signal-5', label: 'Ch.5', href: 'astral-rift-story-5.html', color: '#a0a0b8' },
+    { id: 'signal-6', label: 'Ch.6', href: 'astral-rift-story-6.html', color: '#a0a0b8' },
+  ];
+
+  const storyLabel = document.createElement('div');
+  storyLabel.textContent = 'Stories';
+  storyLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.6rem; color: rgba(160,160,184,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; margin-bottom: 8px;';
+  nav.appendChild(storyLabel);
+
+  const storyRow = document.createElement('div');
+  storyRow.style.cssText = 'display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;';
+  storyLinks.forEach(item => storyRow.appendChild(makeLink(item)));
+  nav.appendChild(storyRow);
 })();
 
 /* ============================================================

@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RL Training Pipeline - Astral Rift</title>
   <meta name="description" content="Deep dive into Astral Rift's reinforcement learning pipeline: JAX simulation, PPO training, reward shaping, automated evaluation, and self-play.">
@@ -375,7 +377,7 @@
 
       <div class="metric-grid">
         <div class="metric">
-          <div class="metric-value">8,192</div>
+          <div class="metric-value">4,096</div>
           <div class="metric-label">Parallel envs</div>
         </div>
         <div class="metric">
@@ -383,7 +385,7 @@
           <div class="metric-label">Steps/sec (GPU)</div>
         </div>
         <div class="metric">
-          <div class="metric-value">15+</div>
+          <div class="metric-value">23</div>
           <div class="metric-label">Training phases</div>
         </div>
         <div class="metric">
@@ -396,7 +398,7 @@
     <section>
       <h2>The simulation</h2>
       <p>
-        Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 8,192 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and all 9 combat abilities.
+        Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 4,096 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and all 9 combat abilities.
       </p>
       <p>
         The simulation must match the game exactly or the trained model won't transfer. 31 cross-check tests verify parity: thrust values, wall bouncing, bullet damage, bomb splash radius, mine proximity triggers, ship-specific stats, ability mechanics. When a value changes in C++, the same change must be made in Python. 189 behavior tests and 86 visual tests verify the UE5 side.
@@ -509,7 +511,7 @@
     <section>
       <h2>Training history: what worked, what didn't</h2>
       <p>
-        15+ training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
+        23 training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
       </p>
 
       <table>
@@ -520,12 +522,26 @@
           <tr><td>13</td><td class="up">60%</td><td>Self-play vs Phase 12 (50% mix)</td><td><strong>Best model.</strong> All 7 abilities used.</td></tr>
           <tr><td>14</td><td class="down">31%</td><td>Self-play vs Phase 13 (50% mix)</td><td><strong>Regression.</strong> Overspecialized.</td></tr>
           <tr><td>15</td><td class="down">35%</td><td>Self-play vs Phase 13 (30% mix)</td><td>Lower mix didn't help. Still too narrow.</td></tr>
-          <tr><td>16</td><td class="neutral">???</td><td>5B steps from scratch, no opponent</td><td>Longer base training. Running now.</td></tr>
+          <tr><td>16</td><td class="down">32%</td><td>5B steps from scratch, no opponent</td><td>More steps didn't help without shaping.</td></tr>
+          <tr><td>18</td><td class="down">38%</td><td>Masked projectile observations</td><td>Feature ablation didn't transfer to training.</td></tr>
+          <tr><td>19</td><td class="down">43%</td><td>21 rotation bins from scratch (2B)</td><td>Finer aim, but plateaued at 43%.</td></tr>
+          <tr><td>20</td><td class="neutral">43%</td><td>21 rotation bins from scratch (5B)</td><td>More steps didn't help. But beat Phase 13 head-to-head (53%).</td></tr>
+          <tr><td>21</td><td class="down">45%</td><td>Self-play on Phase 20 (20% mix)</td><td>Self-play regression. Even 20% mix fails.</td></tr>
+          <tr><td>22</td><td class="down">37%</td><td>3B 11-bin foundation, new seed</td><td>Seed-sensitive. Same config, worse result.</td></tr>
+          <tr><td>23</td><td class="neutral">???</td><td>FFA deathmatch (4 ships, team preset)</td><td>Pivoted to FFA training. Running.</td></tr>
         </tbody>
       </table>
 
       <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phase 14):</strong> One round of self-play works. Iterating self-play beyond that causes regression. At higher skill levels, training against a single frozen opponent causes the model to overfit to that opponent's weaknesses rather than developing general combat ability. WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is overspecializing.</p>
+        <p><strong>Lesson learned (Phases 14&ndash;21):</strong> Self-play consistently causes regression at every opponent mix level tested (50%, 30%, 20%). One round works (Phase 12&rarr;13). Iterating beyond that causes overspecialization. WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is narrowing instead of improving.</p>
+      </div>
+
+      <div class="callout callout-warning">
+        <p><strong>Lesson learned (Phases 19&ndash;20):</strong> Finer action resolution (21 rotation bins vs 11) plateaus at 43% regardless of step count. The 21-bin model beat Phase 13 head-to-head (53%) but lost to random&mdash;it learned structured combat at the expense of generalization. Higher precision doesn't automatically produce better bots.</p>
+      </div>
+
+      <div class="callout callout-warning">
+        <p><strong>Lesson learned (Phase 22):</strong> Training is seed-sensitive. Same hyperparameters, same reward shaping, different seed, dramatically different results (Phase 12: 48% vs Phase 22: 37%). Reproducibility requires controlling for this.</p>
       </div>
 
       <h3>The Phase 13 breakthrough</h3>
