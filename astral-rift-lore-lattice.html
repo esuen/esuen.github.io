@@ -88,6 +88,14 @@
       filter: blur(55px);
     }
 
+    #crystal-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     .lore-illustration {
       box-shadow: 0 12px 60px -20px rgba(0,0,0,0.6), 0 0 80px -30px rgba(212, 148, 10, 0.08);
     }
@@ -156,6 +164,7 @@
 <div id="stars2"></div>
 <div id="stars-twinkle"></div>
 <canvas id="rift-canvas"></canvas>
+<canvas id="crystal-canvas"></canvas>
 <div class="nebula-field nebula-deep"></div>
 
 <header class="site-header">
@@ -197,7 +206,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/lattice/growth_chamber.png" alt="Crystal growth chamber with ship forming">
+      <img loading="lazy" src="images/lore/lattice/growth_chamber.webp" alt="Crystal growth chamber with ship forming">
       <div class="lore-illustration-caption">Growth chamber, Lattice Site 3-K. Titan-class hull, estimated 72% mineral bonding. Completion in approximately 5 days.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -238,7 +247,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/lattice/carbon_dating.png" alt="Laboratory analysis of Lattice hull fragment">
+      <img loading="lazy" src="images/lore/lattice/carbon_dating.webp" alt="Laboratory analysis of Lattice hull fragment">
       <div class="lore-illustration-caption">Analysis: Titan hull fragment, sample LT-441. Isotope date: pre-Collapse by 600+ years. Equipment status: calibrated and verified.</div>
     </div>
   </div>
@@ -267,7 +276,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/lattice/still_growing.png" alt="Mineral formations growing on corridor walls">
+      <img loading="lazy" src="images/lore/lattice/still_growing.webp" alt="Mineral formations growing on corridor walls">
       <div class="lore-illustration-caption">Survey image: Corridor 22-Sigma, hexagonal mineral growth. Previous survey (8 years prior) shows bare walls at this location.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -302,7 +311,7 @@
 
     <div class="ship-showcase reveal reveal-delay-2">
       <div class="ship-showcase-card">
-        <img src="images/ships/titan.png" alt="Titan">
+        <img loading="lazy" src="images/ships/titan.png" alt="Titan">
         <div class="ship-showcase-name">Titan</div>
         <div class="ship-showcase-role">Heavy Assault</div>
         <div class="ship-showcase-desc">
@@ -311,7 +320,7 @@
         </div>
       </div>
       <div class="ship-showcase-card">
-        <img src="images/ships/bastion.png" alt="Bastion">
+        <img loading="lazy" src="images/ships/bastion.png" alt="Bastion">
         <div class="ship-showcase-name">Bastion</div>
         <div class="ship-showcase-role">Defensive Anchor</div>
         <div class="ship-showcase-desc">
@@ -339,6 +348,143 @@
 </div>
 
 <script src="astral-rift-shared.js"></script>
+<script>
+  // Fractal crystal growth — branching mineral veins from seed points
+  (function() {
+    const canvas = document.getElementById('crystal-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Pre-generate a crystal tree structure
+    function generateBranches(x, y, angle, length, depth, maxDepth) {
+      if (depth > maxDepth || length < 4) return [];
+
+      const ex = x + Math.cos(angle) * length;
+      const ey = y + Math.sin(angle) * length;
+      const branch = { x1: x, y1: y, x2: ex, y2: ey, depth: depth };
+      const results = [branch];
+
+      // Crystalline branching — 60 degree angles (hexagonal)
+      const branchCount = depth === 0 ? 3 + Math.floor(Math.random() * 3) : 1 + Math.floor(Math.random() * 3);
+      const decay = 0.6 + Math.random() * 0.15;
+
+      for (let i = 0; i < branchCount; i++) {
+        const spread = (Math.PI / 3) * (i - (branchCount - 1) / 2); // 60° spacing
+        const jitter = (Math.random() - 0.5) * 0.2;
+        const newAngle = angle + spread + jitter;
+        const newLength = length * decay;
+        results.push(...generateBranches(ex, ey, newAngle, newLength, depth + 1, maxDepth));
+      }
+
+      return results;
+    }
+
+    class CrystalTree {
+      constructor() { this.reset(true); }
+
+      reset(initial) {
+        this.cx = canvas.width * (0.1 + Math.random() * 0.8);
+        this.cy = canvas.height * (0.1 + Math.random() * 0.8);
+
+        // Generate branches in multiple directions from center
+        this.branches = [];
+        const numRoots = 3 + Math.floor(Math.random() * 3);
+        const baseAngle = Math.random() * Math.PI * 2;
+        for (let i = 0; i < numRoots; i++) {
+          const angle = baseAngle + (Math.PI * 2 / numRoots) * i + (Math.random() - 0.5) * 0.3;
+          const length = 30 + Math.random() * 40;
+          this.branches.push(...generateBranches(this.cx, this.cy, angle, length, 0, 3));
+        }
+
+        this.totalBranches = this.branches.length;
+        this.delay = initial ? Math.random() * 3 : 3 + Math.random() * 6;
+        this.growTime = 3 + Math.random() * 3;
+        this.holdTime = 3 + Math.random() * 4;
+        this.fadeTime = 2 + Math.random() * 3;
+        this.totalLife = this.growTime + this.holdTime + this.fadeTime;
+        this.time = -this.delay;
+      }
+
+      update(dt) {
+        this.time += dt;
+        if (this.time > this.totalLife) this.reset(false);
+      }
+
+      draw(ctx) {
+        if (this.time < 0) return;
+
+        let growProgress, alpha;
+        if (this.time < this.growTime) {
+          growProgress = this.time / this.growTime;
+          alpha = 0.4;
+        } else if (this.time < this.growTime + this.holdTime) {
+          growProgress = 1;
+          alpha = 0.4;
+        } else {
+          growProgress = 1;
+          const fp = (this.time - this.growTime - this.holdTime) / this.fadeTime;
+          alpha = (1 - fp) * 0.4;
+        }
+
+        if (alpha < 0.01) return;
+
+        const branchesToShow = Math.floor(growProgress * this.totalBranches);
+
+        ctx.save();
+        ctx.lineCap = 'round';
+
+        // Batch branches by depth to minimize state changes
+        for (let d = 0; d <= 3; d++) {
+          const depthFade = 1 - (d * 0.15);
+          const lineAlpha = alpha * depthFade;
+          const lineWidth = Math.max(0.3, 1.8 - d * 0.35);
+          ctx.strokeStyle = `rgba(212, 148, 10, ${lineAlpha})`;
+          ctx.lineWidth = lineWidth;
+          ctx.beginPath();
+          for (let i = 0; i < branchesToShow && i < this.branches.length; i++) {
+            const b = this.branches[i];
+            if (b.depth !== d) continue;
+            ctx.moveTo(b.x1, b.y1);
+            ctx.lineTo(b.x2, b.y2);
+          }
+          ctx.stroke();
+        }
+
+        // Center seed node
+        ctx.fillStyle = `rgba(240, 180, 40, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.cx, this.cy, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    const trees = [];
+    for (let i = 0; i < 2; i++) trees.push(new CrystalTree());
+
+    let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const t of trees) { t.update(dt); t.draw(ctx); }
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
 
 </body>
 </html>

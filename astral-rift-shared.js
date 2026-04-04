@@ -143,22 +143,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     _drawGlow(ctx, points, brightness, intensity) {
       const t = this.time, j = 1.5;
-      ctx.strokeStyle = `rgba(130, 50, 220, ${0.25 * brightness * intensity})`;
+      // Wide dim outer pass
+      ctx.strokeStyle = `rgba(130, 50, 220, ${0.2 * brightness * intensity})`;
       ctx.lineWidth = Math.max(1, 10 * intensity);
-      ctx.shadowBlur = 25 * brightness;
-      ctx.shadowColor = '#7030d0';
       this._stroke(ctx, points, t, j);
-      ctx.strokeStyle = `rgba(80, 150, 255, ${0.45 * brightness * intensity})`;
+      // Mid pass
+      ctx.strokeStyle = `rgba(80, 150, 255, ${0.35 * brightness * intensity})`;
       ctx.lineWidth = Math.max(0.5, 4 * intensity);
-      ctx.shadowBlur = 15 * brightness;
-      ctx.shadowColor = '#4488ff';
       this._stroke(ctx, points, t, j * 0.6);
-      ctx.strokeStyle = `rgba(220, 240, 255, ${0.85 * brightness * intensity})`;
+      // Bright core
+      ctx.strokeStyle = `rgba(220, 240, 255, ${0.7 * brightness * intensity})`;
       ctx.lineWidth = Math.max(0.3, 1.5 * intensity);
-      ctx.shadowBlur = 8 * brightness;
-      ctx.shadowColor = '#aaddff';
       this._stroke(ctx, points, t, j * 0.3);
-      ctx.shadowBlur = 0;
     }
 
     _stroke(ctx, points, time, jAmt) {
@@ -181,13 +177,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const rifts = [];
   for (let i = 0; i < 3; i++) rifts.push(new Rift());
   let lastTime = performance.now();
+  const frameInterval = 1000 / 30; // 30fps cap
 
   function loop(now) {
-    const dt = Math.min((now - lastTime) / 1000, 0.05);
-    lastTime = now;
+    requestAnimationFrame(loop);
+    const elapsed = now - lastTime;
+    if (elapsed < frameInterval) return;
+    const dt = Math.min(elapsed / 1000, 0.05);
+    lastTime = now - (elapsed % frameInterval);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (const r of rifts) { r.update(dt); r.draw(ctx); }
-    requestAnimationFrame(loop);
   }
   requestAnimationFrame(loop);
 })();

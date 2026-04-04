@@ -239,7 +239,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/neural_tree.png" alt="The neural tree at the center of a Choir production facility">
+      <img loading="lazy" src="images/lore/choir/neural_tree.webp" alt="The neural tree at the center of a Choir production facility">
       <div class="lore-illustration-caption">Neural mass, Site 7-Choir. The tendrils extend to 340+ active growth vats. Metabolic age estimate: pre-Collapse.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -285,7 +285,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/ship_birth.png" alt="A Choir ship emerging from a growth vat">
+      <img loading="lazy" src="images/lore/choir/ship_birth.webp" alt="A Choir ship emerging from a growth vat">
       <div class="lore-illustration-caption">Tempest-class vessel, 94% growth completion. Umbilical detachment in approximately 8 hours.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -328,7 +328,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/munitions.png" alt="Bio-organic munitions growing in vats">
+      <img loading="lazy" src="images/lore/choir/munitions.webp" alt="Bio-organic munitions growing in vats">
       <div class="lore-illustration-caption">Munitions production array. Left to right: elastic bombs, proximity organisms, burst projectile clusters.</div>
     </div>
     <div class="section-text reveal reveal-delay-3">
@@ -346,7 +346,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal">
-      <img src="images/lore/choir/bouncing_bomb.png" alt="A bouncing bomb mid-ricochet in a corridor">
+      <img loading="lazy" src="images/lore/choir/bouncing_bomb.webp" alt="A bouncing bomb mid-ricochet in a corridor">
       <div class="lore-illustration-caption">High-speed capture: elastic bomb, third ricochet. Note membrane deformation and energy trail. Ship at far end: 0.4s to impact.</div>
     </div>
   </div>
@@ -370,7 +370,7 @@
 
     <div class="ship-showcase reveal reveal-delay-2">
       <div class="ship-showcase-card">
-        <img src="images/ships/tempest.png" alt="Tempest">
+        <img loading="lazy" src="images/ships/tempest.png" alt="Tempest">
         <div class="ship-showcase-name">Tempest</div>
         <div class="ship-showcase-role">Disruptor</div>
         <div class="ship-showcase-desc">
@@ -380,7 +380,7 @@
         </div>
       </div>
       <div class="ship-showcase-card">
-        <img src="images/ships/lurker.png" alt="Lurker">
+        <img loading="lazy" src="images/ships/lurker.png" alt="Lurker">
         <div class="ship-showcase-name">Lurker</div>
         <div class="ship-showcase-role">Area Denial</div>
         <div class="ship-showcase-desc">
@@ -432,7 +432,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/graveyard.png" alt="Decomposing Choir ships with new growth emerging">
+      <img loading="lazy" src="images/lore/choir/graveyard.webp" alt="Decomposing Choir ships with new growth emerging">
       <div class="lore-illustration-caption">Decomposition site, deep corridor 14-Rho. New growth structures visible on remains of Tempest-class vessel.</div>
     </div>
   </div>
@@ -465,7 +465,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/minefield.png" alt="Organic proximity mines in a dark corridor">
+      <img loading="lazy" src="images/lore/choir/minefield.webp" alt="Organic proximity mines in a dark corridor">
       <div class="lore-illustration-caption">Lurker minefield, corridor 8-Gamma. 14 organisms detected. Estimated detection radius: total corridor coverage.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -512,7 +512,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/choir/the_question.png" alt="Close-up of the neural tree surface showing patterns">
+      <img loading="lazy" src="images/lore/choir/the_question.webp" alt="Close-up of the neural tree surface showing patterns">
       <div class="lore-illustration-caption">Neural surface pattern analysis, Site 7-Choir. Pattern classification: inconclusive. Recommendation: continued observation.</div>
     </div>
   </div>
@@ -607,13 +607,16 @@
     for (let i = 0; i < 40; i++) spores.push(new Spore());
 
     let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
 
     function loop(now) {
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
-      lastTime = now;
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       for (const s of spores) { s.update(dt); s.draw(ctx); }
-      requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
   })();

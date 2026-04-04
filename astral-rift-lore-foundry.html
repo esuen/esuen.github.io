@@ -234,7 +234,7 @@
 
     <div class="ship-showcase reveal reveal-delay-2">
       <div class="ship-showcase-card">
-        <img src="images/ships/viper.png" alt="Viper">
+        <img loading="lazy" src="images/ships/viper.png" alt="Viper">
         <div class="ship-showcase-name">Viper</div>
         <div class="ship-showcase-role">Interceptor</div>
         <div class="ship-showcase-desc">
@@ -244,7 +244,7 @@
         </div>
       </div>
       <div class="ship-showcase-card">
-        <img src="images/ships/comet.png" alt="Comet">
+        <img loading="lazy" src="images/ships/comet.png" alt="Comet">
         <div class="ship-showcase-name">Comet</div>
         <div class="ship-showcase-role">Fast Attack</div>
         <div class="ship-showcase-desc">
@@ -253,7 +253,7 @@
         </div>
       </div>
       <div class="ship-showcase-card">
-        <img src="images/ships/hydra.png" alt="Hydra">
+        <img loading="lazy" src="images/ships/hydra.png" alt="Hydra">
         <div class="ship-showcase-name">Hydra</div>
         <div class="ship-showcase-role">Suppression</div>
         <div class="ship-showcase-desc">
@@ -301,11 +301,11 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/foundry/assembly.png" alt="Foundry assembly line still operating with no workers">
+      <img loading="lazy" src="images/lore/foundry/assembly.webp" alt="Foundry assembly line still operating with no workers">
       <div class="lore-illustration-caption">Assembly Complex KV, Line 3. Operational. Unmanned. Current output: 1 Viper-class hull per 9 days.</div>
     </div>
     <div class="lore-illustration reveal">
-      <img src="images/lore/foundry/queue.png" alt="Hangar full of completed ships covered in dust">
+      <img loading="lazy" src="images/lore/foundry/queue.webp" alt="Hangar full of completed ships covered in dust">
       <div class="lore-illustration-caption">Output hangar, Complex KV. Capacity: 140. Current inventory: 312. Overflow protocol: autonomous.</div>
     </div>
     <div class="lore-quote reveal">
@@ -345,7 +345,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/foundry/variant.png" alt="A hybrid ship on the assembly line">
+      <img loading="lazy" src="images/lore/foundry/variant.webp" alt="A hybrid ship on the assembly line">
       <div class="lore-illustration-caption">Assembly Complex TH, Line 7, day 4,218. Hull designation: TH-7-0041. Template: unrecognized.</div>
     </div>
     <div class="section-text reveal reveal-delay-3">
@@ -402,7 +402,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/foundry/transmission.png" alt="Empty transmission log on a monitoring console">
+      <img loading="lazy" src="images/lore/foundry/transmission.webp" alt="Empty transmission log on a monitoring console">
       <div class="lore-illustration-caption">Communications log, Complex TH, day 4,217. Incoming transmissions: 0. New production templates received: 1.</div>
     </div>
   </div>
@@ -527,10 +527,14 @@
     }
 
     let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
 
     function loop(now) {
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
-      lastTime = now;
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalCompositeOperation = 'lighter';
 
@@ -549,7 +553,6 @@
 
       for (const s of sparkPool) { s.update(dt); s.draw(ctx); }
       ctx.globalCompositeOperation = 'source-over';
-      requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
   })();

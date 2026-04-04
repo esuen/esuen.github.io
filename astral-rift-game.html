@@ -166,6 +166,15 @@
       opacity: 0.8;
     }
 
+    #combat-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.4;
+    }
+
     /* ============================================================
        SCROLL-TRIGGERED REVEAL ANIMATIONS
        ============================================================ */
@@ -686,6 +695,7 @@
 
 <!-- Background effects -->
 <canvas id="rift-canvas"></canvas>
+<canvas id="combat-canvas"></canvas>
 
 <!-- Nebula gas layers (parallax, spread across full page height) -->
 <div class="nebula-field nebula-deep" data-parallax="0.04"></div>
@@ -1315,19 +1325,15 @@
       ctx.closePath();
       ctx.fill();
 
-      // Ship image with glow (boost darker ships)
+      // Ship image (boost darker ships)
       if (img && img.complete) {
         const darkShip = this.type.img === 'specter' || this.type.img === 'lurker';
-        if (darkShip) ctx.globalAlpha = 1.1; // 10% brighter via overdraw
-        ctx.shadowColor = this.color;
-        ctx.shadowBlur = darkShip ? 16 : 12;
         ctx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
         if (darkShip) {
-          ctx.globalAlpha = 0.1;
+          ctx.globalAlpha = 0.15;
           ctx.drawImage(img, -drawSize / 2, -drawSize / 2, drawSize, drawSize);
           ctx.globalAlpha = 1.0;
         }
-        ctx.shadowBlur = 0;
       }
 
       ctx.restore();
@@ -1364,17 +1370,12 @@
 
   function drawBullets(ctx, bullets) {
     for (const b of bullets) {
-      ctx.save();
-      ctx.shadowColor = b.color;
-      ctx.shadowBlur = b.isBomb ? 8 : 4;
       ctx.fillStyle = b.isBomb
         ? b.color
         : `rgba(255, 255, 255, ${0.5 + b.life * 0.2})`;
       ctx.beginPath();
       ctx.arc(b.x, b.y, b.size, 0, Math.PI * 2);
       ctx.fill();
-      ctx.shadowBlur = 0;
-      ctx.restore();
     }
   }
 
@@ -1412,181 +1413,37 @@
     }
   }
 
-  // Midpoint displacement — generates smooth jagged fracture paths
-  function fracturePath(x1, y1, x2, y2, displace, depth) {
-    if (depth <= 0) return [{x: x1, y: y1}, {x: x2, y: y2}];
-    const dx = x2 - x1, dy = y2 - y1;
-    const len = Math.sqrt(dx*dx + dy*dy);
-    const nx = -dy/len, ny = dx/len; // perpendicular
-    const mx = (x1+x2)/2 + nx * (Math.random()-0.5) * displace;
-    const my = (y1+y2)/2 + ny * (Math.random()-0.5) * displace;
-    const left = fracturePath(x1, y1, mx, my, displace*0.5, depth-1);
-    const right = fracturePath(mx, my, x2, y2, displace*0.5, depth-1);
-    return left.concat(right.slice(1));
-  }
-
-  // Rift fractures — glowing cracks in spacetime
-  class Rift {
-    constructor() {
-      this.time = 0;
-      this.regenTimer = 0;
-      this.generate();
-    }
-
-    generate() {
-      this.x = Math.random() * canvas.width;
-      this.y = Math.random() * canvas.height;
-      const angle = Math.random() * Math.PI * 2;
-      const length = 150 + Math.random() * 200;
-      const ex = Math.cos(angle) * length;
-      const ey = Math.sin(angle) * length;
-
-      // Main crack via midpoint displacement
-      this.mainPath = fracturePath(0, 0, ex, ey, 60, 6);
-
-      // Branches from random points along the main path
-      this.branchPaths = [];
-      for (let i = 2; i < this.mainPath.length - 2; i++) {
-        if (Math.random() < 0.15) {
-          const p = this.mainPath[i];
-          const bAngle = angle + (Math.random() > 0.5 ? 1 : -1) * (0.5 + Math.random() * 0.8);
-          const bLen = 30 + Math.random() * 60;
-          const branch = fracturePath(p.x, p.y, p.x + Math.cos(bAngle)*bLen, p.y + Math.sin(bAngle)*bLen, 25, 4);
-          this.branchPaths.push(branch);
-        }
-      }
-
-      this.life = 12 + Math.random() * 20;
-      this.maxLife = this.life;
-    }
-
-    update(dt) {
-      this.time += dt * 1000; // ms for jitter functions
-      this.life -= dt;
-      // Regenerate sub-branches periodically for subtle variation
-      this.regenTimer += dt;
-      if (this.regenTimer > 0.8 + Math.random() * 0.4) {
-        this.regenTimer = 0;
-        // Regenerate only branches, keep main path stable
-        const newBranches = [];
-        for (let i = 2; i < this.mainPath.length - 2; i++) {
-          if (Math.random() < 0.12) {
-            const p = this.mainPath[i];
-            const a = Math.random() * Math.PI * 2;
-            const l = 20 + Math.random() * 50;
-            newBranches.push(fracturePath(p.x, p.y, p.x+Math.cos(a)*l, p.y+Math.sin(a)*l, 20, 3));
-          }
-        }
-        this.branchPaths = newBranches;
-      }
-      if (this.life <= 0) this.generate();
-    }
-
-    draw(ctx) {
-      const lifeFrac = this.life / this.maxLife;
-      const fade = lifeFrac > 0.9 ? (1-lifeFrac)*10 : lifeFrac < 0.1 ? lifeFrac*10 : 1;
-      const pulse = 0.7 + 0.3 * Math.sin(this.time * 0.003);
-      const flicker = Math.random() > 0.93 ? 0.3 + Math.random()*0.4 : 1.0;
-      const brightness = fade * pulse * flicker;
-
-      ctx.save();
-      ctx.translate(this.x, this.y);
-      ctx.globalCompositeOperation = 'lighter';
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-
-      // Draw main path with 3-pass glow
-      this._drawGlow(ctx, this.mainPath, brightness, 1.0);
-
-      // Draw branches (dimmer)
-      for (const bp of this.branchPaths) {
-        this._drawGlow(ctx, bp, brightness * 0.5, 0.6);
-      }
-
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.restore();
-    }
-
-    _drawGlow(ctx, points, brightness, intensity) {
-      const t = this.time;
-      const jitter = 1.5;
-
-      // Pass 1: outer purple glow
-      ctx.strokeStyle = `rgba(130, 50, 220, ${0.25 * brightness * intensity})`;
-      ctx.lineWidth = Math.max(1, 10 * intensity);
-      ctx.shadowBlur = 25 * brightness;
-      ctx.shadowColor = '#7030d0';
-      this._strokeSmooth(ctx, points, t, jitter);
-
-      // Pass 2: mid blue glow
-      ctx.strokeStyle = `rgba(80, 150, 255, ${0.45 * brightness * intensity})`;
-      ctx.lineWidth = Math.max(0.5, 4 * intensity);
-      ctx.shadowBlur = 15 * brightness;
-      ctx.shadowColor = '#4488ff';
-      this._strokeSmooth(ctx, points, t, jitter * 0.6);
-
-      // Pass 3: bright white-blue core
-      ctx.strokeStyle = `rgba(220, 240, 255, ${0.85 * brightness * intensity})`;
-      ctx.lineWidth = Math.max(0.3, 1.5 * intensity);
-      ctx.shadowBlur = 8 * brightness;
-      ctx.shadowColor = '#aaddff';
-      this._strokeSmooth(ctx, points, t, jitter * 0.3);
-
-      ctx.shadowBlur = 0;
-    }
-
-    // Smooth quadratic bezier curves with micro-jitter
-    _strokeSmooth(ctx, points, time, jAmt) {
-      if (points.length < 2) return;
-      ctx.beginPath();
-      const jx = (i) => (Math.sin(time*0.011+i*7.3)+Math.sin(time*0.023+i*3.1))*jAmt;
-      const jy = (i) => (Math.cos(time*0.013+i*5.7)+Math.cos(time*0.019+i*11.3))*jAmt;
-
-      ctx.moveTo(points[0].x + jx(0), points[0].y + jy(0));
-      for (let i = 0; i < points.length - 1; i++) {
-        const cx = points[i].x + jx(i), cy = points[i].y + jy(i);
-        const nx = points[i+1].x + jx(i+1), ny = points[i+1].y + jy(i+1);
-        ctx.quadraticCurveTo(cx, cy, (cx+nx)/2, (cy+ny)/2);
-      }
-      const last = points.length-1;
-      ctx.lineTo(points[last].x + jx(last), points[last].y + jy(last));
-      ctx.stroke();
-    }
-  }
-
-  // Init
-  const rifts = [];
-  const NUM_RIFTS = 3;
-  for (let i = 0; i < NUM_RIFTS; i++) rifts.push(new Rift());
-
+  // Init (ships only — rifts handled by shared JS on #rift-canvas)
   const ships = [];
   const bullets = [];
   const explosions = [];
-  const NUM_SHIPS = 4;
-
-  for (let i = 0; i < NUM_SHIPS; i++) ships.push(new Ship(i));
+  // Pick 4 random ships from all types
+  const indices = [...Array(SHIP_TYPES.length).keys()];
+  for (let i = indices.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [indices[i], indices[j]] = [indices[j], indices[i]];
+  }
+  for (let i = 0; i < 8; i++) ships.push(new Ship(indices[i % indices.length]));
 
   let lastTime = performance.now();
+  const frameInterval = 1000 / 30;
 
   function loop(now) {
-    const dt = Math.min((now - lastTime) / 1000, 0.05); // Cap at 50ms
-    lastTime = now;
+    requestAnimationFrame(loop);
+    const elapsed = now - lastTime;
+    if (elapsed < frameInterval) return;
+    const dt = Math.min(elapsed / 1000, 0.05);
+    lastTime = now - (elapsed % frameInterval);
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update
-    for (const r of rifts) r.update(dt);
     for (const s of ships) s.update(dt, ships, bullets, explosions);
     updateBullets(bullets, ships, explosions, dt);
     updateExplosions(explosions, dt);
 
-    // Draw (rifts behind everything)
-    for (const r of rifts) r.draw(ctx);
     drawBullets(ctx, bullets);
     for (const s of ships) s.draw(ctx);
     drawExplosions(ctx, explosions);
-
-    requestAnimationFrame(loop);
   }
 
   requestAnimationFrame(loop);

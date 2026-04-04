@@ -95,6 +95,14 @@
       background: linear-gradient(135deg, rgba(48, 200, 192, 0.04), transparent);
     }
 
+    #filament-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     @media (max-width: 768px) {
       .hero { min-height: auto; padding: 60px 20px 40px; }
     }
@@ -106,6 +114,7 @@
 <div id="stars2"></div>
 <div id="stars-twinkle"></div>
 <canvas id="rift-canvas"></canvas>
+<canvas id="filament-canvas"></canvas>
 <div class="nebula-field nebula-deep"></div>
 
 <header class="site-header">
@@ -149,7 +158,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/weave/filament_decay.png" alt="Decaying filament in a containment unit">
+      <img loading="lazy" src="images/lore/weave/filament_decay.webp" alt="Decaying filament in a containment unit">
       <div class="lore-illustration-caption">Containment log: Weave filament sample W-7. Frame 1: sample present. Frame 2 (0.03s later): sample absent. No transition detected.</div>
     </div>
     <div class="lore-quote reveal reveal-delay-3">
@@ -192,7 +201,7 @@
       </p>
     </div>
     <div class="lore-illustration reveal reveal-delay-2">
-      <img src="images/lore/weave/anchor_points.png" alt="Empty mounting brackets in a web pattern">
+      <img loading="lazy" src="images/lore/weave/anchor_points.webp" alt="Empty mounting brackets in a web pattern">
       <div class="lore-illustration-caption">Survey image: Anchor array, Corridor 19-Theta. 47 brackets documented. 0 filaments remaining. Pattern classification: orb-weaver radial, scale factor 400x.</div>
     </div>
   </div>
@@ -250,6 +259,169 @@
 </div>
 
 <script src="astral-rift-shared.js"></script>
+<script>
+  // Orb-weaver web — radial threads then spiral, builds and fades
+  (function() {
+    const canvas = document.getElementById('filament-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    class Web {
+      constructor() { this.reset(true); }
+
+      reset(initial) {
+        this.cx = canvas.width * (0.15 + Math.random() * 0.7);
+        this.cy = canvas.height * (0.15 + Math.random() * 0.7);
+        this.radius = 60 + Math.random() * 100;
+        this.spokes = 8 + Math.floor(Math.random() * 8); // 8-15 radials
+        this.rings = 5 + Math.floor(Math.random() * 5);  // 5-9 spiral rings
+        this.rotation = Math.random() * Math.PI * 2;
+
+        // Timing
+        this.delay = initial ? Math.random() * 4 : 2 + Math.random() * 6;
+        this.buildTime = 3 + Math.random() * 3;  // time to draw full web
+        this.holdTime = 3 + Math.random() * 4;
+        this.fadeTime = 2 + Math.random() * 3;
+        this.totalLife = this.buildTime + this.holdTime + this.fadeTime;
+        this.time = -this.delay;
+
+        // Pre-compute spoke angles with slight irregularity
+        this.spokeAngles = [];
+        for (let i = 0; i < this.spokes; i++) {
+          const base = (Math.PI * 2 / this.spokes) * i + this.rotation;
+          this.spokeAngles.push(base + (Math.random() - 0.5) * 0.15);
+        }
+      }
+
+      update(dt) {
+        this.time += dt;
+        if (this.time > this.totalLife) this.reset(false);
+      }
+
+      draw(ctx) {
+        if (this.time < 0) return;
+
+        let buildProgress, alpha;
+        if (this.time < this.buildTime) {
+          buildProgress = this.time / this.buildTime;
+          alpha = 0.3;
+        } else if (this.time < this.buildTime + this.holdTime) {
+          buildProgress = 1;
+          alpha = 0.3;
+        } else {
+          buildProgress = 1;
+          const fp = (this.time - this.buildTime - this.holdTime) / this.fadeTime;
+          alpha = (1 - fp) * 0.3;
+        }
+
+        if (alpha < 0.01) return;
+
+        ctx.save();
+
+        // Phase 1: radial threads (first 40% of build)
+        const radialProgress = Math.min(1, buildProgress / 0.4);
+
+        ctx.strokeStyle = `rgba(48, 200, 192, ${alpha})`;
+        ctx.lineWidth = 0.8;
+
+        for (let i = 0; i < this.spokes; i++) {
+          const a = this.spokeAngles[i];
+          const len = this.radius * radialProgress;
+          ctx.beginPath();
+          ctx.moveTo(this.cx, this.cy);
+          ctx.lineTo(
+            this.cx + Math.cos(a) * len,
+            this.cy + Math.sin(a) * len
+          );
+          ctx.stroke();
+        }
+
+        // Phase 2: spiral rings (40%-100% of build)
+        if (buildProgress > 0.4) {
+          const spiralProgress = (buildProgress - 0.4) / 0.6;
+          const ringsToShow = Math.ceil(spiralProgress * this.rings);
+
+          ctx.strokeStyle = `rgba(48, 200, 192, ${alpha * 0.7})`;
+          ctx.lineWidth = 0.5;
+
+          for (let r = 1; r <= ringsToShow; r++) {
+            const ringRadius = (this.radius / this.rings) * r;
+            // Partial ring for the last one being drawn
+            const ringProgress = r === ringsToShow
+              ? (spiralProgress * this.rings - (r - 1))
+              : 1;
+
+            ctx.beginPath();
+            for (let s = 0; s <= this.spokes; s++) {
+              const idx = s % this.spokes;
+              const nextIdx = (s + 1) % this.spokes;
+              const progress = s / this.spokes;
+
+              if (progress > ringProgress) break;
+
+              const a = this.spokeAngles[idx];
+              // Slight radius variation per spoke for organic feel
+              const rVar = ringRadius * (0.95 + Math.sin(idx * 3.7) * 0.08);
+              const px = this.cx + Math.cos(a) * rVar;
+              const py = this.cy + Math.sin(a) * rVar;
+
+              if (s === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+          }
+        }
+
+        // Anchor dots at spoke tips
+        if (radialProgress > 0.9) {
+          ctx.fillStyle = `rgba(80, 230, 220, ${alpha * 1.2})`;
+          for (let i = 0; i < this.spokes; i++) {
+            const a = this.spokeAngles[i];
+            ctx.beginPath();
+            ctx.arc(
+              this.cx + Math.cos(a) * this.radius,
+              this.cy + Math.sin(a) * this.radius,
+              1.5, 0, Math.PI * 2
+            );
+            ctx.fill();
+          }
+        }
+
+        // Center node
+        ctx.fillStyle = `rgba(48, 200, 192, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.cx, this.cy, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    const webs = [];
+    for (let i = 0; i < 3; i++) webs.push(new Web());
+
+    let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const w of webs) { w.update(dt); w.draw(ctx); }
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
 
 </body>
 </html>

@@ -830,9 +830,7 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 16px 32px;
-  background: rgba(5, 5, 16, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(5, 5, 16, 0.85);
   border-bottom: 1px solid rgba(30, 30, 58, 0.3);
   opacity: 0;
   animation: header-fade 0.3s 0.4s forwards;
