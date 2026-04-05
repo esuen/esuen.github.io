@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Label + faction links
   const factionLabel = document.createElement('div');
   factionLabel.textContent = 'Dossiers';
-  factionLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.6rem; color: rgba(160,160,184,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;';
+  factionLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.7rem; color: rgba(160,160,184,0.8); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;';
   nav.appendChild(factionLabel);
 
   const factionRow = document.createElement('div');
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const storyLabel = document.createElement('div');
   storyLabel.textContent = 'Stories';
-  storyLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.6rem; color: rgba(160,160,184,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; margin-bottom: 8px;';
+  storyLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.7rem; color: rgba(160,160,184,0.8); letter-spacing: 0.15em; text-transform: uppercase; margin-top: 16px; margin-bottom: 8px;';
   nav.appendChild(storyLabel);
 
   const storyRow = document.createElement('div');
