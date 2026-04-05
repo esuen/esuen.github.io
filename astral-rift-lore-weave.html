@@ -279,26 +279,38 @@
       constructor() { this.reset(true); }
 
       reset(initial) {
-        this.cx = canvas.width * (0.15 + Math.random() * 0.7);
-        this.cy = canvas.height * (0.15 + Math.random() * 0.7);
-        this.radius = 60 + Math.random() * 100;
-        this.spokes = 8 + Math.floor(Math.random() * 8); // 8-15 radials
-        this.rings = 5 + Math.floor(Math.random() * 5);  // 5-9 spiral rings
+        this.cx = canvas.width * (0.1 + Math.random() * 0.8);
+        this.cy = canvas.height * (0.1 + Math.random() * 0.8);
+        this.radius = 50 + Math.random() * 120;
+        this.spokes = 5 + Math.floor(Math.random() * 10); // 5-14 radials
+        this.rings = 3 + Math.floor(Math.random() * 6);   // 3-8 spiral rings
         this.rotation = Math.random() * Math.PI * 2;
 
         // Timing
         this.delay = initial ? Math.random() * 4 : 2 + Math.random() * 6;
-        this.buildTime = 3 + Math.random() * 3;  // time to draw full web
+        this.buildTime = 3 + Math.random() * 3;
         this.holdTime = 3 + Math.random() * 4;
         this.fadeTime = 2 + Math.random() * 3;
         this.totalLife = this.buildTime + this.holdTime + this.fadeTime;
         this.time = -this.delay;
 
-        // Pre-compute spoke angles with slight irregularity
+        // Pre-compute spoke angles with heavy irregularity
         this.spokeAngles = [];
+        this.spokeLengths = [];
         for (let i = 0; i < this.spokes; i++) {
           const base = (Math.PI * 2 / this.spokes) * i + this.rotation;
-          this.spokeAngles.push(base + (Math.random() - 0.5) * 0.15);
+          this.spokeAngles.push(base + (Math.random() - 0.5) * 0.6);
+          this.spokeLengths.push(0.5 + Math.random() * 0.5); // each spoke 50-100% of radius
+        }
+
+        // Pre-compute which ring segments are broken (gaps in the web)
+        this.ringGaps = [];
+        for (let r = 0; r < this.rings; r++) {
+          const gaps = [];
+          for (let s = 0; s < this.spokes; s++) {
+            gaps.push(Math.random() < 0.15); // 15% chance of gap per segment
+          }
+          this.ringGaps.push(gaps);
         }
       }
 
@@ -327,7 +339,7 @@
 
         ctx.save();
 
-        // Phase 1: radial threads (first 40% of build)
+        // Phase 1: radial threads (first 40% of build) — varied lengths
         const radialProgress = Math.min(1, buildProgress / 0.4);
 
         ctx.strokeStyle = `rgba(48, 200, 192, ${alpha})`;
@@ -335,7 +347,7 @@
 
         for (let i = 0; i < this.spokes; i++) {
           const a = this.spokeAngles[i];
-          const len = this.radius * radialProgress;
+          const len = this.radius * this.spokeLengths[i] * radialProgress;
           ctx.beginPath();
           ctx.moveTo(this.cx, this.cy);
           ctx.lineTo(
@@ -345,7 +357,7 @@
           ctx.stroke();
         }
 
-        // Phase 2: spiral rings (40%-100% of build)
+        // Phase 2: spiral rings (40%-100% of build) — with gaps
         if (buildProgress > 0.4) {
           const spiralProgress = (buildProgress - 0.4) / 0.6;
           const ringsToShow = Math.ceil(spiralProgress * this.rings);
@@ -355,41 +367,54 @@
 
           for (let r = 1; r <= ringsToShow; r++) {
             const ringRadius = (this.radius / this.rings) * r;
-            // Partial ring for the last one being drawn
             const ringProgress = r === ringsToShow
               ? (spiralProgress * this.rings - (r - 1))
               : 1;
+            const gaps = this.ringGaps[r - 1] || [];
 
-            ctx.beginPath();
-            for (let s = 0; s <= this.spokes; s++) {
+            // Draw curved segments between spokes, skipping gaps
+            for (let s = 0; s < this.spokes; s++) {
+              const progress = s / this.spokes;
+              if (progress > ringProgress) break;
+              if (gaps[s]) continue;
+
               const idx = s % this.spokes;
               const nextIdx = (s + 1) % this.spokes;
-              const progress = s / this.spokes;
+              const a1 = this.spokeAngles[idx];
+              const a2 = this.spokeAngles[nextIdx];
 
-              if (progress > ringProgress) break;
+              const r1 = ringRadius * (0.85 + this.spokeLengths[idx] * 0.3);
+              const r2 = ringRadius * (0.85 + this.spokeLengths[nextIdx] * 0.3);
 
-              const a = this.spokeAngles[idx];
-              // Slight radius variation per spoke for organic feel
-              const rVar = ringRadius * (0.95 + Math.sin(idx * 3.7) * 0.08);
-              const px = this.cx + Math.cos(a) * rVar;
-              const py = this.cy + Math.sin(a) * rVar;
+              const x1 = this.cx + Math.cos(a1) * r1;
+              const y1 = this.cy + Math.sin(a1) * r1;
+              const x2 = this.cx + Math.cos(a2) * r2;
+              const y2 = this.cy + Math.sin(a2) * r2;
 
-              if (s === 0) ctx.moveTo(px, py);
-              else ctx.lineTo(px, py);
+              // Control point: midpoint pushed inward toward center for sag
+              const midA = (a1 + a2) / 2;
+              const midR = (r1 + r2) / 2 * (0.88 + Math.random() * 0.08);
+              const cpx = this.cx + Math.cos(midA) * midR;
+              const cpy = this.cy + Math.sin(midA) * midR;
+
+              ctx.beginPath();
+              ctx.moveTo(x1, y1);
+              ctx.quadraticCurveTo(cpx, cpy, x2, y2);
+              ctx.stroke();
             }
-            ctx.stroke();
           }
         }
 
-        // Anchor dots at spoke tips
+        // Anchor dots at spoke tips — varied positions
         if (radialProgress > 0.9) {
           ctx.fillStyle = `rgba(80, 230, 220, ${alpha * 1.2})`;
           for (let i = 0; i < this.spokes; i++) {
             const a = this.spokeAngles[i];
+            const len = this.radius * this.spokeLengths[i];
             ctx.beginPath();
             ctx.arc(
-              this.cx + Math.cos(a) * this.radius,
-              this.cy + Math.sin(a) * this.radius,
+              this.cx + Math.cos(a) * len,
+              this.cy + Math.sin(a) * len,
               1.5, 0, Math.PI * 2
             );
             ctx.fill();
