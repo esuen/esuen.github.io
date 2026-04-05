@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Label + faction links
   const factionLabel = document.createElement('div');
-  factionLabel.textContent = 'Faction Dossiers';
+  factionLabel.textContent = 'Dossiers';
   factionLabel.style.cssText = 'font-family: "Exo 2", sans-serif; font-size: 0.6rem; color: rgba(160,160,184,0.5); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 8px;';
   nav.appendChild(factionLabel);
 
