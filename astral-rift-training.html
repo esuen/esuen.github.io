@@ -528,9 +528,13 @@
           <tr><td>20</td><td class="neutral">43%</td><td>21 rotation bins from scratch (5B)</td><td>More steps didn't help. But beat Phase 13 head-to-head (53%).</td></tr>
           <tr><td>21</td><td class="down">45%</td><td>Self-play on Phase 20 (20% mix)</td><td>Self-play regression. Even 20% mix fails.</td></tr>
           <tr><td>22</td><td class="down">37%</td><td>3B 11-bin foundation, new seed</td><td>Seed-sensitive. Same config, worse result.</td></tr>
-          <tr><td>23</td><td class="neutral">???</td><td>FFA deathmatch (4 ships, team preset)</td><td>Pivoted to FFA training. Running.</td></tr>
+          <tr><td>23</td><td class="up">73%</td><td>FFA deathmatch (4 ships, team preset)</td><td><strong>FFA breakthrough.</strong> All 12 abilities used. Beat 3x Phase 13.</td></tr>
         </tbody>
       </table>
+
+      <div class="callout callout-success" style="border-left: 3px solid #22c55e; background: rgba(34, 197, 94, 0.05); padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
+        <p><strong>Phase 23 breakthrough:</strong> Pivoting from duel (1v1) to FFA (4-ship) deathmatch produced the strongest model yet. 72.6% WR in 4-player FFA (25% is random baseline). The model uses all 12 abilities in the team action preset &mdash; rocket boost, stealth, burst spray, warp, portal &mdash; compared to 7 abilities in the best duel model. FFA's natural opponent diversity (4 ships, not 2) may explain why the model generalizes better than duel training ever did.</p>
+      </div>
 
       <div class="callout callout-warning">
         <p><strong>Lesson learned (Phases 14&ndash;21):</strong> Self-play consistently causes regression at every opponent mix level tested (50%, 30%, 20%). One round works (Phase 12&rarr;13). Iterating beyond that causes overspecialization. WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is narrowing instead of improving.</p>

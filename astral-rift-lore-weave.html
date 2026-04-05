@@ -275,8 +275,8 @@
     resize();
     window.addEventListener('resize', resize);
 
-    const NODE_COUNT = 30;
-    const CONNECT_DIST = 150;
+    const NODE_COUNT = Math.max(30, Math.floor(canvas.width * canvas.height / 25000));
+    const CONNECT_DIST = Math.max(150, canvas.width / 8);
     const nodes = [];
 
     class Node {
