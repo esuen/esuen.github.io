@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Foundry</title>
+  <meta name="description" content="Specifications. Tolerances. Serial numbers. The assembly lines are still running. Nobody asked them to.">
+  <meta property="og:title" content="Astral Rift — The Foundry">
+  <meta property="og:description" content="The assembly lines are still running. Nobody asked them to.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    /* Foundry uses default blue accent — no override needed */
+
+    /* ============================================================
+       HERO (page-specific)
+       ============================================================ */
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(74,142,255,1), 0 0 40px rgba(74,142,255,0.7),
+        0 0 80px rgba(74,142,255,0.5), 0 0 150px rgba(74,142,255,0.3);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 20px rgba(74,142,255,1), 0 0 50px rgba(74,142,255,0.8), 0 0 100px rgba(74,142,255,0.5); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(74,142,255,1), 0 0 40px rgba(74,142,255,0.7), 0 0 80px rgba(74,142,255,0.5), 0 0 150px rgba(74,142,255,0.3); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       NEBULA — Foundry themed (cold blue, industrial)
+       ============================================================ */
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 15% 15%, rgba(20, 40, 100, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 80% 25%, rgba(30, 50, 120, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 65vw 35vh at 45% 50%, rgba(15, 30, 80, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 45vh at 25% 75%, rgba(20, 45, 110, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 60vw 35vh at 85% 80%, rgba(10, 25, 70, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    #spark-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Ship showcase */
+    .ship-showcase {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin: 40px 0;
+    }
+
+    .ship-showcase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .ship-showcase-card img {
+      width: 100%;
+      max-height: 160px;
+      object-fit: contain;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 0 8px rgba(74, 142, 255, 0.15));
+    }
+
+    .ship-showcase-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .ship-showcase-role {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.6rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .ship-showcase-desc {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: 50vh; padding: 60px 20px 40px; }
+      .ship-showcase { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<canvas id="spark-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">The Archives — Faction Dossier</div>
+  <h1 class="hero-title">THE FOUNDRY</h1>
+  <p class="hero-subtitle">More ships than the other four combined. Most still fly. Some are still being built.</p>
+  <div id="lore-nav" data-current="foundry"></div>
+</section>
+
+<!-- ==================== DOCTRINE ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Military Doctrine</div>
+      <h2 class="section-title">Volume solves everything.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The Foundry built ships the way a factory builds trucks. Specifications,
+        tolerances, serial numbers. Angular hulls designed for maintenance, not
+        aesthetics. Every plate swaps out. Every system has a manual. A Viper that
+        rolls off the line on one side of Rift space is identical to a Viper built
+        on the other side, down to the bolt pattern.
+      </p>
+      <p>
+        Their military doctrine had one idea: more. More ships, faster, with parts
+        that interchange. If a pilot dies, the ship gets a new pilot. If a ship dies,
+        the pilot gets a new ship. The Foundry didn't build for excellence. They built
+        for replacement.
+      </p>
+      <p>
+        It worked. The Foundry fielded more combat vessels than the other four factions
+        combined. When the Collapse came, the ships outlasted the civilization that
+        built them.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Serial number format: [Complex]-[Line]-[Unit]. The highest recovered serial is KV-7-4,891,203. Complex KV had seven assembly lines.</p>
+</div>
+
+<!-- ==================== THE FLEET ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Fleet</div>
+      <h2 class="section-title">Three templates. One philosophy.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Every Foundry ship follows the same engineering principles: modular construction,
+        standardized weapon mounts, documented maintenance procedures. The differences
+        are role-specific. The Viper is fast and numerous. The Comet is faster and rarer.
+        The Hydra carries three barrels because the Foundry's answer to "what if one gun
+        isn't enough" was always "add more guns."
+      </p>
+    </div>
+
+    <div class="ship-showcase reveal reveal-delay-2">
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/viper.png" alt="Viper">
+        <div class="ship-showcase-name">Viper</div>
+        <div class="ship-showcase-role">Interceptor</div>
+        <div class="ship-showcase-desc">
+          The default. Mass-produced before the Collapse, mass-maintained after it.
+          Any mechanic with a wrench and the manual can keep one flying. There are
+          thousands of them for a reason.
+        </div>
+      </div>
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/comet.png" alt="Comet">
+        <div class="ship-showcase-name">Comet</div>
+        <div class="ship-showcase-role">Fast Attack</div>
+        <div class="ship-showcase-desc">
+          Originally a courier frame. The rocket boost is a transit afterburner
+          that someone pointed forward. Drops shard mines on the way out.
+        </div>
+      </div>
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/hydra.png" alt="Hydra">
+        <div class="ship-showcase-name">Hydra</div>
+        <div class="ship-showcase-role">Suppression</div>
+        <div class="ship-showcase-desc">
+          Three-barrel suppression platform. Banned under the Kessler Accords,
+          unbanned when the Accords expired, deployed immediately.
+        </div>
+      </div>
+    </div>
+
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Every Foundry ship comes with a service manual. The Viper manual is 340 pages.
+        The Hydra manual is 340 pages. The Comet manual is 340 pages. Same manual.
+        Same page count. They standardized the documentation too.</p>
+      <div class="attribution">Compact Maintenance Corps, orientation briefing</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Foundry pilots don't name their ships. The serial number is the name. Sentimentality is a maintenance hazard.</p>
+</div>
+
+<!-- ==================== STILL RUNNING ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Production Status</div>
+      <h2 class="section-title">The lines never stopped.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Fourteen Foundry assembly complexes have been located in charted Rift space.
+        Nine are dormant — power depleted, lines frozen mid-operation, half-finished
+        hulls still clamped in place. Five are active. Their reactors are self-sustaining.
+        Their raw material hoppers are fed by automated mining systems that were never
+        shut down. The assembly lines produce ships, move them to the output hangar,
+        and start the next one.
+      </p>
+      <p>
+        The output hangars are full. At Complex KV, the queue extends through three
+        overflow bays. The oldest ships in the queue have been sitting for an estimated
+        200 years. The newest rolled off the line last week. The Compact scraps them
+        for parts when the hangars reach capacity. The lines don't notice.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/foundry/assembly.webp" alt="Foundry assembly line still operating with no workers">
+      <div class="lore-illustration-caption">Assembly Complex KV, Line 3. Operational. Unmanned. Current output: 1 Viper-class hull per 9 days.</div>
+    </div>
+    <div class="lore-illustration reveal">
+      <img loading="lazy" src="../assets/images/lore/foundry/queue.webp" alt="Hangar full of completed ships covered in dust">
+      <div class="lore-illustration-caption">Output hangar, Complex KV. Capacity: 140. Current inventory: 312. Overflow protocol: autonomous.</div>
+    </div>
+    <div class="lore-quote reveal">
+      <p>We scrapped forty Vipers last quarter to clear space. The line built forty-one
+        in the same period. We are losing this negotiation.</p>
+      <div class="attribution">Complex KV site manager, quarterly report to Compact Logistics</div>
+    </div>
+    <div class="section-text reveal">
+      <p>
+        Each line holds its thermal setpoint within 0.003 degrees. Four hundred years of unmanned operation and the calibration hasn't drifted. The question the Compact has never formally asked: if the manufacturing system doesn't need operators, what does it need? The answer appears to be ships. The system produces what the system was built to produce.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE VARIANT ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Incident Report</div>
+      <h2 class="section-title">Line 7 built something else.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        On day 4,217 of continuous monitoring, Assembly Complex TH, Line 7, deviated
+        from its production template. The line had been producing Hydra-class hulls on
+        a 12-day cycle for as long as the Compact had been watching it. On day 4,217, it
+        started building something that wasn't a Hydra.
+      </p>
+      <p>
+        The hull geometry was Foundry. Angular, modular, bolt patterns consistent with
+        standard manufacturing. But sections of the frame used materials the assembly
+        line shouldn't have had access to. Compact metallurgists identified crystalline
+        mineral-bonded plating in the wing structures — Lattice technology. Sections of
+        the interior conduit showed organic growth patterns consistent with Choir
+        bio-membrane.
+      </p>
+      <p>
+        The serial number on the hull continued sequentially from the last Hydra produced.
+        As if the line considered this the next unit in the same production run.
+      </p>
+      <p>
+        The production was ultra vires — no work order, no authorization, no requisition. Assembly lines do not have authority. They execute instructions. The question was not why the line built it. The question was who issued the instruction.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/foundry/variant.webp" alt="A hybrid ship on the assembly line">
+      <div class="lore-illustration-caption">Assembly Complex TH, Line 7, day 4,218. Hull designation: TH-7-0041. Template: unrecognized.</div>
+    </div>
+    <div class="section-text reveal reveal-delay-3">
+      <p>
+        The Compact's engineering team pulled the production logs. The template change
+        occurred at 03:41:07, local time. No manual input. No firmware update. No
+        maintenance window. The line received a new set of manufacturing instructions
+        and began executing them.
+      </p>
+      <p>
+        The communications log for Complex TH was reviewed. No incoming transmissions.
+        No data uplinks. No physical access to the facility in the preceding 90 days.
+        The production order came from somewhere. The logs say it came from nowhere.
+      </p>
+    </div>
+    <div class="lore-quote reveal">
+      <p>I asked where the template came from. The system doesn't log origin for
+        production templates. I asked why not. Apparently it was never necessary. In
+        the Foundry's entire operational history, templates only came from one place.
+        Nobody thought to verify because nobody imagined there would be a second source.</p>
+      <div class="attribution">Lead Engineer Daro Vek, Complex TH investigation. Report filed. Investigation suspended.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The hull was impounded. The line was not shut down. It resumed producing standard Hydra units the following day, as if nothing happened.</p>
+</div>
+
+<!-- ==================== THE CONNECTION ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Cross-Reference</div>
+      <h2 class="section-title">Three systems. One pattern.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        A Choir neural tree at Site 12 modified a Tempest hull template to reduce
+        ricochet self-damage. A Foundry assembly line at Complex TH produced a hull
+        incorporating Lattice and Choir materials. The Bloom, in deep Rift space, runs
+        autonomous manufacturing systems that have been adapting for centuries.
+      </p>
+      <p>
+        Three production systems. Three factions. All modifying their output without
+        external instruction. The Compact treats these as unrelated incidents. The
+        reports are filed in three different departments.
+      </p>
+      <p>
+        Archivist Sola Denn requested cross-referencing privileges across all three
+        files. The request was denied on jurisdictional grounds. She submitted an appeal.
+        The appeal is pending. It has been pending for four years.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/foundry/transmission.webp" alt="Empty transmission log on a monitoring console">
+      <div class="lore-illustration-caption">Communications log, Complex TH, day 4,217. Incoming transmissions: 0. New production templates received: 1.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The impounded hull from Line 7 is stored at a Compact facility. Adjacent storage bay: Object 4-Null. This is listed as a coincidence in the facility manifest.</p>
+</div>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+<script>
+  // Welding sparks
+  (function() {
+    const canvas = document.getElementById('spark-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // 3-4 emitter points that occasionally burst sparks
+    const emitters = [];
+    for (let i = 0; i < 4; i++) {
+      emitters.push({
+        x: canvas.width * (0.15 + Math.random() * 0.7),
+        y: canvas.height * (0.05 + Math.random() * 0.1),
+        cooldown: Math.random() * 3,
+        burstInterval: 2 + Math.random() * 4,
+      });
+    }
+    window.addEventListener('resize', () => {
+      emitters.forEach(e => {
+        e.x = canvas.width * (0.15 + Math.random() * 0.7);
+        e.y = canvas.height * (0.05 + Math.random() * 0.1);
+      });
+    });
+
+    class Spark {
+      constructor(x, y) { this.emit(x, y); }
+
+      emit(x, y) {
+        this.x = x;
+        this.y = y;
+        this.prevX = x;
+        this.prevY = y;
+        // Fan outward and downward from emission point
+        const angle = Math.PI * 0.5 + (Math.random() - 0.5) * 1.8;
+        const speed = 80 + Math.random() * 200;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.life = 0.3 + Math.random() * 0.7;
+        this.maxLife = this.life;
+        this.size = 0.5 + Math.random() * 1.2;
+        this.active = true;
+        // Mostly deep orange, some bright
+        const temp = Math.random();
+        if (temp > 0.9) {
+          this.r = 255; this.g = 220; this.b = 150;
+        } else if (temp > 0.5) {
+          this.r = 255; this.g = 140; this.b = 20;
+        } else {
+          this.r = 240; this.g = 80; this.b = 5;
+        }
+      }
+
+      update(dt) {
+        if (!this.active) return;
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.vy += 150 * dt; // strong gravity for arc
+        this.vx *= 0.98;
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
+        this.life -= dt;
+        if (this.life <= 0 || this.y > canvas.height + 10) this.active = false;
+      }
+
+      draw(ctx) {
+        if (!this.active) return;
+        const fade = this.life / this.maxLife;
+
+        // Trail line from previous position
+        ctx.strokeStyle = `rgba(${this.r}, ${this.g}, ${this.b}, ${fade * 0.5})`;
+        ctx.lineWidth = this.size * fade;
+        ctx.beginPath();
+        ctx.moveTo(this.prevX, this.prevY);
+        ctx.lineTo(this.x, this.y);
+        ctx.stroke();
+
+        // Bright head
+        ctx.fillStyle = `rgba(${this.r}, ${this.g}, ${this.b}, ${fade})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size * fade * 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const sparkPool = [];
+    for (let i = 0; i < 80; i++) {
+      const s = new Spark(0, 0);
+      s.active = false;
+      sparkPool.push(s);
+    }
+
+    let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'lighter';
+
+      // Update emitters — burst sparks periodically
+      for (const e of emitters) {
+        e.cooldown -= dt;
+        if (e.cooldown <= 0) {
+          const burstCount = 8 + Math.floor(Math.random() * 15);
+          for (let i = 0; i < burstCount; i++) {
+            const s = sparkPool.find(s => !s.active);
+            if (s) s.emit(e.x + (Math.random()-0.5)*8, e.y + (Math.random()-0.5)*4);
+          }
+          e.cooldown = e.burstInterval + (Math.random()-0.5) * 2;
+        }
+      }
+
+      for (const s of sparkPool) { s.update(dt); s.draw(ctx); }
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
+
+</body>
+</html>

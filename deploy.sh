@@ -5,13 +5,13 @@ set -e
 cd "$(dirname "$0")"
 
 echo "Minifying CSS..."
-npx clean-css-cli astral-rift-shared.css -o astral-rift-shared.min.css
+npx clean-css-cli astral-rift/assets/shared.css -o astral-rift/assets/shared.min.css
 
 echo "Minifying JS..."
-npx terser astral-rift-shared.js -o astral-rift-shared.min.js -c -m
+npx terser astral-rift/assets/shared.js -o astral-rift/assets/shared.min.js -c -m
 
-echo "CSS: $(wc -c < astral-rift-shared.css | tr -d ' ')B → $(wc -c < astral-rift-shared.min.css | tr -d ' ')B"
-echo "JS:  $(wc -c < astral-rift-shared.js | tr -d ' ')B → $(wc -c < astral-rift-shared.min.js | tr -d ' ')B"
+echo "CSS: $(wc -c < astral-rift/assets/shared.css | tr -d ' ')B → $(wc -c < astral-rift/assets/shared.min.css | tr -d ' ')B"
+echo "JS:  $(wc -c < astral-rift/assets/shared.js | tr -d ' ')B → $(wc -c < astral-rift/assets/shared.min.js | tr -d ' ')B"
 
 git add -A
 git status --short

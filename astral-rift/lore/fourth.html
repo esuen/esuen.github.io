@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Fourth</title>
+  <meta name="description" content="One ship. No crew. No schematics. No explanation. Designation: provisional.">
+  <meta property="og:title" content="Astral Rift — The Fourth">
+  <meta property="og:description" content="One ship. No crew. No schematics. No explanation.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    /* Override accent to Null violet */
+    :root {
+      --accent: #9060e0;
+      --accent-secondary: #6030a0;
+    }
+
+    /* ============================================================
+       HERO (page-specific)
+       ============================================================ */
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(144,96,224,1), 0 0 40px rgba(144,96,224,0.7),
+        0 0 80px rgba(144,96,224,0.5), 0 0 150px rgba(144,96,224,0.3);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 20px rgba(144,96,224,1), 0 0 50px rgba(144,96,224,0.8), 0 0 100px rgba(144,96,224,0.5); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(144,96,224,1), 0 0 40px rgba(144,96,224,0.7), 0 0 80px rgba(144,96,224,0.5), 0 0 150px rgba(144,96,224,0.3); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       NEBULA — Null themed (deep violet, minimal)
+       ============================================================ */
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 50vh at 80% 20%, rgba(40, 10, 80, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 40vh at 20% 70%, rgba(30, 10, 60, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 60vw 35vh at 50% 45%, rgba(20, 5, 50, 0.15) 0%, transparent 60%);
+      filter: blur(60px);
+    }
+
+    /* ============================================================
+       REDACTED TEXT
+       ============================================================ */
+    .redacted {
+      background: var(--text-dim);
+      color: transparent;
+      padding: 0 4px;
+      border-radius: 2px;
+      user-select: none;
+    }
+
+    /* ============================================================
+       EMPTY SECTION (deliberately sparse)
+       ============================================================ */
+    .empty-section {
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .empty-section-text {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      letter-spacing: 0.08em;
+      opacity: 0.5;
+    }
+
+    /* Choir-style overrides for violet accent */
+    .lore-illustration {
+      box-shadow: 0 12px 60px -20px rgba(0,0,0,0.6), 0 0 80px -30px rgba(144, 96, 224, 0.08);
+    }
+
+    .lore-quote {
+      background: linear-gradient(135deg, rgba(144, 96, 224, 0.04), transparent);
+    }
+
+    /* Ship showcase */
+    .ship-showcase {
+      display: flex;
+      justify-content: center;
+      margin: 40px 0;
+    }
+
+    .ship-showcase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+      max-width: 340px;
+    }
+
+    .ship-showcase-card img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: contain;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 12px rgba(144, 96, 224, 0.25));
+    }
+
+    .ship-showcase-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .ship-showcase-role {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .ship-showcase-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: 50vh; padding: 60px 20px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">The Archives — Faction Dossier</div>
+  <h1 class="hero-title">THE FOURTH</h1>
+  <p class="hero-subtitle">Designation provisional. Classification pending. File status: open.</p>
+  <div id="lore-nav" data-current="fourth"></div>
+</section>
+
+<!-- ==================== DESIGNATION ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Nomenclature</div>
+      <h2 class="section-title">The name is a filing error.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        When the Compact first catalogued the pre-Collapse civilizations, they identified
+        four. Foundry, Lattice, Choir, and an unnamed fourth whose evidence consisted of
+        a single ship. The numbering was administrative. Later, when Weave anchor points
+        were discovered in deep corridors, the count became five. Nobody updated the
+        designation. The Fourth is still called the Fourth.
+      </p>
+      <p>
+        Compact archivists have submitted three requests to rename the entry. All three
+        were returned with the same note: "Rename to what?"
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">File opened: 7 years post-Collapse. Last updated: 7 years post-Collapse.</p>
+</div>
+
+<!-- ==================== THE DISCOVERY ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Recovery Log</div>
+      <h2 class="section-title">One ship.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        An Outermark survey team found it in deep Rift corridor 4-Null, drifting at
+        2.3 meters per second on no detectable heading. No energy signature. No
+        transponder. No debris field suggesting it had come from somewhere else.
+        It was simply there.
+      </p>
+      <p>
+        The cockpit was open. No crew. No remains. No personal effects. The survey
+        team's pilot, Wren Hadak, described the interior as "a room that doesn't
+        want you in it." She did not elaborate. Her co-pilot's report is shorter:
+        "Confirmed. Empty."
+      </p>
+      <p>
+        The ship was towed to Compact custody without incident. It has not produced
+        any additional evidence of its origin in the decades since.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/fourth/discovery.webp" alt="The Specter found drifting in empty space">
+      <div class="lore-illustration-caption">Recovery image: Object 4-Null, corridor 4-Null. Survey vessel visible at lower left. Note absence of background stellar objects.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE HULL ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Materials Analysis</div>
+      <h2 class="section-title">The readings came back empty.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Spectroscopic analysis: no result. Not unknown compounds. No result. The instrument
+        worked fine on control samples before and after. Aimed at the hull, it returned
+        values indistinguishable from pointing it at empty space.
+      </p>
+      <p>
+        The hull has no seams. No welds. No fasteners. No panel lines. No access points.
+        The cockpit opening is the only discontinuity in the entire surface. Compact
+        metallurgists requested permission to take a sample. The request was approved.
+        The sampling tool could not mark the surface. A harder tool was requested. Also
+        could not mark the surface. The file lists eleven tools attempted. None left a mark.
+      </p>
+      <p>
+        The twelfth request was for a focused plasma cutter. It was denied without
+        explanation.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/fourth/hull.webp" alt="Close-up analysis of the Null hull">
+      <div class="lore-illustration-caption">Analysis image: Hull surface, Object 4-Null. Scanner display shows no material reading. Equipment status: functional.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>I've been doing materials analysis for twenty years. I've scanned Foundry
+        alloys, Lattice mineral bonds, Choir bio-membrane. Everything returns something.
+        This returns nothing. Not zero. Not error. Nothing. As if the beam went
+        somewhere else.</p>
+      <div class="attribution">Dr. Lena Okoro, Compact Materials Division. Reassigned to administrative duties, 34 post-Collapse.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Hardness: unmeasurable. Density: unmeasurable. Composition: unmeasurable. Status: classified.</p>
+</div>
+
+<!-- ==================== THE CLOAK ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">System Analysis</div>
+      <h2 class="section-title">It doesn't hide. It leaves.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The Specter has one system the Compact has been able to activate. The cloaking
+        device was triggered accidentally during a routine inspection when a technician
+        touched a section of the interior wall. The ship vanished. Sensors, visual,
+        gravimetric — all confirmed the ship was no longer present in the inspection bay.
+      </p>
+      <p>
+        It returned four seconds later. Same position. Same orientation. Same open
+        cockpit. The technician was still inside. She reported no sensation of movement,
+        no change in lighting, no sound. From her perspective, nothing happened. From
+        the inspection bay's perspective, the ship and the technician ceased to exist
+        for four seconds.
+      </p>
+      <p>
+        The bay's atmospheric sensors recorded a brief pressure drop consistent with
+        the sudden absence of a ship-sized volume of air. The air rushed back in when
+        the ship returned. That pressure wave is the only physical evidence that
+        anything occurred.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/fourth/cloak.webp" alt="Sensor display showing a void where a ship should be">
+      <div class="lore-illustration-caption">Sensor reconstruction: cloaking event 1, inspection bay 3. The gap in the data is not an error.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Where does it go?</p>
+      <div class="attribution">Compact Science Division inquiry, filed 19 post-Collapse. Status: formally declined.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THE INTERIOR ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Interior Survey</div>
+      <h2 class="section-title">There are no controls.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The cockpit contains a seat. The seat is sized for a human pilot. This is
+        the single most discussed detail in the entire Fourth file, and no one has
+        produced a satisfactory explanation.
+      </p>
+      <p>
+        No screens. No instruments. No input devices. The walls are the same seamless
+        material as the exterior. Faint violet ambient light from no identifiable source.
+        Spectrographic analysis of the light returns a wavelength that doesn't match any
+        known emission process.
+      </p>
+      <p>
+        Pilots who have sat in the seat report a persistent low-frequency hum.
+        Recording equipment in the cockpit does not detect the hum. Pilots describe
+        it as "coming from inside my head, but not mine." Three of the seven test
+        pilots requested to sit in the seat again. Two of those three requested a third
+        session. The program was suspended before a fourth could be scheduled.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/fourth/interior.webp" alt="The featureless interior of the Specter cockpit">
+      <div class="lore-illustration-caption">Interior survey: Object 4-Null cockpit. Note: no controls visible. Ambient light source: unidentified.</div>
+    </div>
+    <div class="lore-quote reveal">
+      <p>Seven test pilots sat in the cockpit. All reported the hum. Three asked to return. Compact Pilot Wellness noted the pattern and recommended discontinuing the seating program. Their report used the phrase "anomalous preference formation." The pilots were not debriefed on whether the preference persisted after the sessions ended, because no one thought to ask.</p>
+      <div class="attribution">Compact Pilot Wellness, seating program review. Recommendation adopted. Follow-up: none.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Test pilot 3 submitted seven requests to resume the seating program. All denied. Test pilot 3 currently serves as a Specter pilot in active combat operations.</p>
+</div>
+
+<!-- ==================== THE SHIP ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Fleet</div>
+      <h2 class="section-title">One template. No explanation.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The original Object 4-Null was never replicated. What modern pilots fly is
+        something else — ships built by Compact engineers who studied the Specter for
+        decades and produced an approximation. The hull is conventional alloy shaped to
+        match the exterior geometry. The cloaking system is a reverse-engineered copy
+        that achieves a similar effect through entirely different means. The EMP discharge
+        was the easiest system to replicate. The Compact does not discuss what was hardest.
+      </p>
+    </div>
+
+    <div class="ship-showcase reveal reveal-delay-2">
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/specter.png" alt="Specter">
+        <div class="ship-showcase-name">Specter</div>
+        <div class="ship-showcase-role">Stealth Assassin</div>
+        <div class="ship-showcase-desc">
+          The reproduction. Cloaking, EMP discharge, and a hull that looks right but
+          scans differently. Specter pilots report the hum. Compact engineers say the
+          reproduction shouldn't produce a hum. Both are correct.
+        </div>
+      </div>
+    </div>
+
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>Specter pilots report a persistent low hum in the cockpit that doesn't
+        match any known system. Pilots say they've grown to like it.</p>
+      <div class="attribution">Compact Pilot Wellness Report, quarterly filing. Same text every quarter for eleven years.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">The original Object 4-Null is stored at a Compact facility whose location is classified. Fourteen people have clearance to access it. The access log shows zero visits in the last six years.</p>
+</div>
+
+<!-- ==================== OPEN QUESTIONS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Open File</div>
+      <h2 class="section-title">What the file doesn't contain.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        The file has no section on civilization, biology, or social structure. Whatever
+        built the Specter left no remains, no DNA, no organic trace. The seat is
+        human-sized but that constrains nothing — a chair is not a skeleton. There is
+        one ship. The file is about the ship.
+      </p>
+      <p>
+        It has no section on motive. Why was the ship in corridor 4-Null? Was it
+        abandoned, lost, or placed? If placed, for whom? If abandoned, what would cause
+        the builders of an indestructible ship to leave it behind?
+      </p>
+      <p>
+        The file contains 214 pages. Eleven are materials analysis. Eight are the
+        cloaking event reports. Six are the pilot seating transcripts. The remaining
+        189 pages are <span class="redacted">redacted</span>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+
+</body>
+</html>

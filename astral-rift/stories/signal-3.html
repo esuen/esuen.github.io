@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 3</title>
+  <meta name="description" content="Night Shift. Dock Chief Maren Solace. The tree is doing something it's never done before.">
+  <meta property="og:title" content="Astral Rift — Signal: Night Shift">
+  <meta property="og:description" content="The tree is doing something it's never done before.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    :root { --accent: #e06830; }
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 20% 25%, rgba(50, 20, 10, 0.25) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 75% 50%, rgba(10, 40, 30, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter Three</div>
+  <h1 class="hero-title">Night Shift</h1>
+  <p class="hero-subtitle">Dock Chief Maren Solace<br>Site 7-Choir, 14 years of service</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        Solace knew the tree's rhythms the way a farmer knows weather. Fourteen years
+        of night shifts will do that. The old crews talked about it like machinery.
+        Production cycles, output schedules, metabolic rates. Solace didn't argue with
+        them. She just knew that the tree had moods, and that tonight its mood was wrong.
+      </p>
+      <p>
+        The trunk was brighter than usual. Not by much. If you put an instrument on it,
+        the reading would come back within normal range. But Solace didn't need an
+        instrument. She'd spent more hours looking at this tree than anyone alive, and
+        the orange was wrong. Too warm. Like a fever.
+      </p>
+      <p>
+        She kept a list in a notebook she didn't show anyone. Names. Kira Doss. Tam
+        Vorne. Osh Helder. Seven others. People from the old crews who'd gone looking
+        at things in the deep growth chambers, things that pulsed or hummed or did
+        something new. Doss went in to check a root anomaly in the lower vaults.
+        Reassigned two days later. Vorne asked too many questions about the trunk's
+        reaction to proximity. Transferred off-site. The official reasons were always
+        different. The pattern was always the same.
+      </p>
+      <p class="short">
+        She poured a cup of tea and watched.
+      </p>
+      <p>
+        Three cups a night, same brand her grandmother used on the ag station. The only thing she'd brought from home that hadn't worn out or been replaced. The tea was nothing special. The habit was everything.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The pattern changed at 03:41.
+      </p>
+      <p>
+        She'd been half-watching, the way you half-watch something you've seen ten
+        thousand times. The trunk pulses were regular. Three seconds on, two off,
+        the standard resting cycle. She could time her breathing to it. Sometimes did,
+        on the long shifts.
+      </p>
+      <p>
+        Then the rhythm broke. The pulse held for six seconds instead of three. She
+        set down her tea. The next pulse was eight seconds. The one after that didn't
+        stop. The bioluminescence along the trunk shifted from the standard orange
+        resting pattern to something she'd never seen. The color shifted.
+        A sequence where there had always been a cycle.
+      </p>
+      <p class="short">
+        Structured.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She called Vasik. He picked up on the second ring, which meant he was already
+        awake, which meant he was always awake at this hour, which she already knew
+        because she'd been calling him about the tree for years.
+      </p>
+      <p>
+        "Something's different."
+      </p>
+      <p>
+        "Different how?"
+      </p>
+      <p>
+        "Come look."
+      </p>
+      <p>
+        He didn't ask questions. That was why she called him instead of filing a
+        report. Reports asked you to classify what you were seeing before you
+        understood it. Vasik just looked.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        He arrived in twelve minutes. Lab coat over pajamas, datapad under his arm,
+        the same expression he always wore when something didn't fit his models.
+        Focused and a little afraid.
+      </p>
+      <p>
+        They stood at the observation platform and watched. The trunk was running
+        the new pattern on a loop. Short segments of structured light, pausing,
+        repeating. Vasik held up his datapad and started recording.
+      </p>
+      <p>
+        "How long has it been doing this?"
+      </p>
+      <p>
+        "Eleven minutes. Started at 03:41."
+      </p>
+      <p>
+        "The vats?"
+      </p>
+      <p>
+        She checked the production board. "Normal. All cycles on schedule. Whatever
+        it's doing, it's not affecting output."
+      </p>
+      <p>
+        That was the thing about the tree that the new crews didn't understand. The
+        hull it grew was living tissue. Bio-membrane over structural lattice, sealed
+        with compounds the science division still couldn't fully characterize.
+        The hulls showed no fatigue curves. Metal fatigues. It accumulates
+        microfractures at stress points, weakens along grain boundaries, fails
+        in predictable ways. Bio-membrane didn't do any of that. After six thousand
+        hours of operational stress, a Choir hull was stronger than the day it
+        detached. The metallurgists had a term for it. They called it impossible.
+      </p>
+      <p>
+        Vasik watched the pattern cycle twice more. He zoomed in on his datapad,
+        frame by frame. Solace watched him watch it. She knew the look. He was
+        seeing something.
+      </p>
+      <p class="short">
+        "What is it?"
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        "It looks like a response."
+      </p>
+      <p>
+        Solace waited. Vasik was not a man who said things before he was ready. If
+        he said "it looks like," he meant "I'm 80% sure but I don't want to be."
+      </p>
+      <p>
+        "A response to what?"
+      </p>
+      <p>
+        He didn't answer. He was scrubbing through the recording, isolating the
+        repeating element. Three cycles. A short pattern, structured, with a
+        rhythm that wasn't biological.
+      </p>
+      <p>
+        "Kael."
+      </p>
+      <p>
+        "I heard you."
+      </p>
+      <p>
+        "A response to what?"
+      </p>
+      <p>
+        He lowered the datapad. The trunk kept pulsing. The vats kept running.
+        Everything at Site 7 was normal except for the thing that wasn't normal,
+        and the way Vasik was looking at it.
+      </p>
+      <p class="short">
+        "I don't know. Something asked a question and the tree answered."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        They watched for another forty minutes. The pattern repeated, identical
+        each time, then stopped as suddenly as it started. The trunk returned to
+        its resting cycle. Three on, two off. The fever color faded. Normal.
+      </p>
+      <p>
+        Vasik saved the recording. Solace filed a night shift report noting "anomalous
+        trunk luminescence, duration 53 minutes, no production impact." Standard
+        language. Nothing in the report would trigger a review.
+      </p>
+      <p>
+        Vasik kept his recording on a personal drive. He did not submit it to the
+        Compact Science Division. When Solace asked why, he said he needed to compare
+        it to something first.
+      </p>
+      <p>
+        "Compare it to what?"
+      </p>
+      <p>
+        "I don't know yet."
+      </p>
+      <p>
+        Solace almost told him about the list. Doss. Vorne. Helder. The people who
+        went looking. She didn't. It wouldn't have helped him, and it wouldn't have
+        stopped him.
+      </p>
+      <p>
+        She'd known Vasik for nine years. He was the only person who'd lasted longer than one rotation, besides her. The list had ten names. She intended to keep it at ten.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The next morning the tree was normal. The vats produced on schedule. Two
+        Tempest hulls completed their growth cycle and detached. The old crews
+        would have called it "the gasp," the sound the hull makes when it seals.
+        The new crews don't call it anything. They rotate through in eighteen-month
+        cycles. By the time they learn the rhythms, they're gone. Solace has watched
+        the institutional memory of Site 7 empty and refill four times.
+      </p>
+      <p>
+        She'd tried once, in her second year. Explained to a rotation supervisor that the tree's output varied with proximity — more visitors in the chamber, slower growth cycles. He'd noted it as "anecdotal" and filed nothing. She'd watched him leave Site 7 sixteen months later knowing exactly as much about the tree as he'd known on arrival. After the third rotation, she stopped trying to teach the new crews. She just kept the notebook.
+      </p>
+      <p>
+        She thought about 03:41.
+      </p>
+      <p>
+        In fourteen years, the tree had never run a structured sequence. Metabolic
+        variation, yes. Production adjustments, yes. Even the patterns Vasik had
+        documented, the ones that changed when people entered the room. But those
+        were reactions. Passive. The tree noticing things.
+      </p>
+      <p>
+        This was the tree saying something. Unprompted. At
+        3:41 in the morning, to an empty facility, in a pattern that repeated
+        like it was waiting for confirmation.
+      </p>
+      <p class="short">
+        Confirmation from what?
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Solace finished her shift, clocked out, and walked to the mess hall. She
+        ate breakfast. She didn't tell anyone what she'd seen, because she didn't
+        know how to describe it in a way that wouldn't sound like fourteen years of
+        night shifts catching up with her.
+      </p>
+      <p>
+        The tree has moods. She's said this to people who smile politely and
+        change the subject. She's stopped saying it. But it's true.
+      </p>
+      <p>
+        Last night the tree's mood was expectant.
+      </p>
+      <p class="short">
+        It was waiting for something, and at 03:41, something arrived.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Three</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="signal-2.html">&larr; Chapter Two</a>
+      <a href="../lore/index.html">The Archives</a>
+      <a href="signal-4.html">Chapter Four &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — The Lattice</title>
+  <meta name="description" content="Ships grown from mineral substrate in crystal caverns. Carbon dating says they're older than everything else. Nobody can explain why.">
+  <meta property="og:title" content="Astral Rift — The Lattice">
+  <meta property="og:description" content="Ships grown from mineral substrate. Older than everything else.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    :root {
+      --accent: #d4940a;
+      --accent-secondary: #c89040;
+    }
+
+    .hero {
+      min-height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 80px 24px 40px;
+    }
+
+    .hero-label {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: hero-fade 1s 0.2s forwards;
+    }
+
+    .hero-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+      text-shadow:
+        0 0 10px rgba(212,148,10,1), 0 0 40px rgba(212,148,10,0.7),
+        0 0 80px rgba(212,148,10,0.5), 0 0 150px rgba(212,148,10,0.3);
+      opacity: 0;
+      animation: hero-glow 1.5s 0s forwards;
+    }
+
+    @keyframes hero-glow {
+      0% { opacity: 0; transform: scale(0.95); filter: blur(8px); }
+      60% { opacity: 1; transform: scale(1); filter: blur(0); }
+      80% { text-shadow: 0 0 20px rgba(212,148,10,1), 0 0 50px rgba(212,148,10,0.8), 0 0 100px rgba(212,148,10,0.5); }
+      100% { opacity: 1; transform: scale(1); filter: blur(0);
+        text-shadow: 0 0 10px rgba(212,148,10,1), 0 0 40px rgba(212,148,10,0.7), 0 0 80px rgba(212,148,10,0.5), 0 0 150px rgba(212,148,10,0.3); }
+    }
+
+    .hero-subtitle {
+      font-family: 'Exo 2', sans-serif;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-dim);
+      font-weight: 300;
+      max-width: 520px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: hero-fade 1s 0.6s forwards;
+    }
+
+    @keyframes hero-fade {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 20% 15%, rgba(100, 60, 5, 0.3) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 75% 30%, rgba(80, 50, 10, 0.25) 0%, transparent 55%),
+        radial-gradient(ellipse 65vw 35vh at 40% 55%, rgba(60, 35, 5, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 50vw 45vh at 85% 70%, rgba(90, 55, 8, 0.2) 0%, transparent 55%),
+        radial-gradient(ellipse 60vw 35vh at 15% 85%, rgba(70, 40, 5, 0.2) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+
+    #crystal-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .lore-illustration {
+      box-shadow: 0 12px 60px -20px rgba(0,0,0,0.6), 0 0 80px -30px rgba(212, 148, 10, 0.08);
+    }
+
+    .lore-quote {
+      background: linear-gradient(135deg, rgba(212, 148, 10, 0.04), transparent);
+    }
+
+    .ship-showcase {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin: 40px 0;
+    }
+
+    .ship-showcase-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: center;
+    }
+
+    .ship-showcase-card img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: contain;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 12px rgba(212, 148, 10, 0.2));
+    }
+
+    .ship-showcase-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-bright);
+      letter-spacing: 0.04em;
+      margin-bottom: 4px;
+    }
+
+    .ship-showcase-role {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 0.65rem;
+      color: var(--accent);
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .ship-showcase-desc {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .hero { min-height: auto; padding: 60px 20px 40px; }
+      .ship-showcase { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<canvas id="crystal-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">The Archives — Faction Dossier</div>
+  <h1 class="hero-title">THE LATTICE</h1>
+  <p class="hero-subtitle">They grew ships from mineral substrate in crystal caverns. The process works. Nobody can explain why.</p>
+  <div id="lore-nav" data-current="lattice"></div>
+</section>
+
+<!-- ==================== THE PROCESS ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Manufacturing Process</div>
+      <h2 class="section-title">Grown, not built.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Lattice ships form in crystal caverns from mineral substrate. The hull bonds at
+        a molecular level through epitaxy — each new layer of mineral aligning its crystal lattice to the existing structure beneath it, atom by atom, the way frost forms on a window by following the pattern already there. Energy conduits follow natural crystal veins through the plating.
+        Compact engineers can replicate the process step by step. None of them can explain
+        the mechanism that makes it work.
+      </p>
+      <p>
+        The Foundry builds a Viper in nine days using documented procedures. A Lattice
+        growth chamber produces a Titan in fourteen, using a process that reads like geology
+        with opinions. Each hull is grown from a seed crystal harvested from the last — a
+        chain of production where every generation carries the crystallographic memory of
+        its predecessor. The mineral chooses where to bond. The crystal veins route themselves.
+        The engineers set conditions and wait.
+      </p>
+      <p>
+        The growth cycle ends with annealing — a slow cool-down that relieves internal stress in the crystal structure. The final temperature is 37 degrees. Body temperature.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/lattice/growth_chamber.webp" alt="Crystal growth chamber with ship forming">
+      <div class="lore-illustration-caption">Growth chamber, Lattice Site 3-K. Titan-class hull, estimated 72% mineral bonding. Completion in approximately 5 days.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>I followed the procedure exactly. Same substrate, same temperature, same mineral
+        composition. The first attempt bonded perfectly. The second attempt, identical
+        conditions, produced inert rock. The third bonded again. There is no variable I
+        can identify that differs between success and failure.</p>
+      <div class="attribution">Dr. Saren Voss, Compact Materials Research, year 3 of a 5-year study. Study discontinued in year 3.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Success rate for Lattice mineral bonding: 68%. Failure rate: 32%. Predictive model accuracy: 0%.</p>
+</div>
+
+<!-- ==================== THE ANOMALY ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Carbon Dating Anomaly</div>
+      <h2 class="section-title">The dates don't fit.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Carbon dating on Titan hull fragments returns dates centuries older than anything
+        from the other factions. Foundry alloys, Choir bio-membrane, Weave anchor brackets —
+        all cluster within the same archaeological period. Lattice mineral dates sit alone,
+        far earlier on the timeline.
+      </p>
+      <p>
+        Either the Lattice existed long before the others, building in isolation for centuries
+        before the other four civilizations appeared. Or the mineral-bonding process produces
+        anomalous isotope signatures that make the material appear older than it is. The
+        Compact has funded three studies to determine which. All three returned inconclusive
+        results. All three principal investigators requested reassignment afterward.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/lattice/carbon_dating.webp" alt="Laboratory analysis of Lattice hull fragment">
+      <div class="lore-illustration-caption">Analysis: Titan hull fragment, sample LT-441. Isotope date: pre-Collapse by 600+ years. Equipment status: calibrated and verified.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== STILL GROWING ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">Field Report</div>
+      <h2 class="section-title">The mineral is still active.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        In deep Rift corridors, survey teams have documented hexagonal mineral formations
+        on the walls that weren't present in previous surveys. The formations are structural —
+        load-bearing walls, supports, bracing — but for what is unclear. They aren't attached
+        to any known Lattice facility. They appear to be building something on their own.
+      </p>
+      <p>
+        The mineral substrate is active the way coral is active. Not sentient, but growing,
+        following a template that wasn't written by anyone alive. The formations
+        expand at roughly three centimeters per year. At that rate, they've been growing
+        since before the Collapse. Whatever they're building, they're not done.
+      </p>
+    </div>
+    <div class="lore-illustration reveal reveal-delay-2">
+      <img loading="lazy" src="../assets/images/lore/lattice/still_growing.webp" alt="Mineral formations growing on corridor walls">
+      <div class="lore-illustration-caption">Survey image: Corridor 22-Sigma, hexagonal mineral growth. Previous survey (8 years prior) shows bare walls at this location.</div>
+    </div>
+    <div class="lore-quote reveal reveal-delay-3">
+      <p>It's building a room. I can see the corners forming. I measured the angles —
+        they're consistent with Lattice architectural standards. This corridor is
+        nowhere near a Lattice site. There is no growth chamber here. There is no
+        substrate supply. It's growing from the wall itself.</p>
+      <div class="attribution">Survey team lead, Corridor 22-Sigma, report filed with Compact Geological Division. No follow-up scheduled.</div>
+    </div>
+  </div>
+</section>
+
+<div class="lore-break reveal">
+  <p class="lore-break-text">Estimated completion date for the Corridor 22-Sigma formation at current growth rate: 340 years. The Compact has not allocated monitoring resources past the current fiscal year.</p>
+</div>
+
+<!-- ==================== THE FLEET ==================== -->
+<section class="section">
+  <div class="container">
+    <div class="section-divider"></div>
+    <div class="reveal">
+      <div class="section-label">The Fleet</div>
+      <h2 class="section-title">Two templates. Dense and denser.</h2>
+    </div>
+    <div class="section-text reveal reveal-delay-1">
+      <p>
+        Lattice growth chambers produce two ship classes. Both are heavy. Both are slow.
+        Both are very difficult to destroy. Lattice pilots don't outmaneuver opponents.
+        They outlast them.
+      </p>
+    </div>
+
+    <div class="ship-showcase reveal reveal-delay-2">
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/titan.png" alt="Titan">
+        <div class="ship-showcase-name">Titan</div>
+        <div class="ship-showcase-role">Heavy Assault</div>
+        <div class="ship-showcase-desc">
+          Mineral-bonded hull absorbs and redistributes kinetic energy across the
+          entire structure. Hitting a Titan doesn't damage it so much as warm it up.
+        </div>
+      </div>
+      <div class="ship-showcase-card">
+        <img loading="lazy" src="../assets/images/ships/bastion.png" alt="Bastion">
+        <div class="ship-showcase-name">Bastion</div>
+        <div class="ship-showcase-role">Defensive Anchor</div>
+        <div class="ship-showcase-desc">
+          Crystalline barrier walls and an autonomous turret running pre-Collapse
+          firmware. Bastion pilots don't fly. They deploy.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+<script>
+  // Fractal crystal growth — branching mineral veins from seed points
+  (function() {
+    const canvas = document.getElementById('crystal-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Pre-generate a crystal tree structure
+    function generateBranches(x, y, angle, length, depth, maxDepth) {
+      if (depth > maxDepth || length < 4) return [];
+
+      const ex = x + Math.cos(angle) * length;
+      const ey = y + Math.sin(angle) * length;
+      const branch = { x1: x, y1: y, x2: ex, y2: ey, depth: depth };
+      const results = [branch];
+
+      // Crystalline branching — 60 degree angles (hexagonal)
+      const branchCount = depth === 0 ? 3 + Math.floor(Math.random() * 3) : 1 + Math.floor(Math.random() * 3);
+      const decay = 0.6 + Math.random() * 0.15;
+
+      for (let i = 0; i < branchCount; i++) {
+        const spread = (Math.PI / 3) * (i - (branchCount - 1) / 2); // 60° spacing
+        const jitter = (Math.random() - 0.5) * 0.2;
+        const newAngle = angle + spread + jitter;
+        const newLength = length * decay;
+        results.push(...generateBranches(ex, ey, newAngle, newLength, depth + 1, maxDepth));
+      }
+
+      return results;
+    }
+
+    class CrystalTree {
+      constructor() { this.reset(true); }
+
+      reset(initial) {
+        this.cx = canvas.width * (0.1 + Math.random() * 0.8);
+        this.cy = canvas.height * (0.1 + Math.random() * 0.8);
+
+        // Generate branches in multiple directions from center
+        this.branches = [];
+        const numRoots = 3 + Math.floor(Math.random() * 3);
+        const baseAngle = Math.random() * Math.PI * 2;
+        for (let i = 0; i < numRoots; i++) {
+          const angle = baseAngle + (Math.PI * 2 / numRoots) * i + (Math.random() - 0.5) * 0.3;
+          const length = 30 + Math.random() * 40;
+          this.branches.push(...generateBranches(this.cx, this.cy, angle, length, 0, 3));
+        }
+
+        this.totalBranches = this.branches.length;
+        this.delay = initial ? Math.random() * 3 : 3 + Math.random() * 6;
+        this.growTime = 3 + Math.random() * 3;
+        this.holdTime = 3 + Math.random() * 4;
+        this.fadeTime = 2 + Math.random() * 3;
+        this.totalLife = this.growTime + this.holdTime + this.fadeTime;
+        this.time = -this.delay;
+      }
+
+      update(dt) {
+        this.time += dt;
+        if (this.time > this.totalLife) this.reset(false);
+      }
+
+      draw(ctx) {
+        if (this.time < 0) return;
+
+        let growProgress, alpha;
+        if (this.time < this.growTime) {
+          growProgress = this.time / this.growTime;
+          alpha = 0.4;
+        } else if (this.time < this.growTime + this.holdTime) {
+          growProgress = 1;
+          alpha = 0.4;
+        } else {
+          growProgress = 1;
+          const fp = (this.time - this.growTime - this.holdTime) / this.fadeTime;
+          alpha = (1 - fp) * 0.4;
+        }
+
+        if (alpha < 0.01) return;
+
+        const branchesToShow = Math.floor(growProgress * this.totalBranches);
+
+        ctx.save();
+        ctx.lineCap = 'round';
+
+        // Batch branches by depth to minimize state changes
+        for (let d = 0; d <= 3; d++) {
+          const depthFade = 1 - (d * 0.15);
+          const lineAlpha = alpha * depthFade;
+          const lineWidth = Math.max(0.3, 1.8 - d * 0.35);
+          ctx.strokeStyle = `rgba(212, 148, 10, ${lineAlpha})`;
+          ctx.lineWidth = lineWidth;
+          ctx.beginPath();
+          for (let i = 0; i < branchesToShow && i < this.branches.length; i++) {
+            const b = this.branches[i];
+            if (b.depth !== d) continue;
+            ctx.moveTo(b.x1, b.y1);
+            ctx.lineTo(b.x2, b.y2);
+          }
+          ctx.stroke();
+        }
+
+        // Center seed node
+        ctx.fillStyle = `rgba(240, 180, 40, ${alpha})`;
+        ctx.beginPath();
+        ctx.arc(this.cx, this.cy, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+    }
+
+    const trees = [];
+    for (let i = 0; i < 2; i++) trees.push(new CrystalTree());
+
+    let lastTime = performance.now();
+    const frameInterval = 1000 / 30;
+
+    function loop(now) {
+      requestAnimationFrame(loop);
+      const elapsed = now - lastTime;
+      if (elapsed < frameInterval) return;
+      const dt = Math.min(elapsed / 1000, 0.05);
+      lastTime = now - (elapsed % frameInterval);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const t of trees) { t.update(dt); t.draw(ctx); }
+    }
+    requestAnimationFrame(loop);
+  })();
+</script>
+
+</body>
+</html>

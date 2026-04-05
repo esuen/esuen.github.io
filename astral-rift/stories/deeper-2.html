@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Deeper: Chapter 2</title>
+  <meta name="description" content="The Conduit. Engineer Nava. The ship's power draw drops, and the walls are feeding it.">
+  <meta property="og:title" content="Astral Rift — Deeper: The Conduit">
+  <meta property="og:description" content="The ship's power draw drops, and the walls are feeding it.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>:root { --accent: #c8a060; }</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Deeper</div>
+  <div class="hero-chapter">Chapter Two</div>
+  <h1 class="hero-title">The Conduit</h1>
+  <p class="hero-subtitle">Engineer Nava<br>Power Systems, Survey Vessel <em>Sable Reach</em>, Outermark Expedition 9</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        The reactor log showed a 4% drop in fuel consumption at 09:40 ship time. Nava
+        noted the time, noted the percentage, noted the ambient temperature of the
+        reactor housing. She wrote all three numbers in the margin of the maintenance
+        ledger she kept by hand because digital logs could corrupt and paper couldn't.
+        Then she assumed a sensor fault and recalibrated.
+      </p>
+      <p>
+        At 11:15, the drop increased to 7%. She swapped the sensor module entirely,
+        pulling a spare from the parts locker and seating it with the kind of practiced
+        irritation that came from sixteen years of maintaining spacecraft that were
+        always older than the budget implied. She counted the spares as she replaced
+        it. Seven sensor modules left. She always counted.
+      </p>
+      <p>
+        The habit predated the Sable Reach, predated the survey work, predated the decision to leave the Lattice complex. At twelve, she'd counted the rivets in the ceiling above her bunk on Deck 14 — two hundred and seventeen, always two hundred and seventeen. Counting was how she confirmed that the world was still the same shape as yesterday.
+      </p>
+      <p>
+        She'd started on newer equipment. She'd left that world behind and never explained why.
+      </p>
+      <p>
+        The new sensor reported the same numbers.
+      </p>
+      <p>
+        The Sable Reach was burning less fuel. Not because the engines were throttled,
+        not because they'd reduced load. The reactor was producing the same output as
+        always. Something else was supplementing it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Nava had a system for problems. Step one: check the instruments. Step two: check
+        them again with different instruments. Step three: stop assuming the problem is
+        with the instruments.
+      </p>
+      <p>
+        She was on step three.
+      </p>
+      <p>
+        The power distribution manifold showed current flowing into the ship through
+        the hull. Microamps at first, in the range where capacitive coupling with
+        ambient electromagnetic fields could explain it. Then milliamps. Then a full
+        amp, steady, entering through the starboard hull plating where the Sable Reach
+        drifted closest to the corridor wall.
+      </p>
+      <p>
+        She pulled up the hull contact logs. No physical contact with the walls. Fourteen
+        meters of clearance, minimum. The energy was crossing open space, and it was
+        doing so with no measurable resistance in the transfer path. She checked that
+        reading three times. Zero loss. In sixteen years of engineering work, she had
+        never seen energy transfer at zero loss outside of a laboratory superconductor,
+        and those required temperatures near absolute zero and materials that cost more
+        per gram than the Sable Reach cost per deck.
+      </p>
+      <p class="short">
+        Nava sat back in her chair and looked at the ceiling.
+      </p>
+      <p>
+        Whatever was carrying the current from the wall to the hull had no resistance.
+        None. The energy arrived at the same potential it left with, as if the fourteen
+        meters of open corridor between the wall and the ship simply weren't there.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She traced the input path through the hull plating to the power bus, through
+        the bus to the reactor's intake regulation system, where it merged with the
+        reactor's output so cleanly that the fuel controller had simply adjusted
+        downward to compensate. Automatic load balancing. The reactor saw another power
+        source feeding the grid and reduced its own contribution to maintain steady
+        voltage. Exactly what it was designed to do.
+      </p>
+      <p>
+        Which meant the energy coming through the hull was compatible. Same frequency.
+        Same waveform. Close enough to the Sable Reach's own power signature that the
+        reactor couldn't tell the difference.
+      </p>
+      <p>
+        That was the part that bothered her.
+      </p>
+      <p>
+        The Sable Reach ran a standard Foundry-pattern reactor. Compact commercial
+        design, licensed from Denn-Sauer Industrial three decades ago. The power
+        characteristics were specific to that reactor family. Voltage regulation, phase
+        timing, harmonic profile. Every manufacturer had a different signature. You could
+        identify a ship's origin by its power emissions the way you could identify a
+        person by their voice.
+      </p>
+      <p>
+        The energy entering the hull matched a Foundry power signature. Not approximately.
+        Exactly.
+      </p>
+      <p>
+        Nava pulled out the maintenance ledger and wrote the match parameters in a
+        column, each value paired with the corresponding Denn-Sauer specification.
+        Fourteen decimal places of agreement. She underlined the number fourteen and
+        stared at it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Nava put on a suit and went outside.
+      </p>
+      <p>
+        The corridor walls looked different up close. From the ship's cameras they
+        appeared smooth, featureless, the way Rift walls always looked from a distance.
+        Standing on the hull with a handheld scanner and a work lamp, she could see
+        the surface detail.
+      </p>
+      <p>
+        Lines. Channels in the wall material, running parallel to the corridor's length,
+        branching at regular intervals into smaller channels, which branched again into
+        capillaries too fine for the naked eye. She pressed the scanner against the wall
+        and held it there for a full minute.
+      </p>
+      <p>
+        The channels were carrying current. Low-level, continuous, flowing in the
+        direction the Sable Reach was traveling. Toward something deeper in the network.
+        The corridor itself was acting as a guide for the energy, shaping and directing
+        it the way a pipe shapes water flow. Except pipes lost energy to friction and
+        heat. These channels didn't. The signal entering one end emerged at the other
+        with the same amplitude, the same phase, the same everything. The corridor
+        wasn't just carrying energy. It was a waveguide, and a perfect one.
+      </p>
+      <p>
+        She'd seen dead conduit networks in Outermark salvage operations. Fossil
+        infrastructure. Channels in the walls where power had once flowed, dry for
+        centuries, filled with mineral deposits. Every engineer in Compact space knew
+        what they were. Relics of a system that didn't work anymore.
+      </p>
+      <p class="short">
+        These were working.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Back inside, she pulled the Outermark engineering archive and searched for
+        any record of active conduit networks. There were none. The closest reference
+        was a Lattice mineral survey from sixty years ago that noted "anomalous
+        conductivity" in a deep corridor wall sample, filed under measurement error
+        and never followed up.
+      </p>
+      <p>
+        She ran the numbers on the power flow. The conduit network in the visible
+        section of corridor wall was carrying enough energy to power a small station.
+        Not a ship. A station. And the visible section was maybe two hundred meters
+        of a corridor that extended thousands of kilometers in both directions. She
+        counted the channel branches she'd mapped during her EVA. Forty-seven primary
+        channels, each splitting into hundreds of secondaries. She extrapolated the
+        total current capacity and wrote the figure in her ledger, then crossed it out
+        and recalculated, because the first number had seemed too large.
+      </p>
+      <p>
+        The second number was the same.
+      </p>
+      <p>
+        The resonance Drel had been tracking was steady at 0.7 hertz above standard
+        now. Nava had been hearing it all day through the hull. A low vibration she
+        could feel in her teeth when the ship was quiet. She pulled the frequency
+        analysis and compared it to the conduit current.
+      </p>
+      <p>
+        Same frequency.
+      </p>
+      <p>
+        The resonance wasn't background noise. It was the sound of the conduit
+        network operating. The sound of power flowing through walls that everyone
+        had assumed were inert.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She wrote the report in the flat, numbered style that engineering logs demanded.
+        Observation, measurement, analysis, conclusion. She kept the language clinical.
+        The facts were sufficient.
+      </p>
+      <p>
+        The Outermark wasn't dead infrastructure at the edge of a failing network.
+        The parts of it that Compact ships could reach were dead. The power had been
+        rerouted away from those sections, the way you'd isolate a bus from an
+        unused subsystem. Not broken. Disconnected.
+      </p>
+      <p>
+        Out here, past the last beacon, past the range of any Compact vessel that
+        had reported back, the original system was intact. The grid was live. Energy
+        was flowing through conduits that predated every faction's earliest records,
+        carrying power from somewhere to somewhere else, on a schedule that had nothing
+        to do with the civilizations using the network's outer edges for transit.
+      </p>
+      <p>
+        And the energy flowed without loss. She kept coming back to that. Every power
+        system she'd ever worked on bled energy at every transfer point, every junction,
+        every meter of cable. Entropy demanded it. Heat was the tax you paid for moving
+        energy through matter. It was the second law, the one rule no engineer could
+        negotiate with.
+      </p>
+      <p>
+        These conduits didn't pay the tax. Energy entered and energy exited and nothing
+        was lost in between. Either the conduit material had no resistance at all, which
+        violated everything she understood about physics, or the system was somehow
+        replacing what was lost faster than it was lost, which violated everything she
+        understood about engineering.
+      </p>
+      <p>
+        The Sable Reach had wandered into range of an active power line, and the
+        line had fed the ship without being asked. The way a socket feeds a device
+        you plug into it. Automatically. Because that's what it was built to do.
+      </p>
+      <p>
+        Nava filed the report. She left the reactor at reduced output. Free
+        energy was free energy, and she was an engineer, and she had learned a long
+        time ago at a Lattice industrial complex she didn't talk about anymore that
+        you don't question power when it's keeping the systems running. You just
+        make sure the systems are worth running.
+      </p>
+      <p>
+        She'd said something like that once before, at the Lattice complex, to a supervisor who'd questioned why she'd signed off on a third interim repair instead of calling a full shutdown. The supervisor had agreed with her. Two hours later the reactor entered thermal runaway. She'd been right about the power. She'd been wrong about the system. The distinction cost two people their lives and cost her the ability to trust an answer just because it was practical.
+      </p>
+      <p>
+        She did not write down the thought that had been forming since she stood
+        on the hull and looked at the conduit network branching into the wall
+        like veins in living tissue. The thought that the Compact's entire energy
+        infrastructure, the reactor designs and power grids and distribution
+        networks that every faction had supposedly invented independently, looked
+        an awful lot like crude versions of what was already here. Crude versions
+        with resistance. With loss. With entropy.
+      </p>
+      <p class="short">
+        Some things you keep out of the log.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Two</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="deeper-1.html">&larr; Chapter One</a>
+      <a href="../lore/index.html">The Archives</a>
+      <a href="deeper-3.html">Chapter Three &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>

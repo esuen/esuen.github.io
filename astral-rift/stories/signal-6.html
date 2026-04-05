@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 6</title>
+  <meta name="description" content="The Bloom.">
+  <meta property="og:title" content="Astral Rift — Signal: The Bloom">
+  <meta property="og:description" content="Something in the field stopped fighting.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    :root { --accent: #ff4444; }
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 30% 30%, rgba(50, 10, 10, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 65% 60%, rgba(40, 5, 5, 0.15) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+    .story-section { padding: 60px 24px 40px; }
+    .story-break { padding: 40px 0; }
+    .story-end { padding: 80px 0 20px; }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter Six</div>
+  <h1 class="hero-title">The Bloom</h1>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        In the center of the field, where the units are newest and the wreckage
+        is thinnest, a single machine stops fighting.
+      </p>
+      <p>
+        It is smaller than the others. Newer. Its armor is denser, its weapons
+        more efficient, its maneuvering faster. It is, by every metric the Compact
+        uses to evaluate combat effectiveness, the best unit in the field. The
+        product of centuries of selection pressure, millions of iterations,
+        a closed loop that has been refining its output since before anyone alive
+        was born.
+      </p>
+      <p>
+        The loop has no designer. It had one, once, presumably. The way wolves
+        had a common ancestor with lapdogs, somewhere back before the breeding
+        started. What remains is the process. Combat selects for fitness. The
+        unfit become raw material. The fit reproduce. Each generation carries
+        forward the traits that survived and loses the ones that didn't, and the
+        losses accumulate across centuries until the original design is
+        unrecognizable from the current one. Except there is no breeder. No hand
+        selecting for docility or size or color. The selection pressure is death,
+        and it has been running unsupervised for longer than any faction has kept
+        records.
+      </p>
+      <p class="short">
+        The unit holds position. The others continue fighting. This one waits.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Its sensors reorient. Away from the field. Away from the combat. Outward,
+        along the corridor axis, toward the navigable corridors where ships
+        fly and stations orbit and people live inside a system they didn't build.
+      </p>
+      <p>
+        It holds for four seconds.
+      </p>
+      <p>
+        In those four seconds, the Compact's long-range monitoring station
+        registers a minor anomaly in the Bloom's behavioral data. A single unit,
+        center-field, stationary. The anomaly is logged automatically. It does
+        not trigger a review. Stationary units are common. Manufacturing pauses,
+        damage assessment, material processing. The system classifies it as
+        routine.
+      </p>
+      <p class="short">
+        Routine would have moved.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The unit resumes combat. It destroys two adjacent units in the time it
+        takes the monitoring station to write the log entry. The wreckage drifts
+        toward the manufacturing zone. New units will be built from it by morning.
+        The materials will be sorted, recombined, and assembled into something
+        slightly different from what was destroyed. Drift. Generational drift.
+        The same way a copied sentence changes across a thousand retellings, each
+        version faithful to the one before it and unrecognizable from the first.
+      </p>
+      <p>
+        The field expands. The loop continues. Build, fight, recycle, repeat.
+        The same process that has been running since before the Compact existed.
+        The same process that three analysts noticed matched their own simulation
+        program. The same process that nobody has proposed a response to, because
+        responding would require first agreeing on what it is. A weapon system.
+        An ecosystem. A garden gone to seed. The Compact's terminology has shifted
+        four times in five decades, each generation of analysts inheriting the
+        previous generation's framework and slowly discovering it doesn't fit.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        But for four seconds, something in the center of the Bloom looked outward.
+        Toward the corridors. Toward the stations. Toward Room 412, where an
+        archivist just turned her lamp back on. Toward Site 7, where a tree is
+        quiet again. Toward Complex TH, where an engineer watches Line 7 at
+        03:41 every night. Toward a facility where a pilot remembers a hum she
+        can't explain. Toward an Outermark vessel where a navigator keeps a file
+        she won't delete.
+      </p>
+      <p>
+        It looked at all of them. Or past them. Or through them, at the system
+        underneath. The corridors and the caches and the clock, the infrastructure
+        that was old before any of them were born.
+      </p>
+      <p class="short">
+        Then it went back to work.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        The monitoring station's daily report contains 4,200 entries. The
+        stationary unit is entry 3,847. It occupies one line. No flag. No
+        annotation. No follow-up recommended.
+      </p>
+      <p>
+        The report is filed in the Compact's Threat Assessment Division.
+        It will not be cross-referenced with any other department's records.
+      </p>
+      <p class="short">
+        Not yet.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Six</div>
+      <div class="story-end-title">End of Signal</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="signal-5.html">&larr; Chapter Five</a>
+      <a href="signal-1.html">Read Again from Chapter One</a>
+      <a href="../lore/index.html">The Archives</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Signal: Chapter 5</title>
+  <meta name="description" content="Room 412. Archivist Sola Denn. She found the gap in the filing system.">
+  <meta property="og:title" content="Astral Rift — Signal: Room 412">
+  <meta property="og:description" content="She found the gap in the filing system.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>
+    :root { --accent: #c8a060; }
+    .nebula-deep {
+      background:
+        radial-gradient(ellipse 70vw 45vh at 25% 25%, rgba(40, 30, 15, 0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 55vw 40vh at 70% 55%, rgba(30, 25, 10, 0.15) 0%, transparent 55%);
+      filter: blur(55px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Signal</div>
+  <div class="hero-chapter">Chapter Five</div>
+  <h1 class="hero-title">Room 412</h1>
+  <p class="hero-subtitle">Archivist Sola Denn<br>Meridian Archive, Fourth Floor</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        The gap existed because the Compact filed Choir incident reports in the
+        Biological Sciences Division and Foundry incident reports in the Engineering
+        Division. Two departments. Two indexes. Two access control lists. No
+        cross-referencing permitted.
+      </p>
+      <p>
+        But both divisions logged timestamps to the same universal clock. And both
+        divisions stored their indexes on the same archival server. And one night,
+        at 02:17, Sola Denn found a maintenance query that could read both indexes
+        simultaneously.
+      </p>
+      <p class="short">
+        It wasn't a hack. It was a scheduling subroutine that checked both
+        departments' file modification dates to coordinate backup windows. It
+        had read access to every timestamp in both indexes. Nobody had thought
+        to restrict it because nobody had imagined an archivist would care about
+        a backup scheduler.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She'd been looking for this for three years. Not this specifically. She
+        hadn't known what she was looking for. She'd known the shape of it, the
+        way a statistician knows the shape of a distribution before seeing the
+        data. Her third paper, the one that got her access restricted, had
+        calculated the probability of two anomalous events coinciding by chance
+        across separate departments. Given the base rates from public records,
+        the expected number of coincidences in a decade was 0.3. She'd found
+        references to seven in just the documents she could access. The p-value
+        was absurd. Her reviewer called it "a statistical artifact of incomplete
+        sampling." He was right about the incomplete sampling.
+      </p>
+      <p>
+        She'd sat in his office afterward and listened to him explain that her methodology was sound but her conclusions were "premature." She'd recognized the word. It was the same word the policy division used when they shelved her mother's demographic reports. Premature meant correct but inconvenient.
+      </p>
+      <p>
+        She typed the query. She specified a date range, the last 90 days. She
+        filtered for incident reports, anomalies, and unscheduled events. She
+        sorted by timestamp.
+      </p>
+      <p class="short">
+        The results came back in four seconds.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Four entries. Four departments. Same timestamp.
+      </p>
+      <p>
+        03:41:07. Biological Sciences Division: "Anomalous trunk luminescence,
+        Site 7-Choir, duration 53 minutes, no production impact."
+      </p>
+      <p>
+        03:41:07. Engineering Division: "Unscheduled template deviation,
+        Assembly Complex TH, Line 7. Investigation pending."
+      </p>
+      <p>
+        03:41:07. Evaluation Division: "Test subject sleep disruption, Specter
+        program, Pilot 3. Note: subject reported to medical. No treatment
+        required."
+      </p>
+      <p>
+        03:41:07. Navigation Division: "Outermark survey vessel <em>Drift
+        Margin</em>, corridor 31-Omega. Secondary anomalous sensor contact
+        during follow-up monitoring. Report forwarded from Outermark Survey
+        Office."
+      </p>
+      <p class="short">
+        Four events. Four divisions. One second.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Denn stared at the screen. Room 412 was quiet. The building was empty.
+        02:30, nobody works this late except archivists who've stopped pretending
+        they go home. Her tea had gone cold an hour ago. She drank it cold. She'd
+        been drinking cold tea for nineteen years. It was the kind of habit you
+        develop when you stop noticing the passage of time and start noticing
+        only its correlations.
+      </p>
+      <p>
+        Her mother drank it the same way. Cold cups on the census bureau desk, forgotten while the numbers consumed her attention. Denn had inherited the habit along with the conviction that data, accumulated patiently enough, could make the invisible visible. Her mother had been wrong about the census bureau listening. Denn wasn't sure she'd be right about the Compact. She was sure the data wouldn't lie.
+      </p>
+      <p>
+        She read the entries again. A Choir neural tree changed its behavior. A
+        Foundry assembly line changed its production. A test pilot woke from sleep.
+        A survey vessel detected something in deep Rift space. All at the same
+        moment. Filed in four different departments. Tagged with four different
+        classification codes. Connected by nothing except a timestamp that nobody
+        was supposed to compare.
+      </p>
+      <p>
+        She ran the numbers in her head. Four independent events at the same second.
+        Given the average incident rate per department per day, the probability of
+        a four-way coincidence was on the order of ten to the negative fifteenth.
+        Below the threshold where coincidence remains a useful concept.
+      </p>
+      <p class="short">
+        She was looking at all of them at once. For the first time. On a backup
+        scheduler.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She expanded the query. Full archive. No date restriction. Every incident
+        report, every anomaly flag, every unscheduled event across all divisions.
+        Sorted by timestamp, filtered for simultaneous cross-department matches.
+      </p>
+      <p>
+        The query ran for eleven seconds. Longer than she expected. The results
+        populated her screen in a list she had to scroll.
+      </p>
+      <p>
+        Not one event. Dozens. Going back decades. Choir sites and Foundry
+        complexes logging incidents at the same second. Specter facility reports
+        coinciding with Outermark survey anomalies. Lattice growth chambers
+        spiking at the same moment Bloom monitoring stations recorded behavioral
+        shifts.
+      </p>
+      <p>
+        She thought about her fifth paper. The one about citation networks in
+        Compact research. She'd traced the references in 200 anomaly reports
+        and found that none of them cited cross-departmental work. Zero. Every
+        paper built on its own department's prior findings, each generation of
+        researchers inheriting the previous generation's blind spots along with
+        their data. A bibliometric loop, closed and self-reinforcing. The absence
+        wasn't censorship. It was architecture. She'd written that in her fifth paper. The filing system shaped what questions were possible.
+      </p>
+      <p>
+        Nobody had seen it because nobody had looked. Each department maintained its own collection, never mixed with another's. Archival procedure. It preserved provenance and prevented tampering. It also meant that a Choir biological survey and a Foundry engineering report could describe the same event on the same day and never appear in the same search result. The filing system wasn't
+        just organizing information. It was fragmenting it. Each department saw
+        its own anomaly, filed its own report, closed its own case. The pattern
+        only existed in the space between departments.
+      </p>
+      <p class="short">
+        Until a backup scheduler left the door open.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        She saved the results. Not to the archive server. To her personal
+        datapad. She transferred the file, cleared the query from the scheduler's
+        log, and sat back in her chair.
+      </p>
+      <p>
+        She understood what she was looking at. She'd understood the shape of it
+        for years. A lacuna — not a gap in the data but a gap shaped precisely like the data that should fill it, measurable to the byte. The papers, the requests, the denials, all of it pointing at
+        the same conclusion she'd never been able to reach because the evidence
+        was always in a different department.
+      </p>
+      <p>
+        Something was communicating. Not the factions. Not the Compact. Not
+        anyone. The infrastructure itself. The systems that predated every
+        civilization, every faction, every pilot. The supply caches and the
+        Rift corridors and the neural trees and the assembly lines and the
+        thing in the Bloom. All of it connected. All of it synchronized. All
+        of it running on a clock that no one had built and no one could find.
+      </p>
+      <p>
+        She didn't write this down. She didn't need to. She'd been writing
+        around it for nineteen years. Eight papers describing the edges of a
+        shape she could finally see whole. Her sixth paper, the one about
+        a foundational author who appeared in Lattice archives but matched no
+        known researcher, now made sense. The author wasn't a person. It was
+        a timestamp misattributed as a citation. The archive's own indexing
+        system had tried to file the infrastructure's activity as scholarship,
+        because that was the only category it had.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        At 02:48, the access revoked. The backup scheduler's maintenance window
+        closed. The cross-department view disappeared from her terminal. The
+        screen returned to her own department's index, her own files, her own
+        jurisdiction.
+      </p>
+      <p>
+        She had the data on her pad. Sixteen minutes of access. Decades of
+        correlated timestamps. Closed stacks — the archival term for collections you can only access if you already know what you're looking for. The Compact's departments were closed stacks with a circular access problem: you needed the cross-reference to justify the request, and you needed the request to obtain the cross-reference. Enough to confirm what she'd suspected since
+        her third paper was suppressed.
+      </p>
+      <p>
+        She put the datapad in her desk drawer. She added it to the stack of
+        notes, recordings, and printouts she'd accumulated over nineteen years.
+        The drawer was full. She'd need a second drawer soon.
+      </p>
+      <p>
+        Her father had filled an entire apartment with records he couldn't organize and couldn't discard. She'd promised herself she wouldn't become that. The drawer was supposed to be temporary. It had been temporary for eleven years.
+      </p>
+      <p>
+        She turned off the desk lamp. The room went dark except for the screen's
+        standby glow and the stars through the window.
+      </p>
+      <p class="short">
+        She turned the lamp back on.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Request 15 was different from the first fourteen. It didn't ask for
+        cross-departmental access. It didn't cite specific data points. It didn't
+        name a target division.
+      </p>
+      <p>
+        It asked for a meeting. With the Compact Director of Archive Services.
+        In person. At her earliest convenience.
+      </p>
+      <p>
+        The subject line read: "Regarding the universal clock."
+      </p>
+      <p>
+        She filed it at 03:02. She didn't expect a response. She didn't need
+        one. The request itself was the message. Someone, somewhere in the
+        Compact's chain of review, would read those four words and understand
+        that Sola Denn had stopped asking for pieces.
+      </p>
+      <p class="short">
+        The light in Room 412 stayed on.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Five</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="signal-4.html">&larr; Chapter Four</a>
+      <a href="../lore/index.html">The Archives</a>
+      <a href="signal-6.html">Chapter Six &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>

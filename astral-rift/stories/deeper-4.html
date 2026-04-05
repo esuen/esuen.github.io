@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Deeper: Chapter 4</title>
+  <meta name="description" content="Garrison. Pilot Shan. Automated units patrol an intersection that has never appeared on any map.">
+  <meta property="og:title" content="Astral Rift — Deeper: Garrison">
+  <meta property="og:description" content="Automated units patrol an intersection that has never appeared on any map.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+  <style>:root { --accent: #e04830; }</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Deeper</div>
+  <div class="hero-chapter">Chapter Four</div>
+  <h1 class="hero-title">Garrison</h1>
+  <p class="hero-subtitle">Pilot Shan<br>Navigation, Survey Vessel <em>Sable Reach</em>, Outermark Expedition 9</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        Shan saw them on passive sensors first. Four contacts, moving in a repeating
+        pattern through a junction two kilometers ahead. He watched them for eleven
+        minutes before saying anything to the crew. Old habit from a career he didn't
+        list on his survey credentials. You don't call contacts until you understand
+        what they're doing.
+      </p>
+      <p>
+        They were patrolling.
+      </p>
+      <p>
+        Two units held position at the junction entrance. Two more traced a figure-eight
+        through the intersection, their paths overlapping so that every angle of approach
+        was covered at all times. Clean geometry. No wasted movement. The kind of
+        formation a flight instructor would put on an exam. Shan had taken that exam,
+        years ago, at a Foundry military academy whose name he'd stopped saying out loud.
+      </p>
+      <p>
+        Saying it invited questions. Questions led to the patrol record, and the patrol record led to a corridor in the mid-Rift where he'd followed doctrine correctly and fourteen civilians had died correctly and the after-action report had concluded that no errors were made. No errors. He'd stopped saying the academy's name because the name was the first link in a chain he'd rather leave coiled.
+      </p>
+      <p>
+        "Captain, we have contacts."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Voss came forward and stood behind Shan's console without speaking. They watched
+        together as the four contacts completed their pattern, reset, and began again.
+        Exactly the same. Same speed. Same timing. Same distances between each unit.
+      </p>
+      <p>
+        "Bloom?" Voss asked.
+      </p>
+      <p>
+        Shan had been asking himself the same question. Bloom units were the one thing
+        you might find this far out. Autonomous combat platforms evolved from corrupted
+        factory systems, iterating through design generations in the deep Rift where
+        nobody went to shut them down. Every pilot learned to recognize Bloom signatures
+        during basic training.
+      </p>
+      <p>
+        "No." He highlighted the sensor profile on his display. "Bloom units are messy.
+        Asymmetric hulls, no two the same, because they're built from whatever the
+        production system scraped together. Natural selection without a designer. You
+        get variety, you get adaptation, you get things that work well enough to survive.
+        You don't get this." He pointed at the four identical contacts. "Same mass,
+        same power output, same dimensions. These came off a production line. Somebody
+        drew these on purpose."
+      </p>
+      <p>
+        "What production line?"
+      </p>
+      <p class="short">
+        "I don't know."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Voss ordered a slow approach, passive sensors only. Shan brought the Sable
+        Reach to a crawl — sprint and drift, the way he'd been taught in interdiction school. Burn the engines for a few seconds, then cut thrust and coast on momentum, watching. The sensor profile of a drifting ship is a fraction of an accelerating one. He used the corridor walls as cover.
+        At eight hundred meters he got visual.
+      </p>
+      <p>
+        The units were beautiful.
+      </p>
+      <p>
+        He hadn't expected that. Survey pilots cultivated a professional indifference
+        toward other ships. A hull was a hull. But these were something else. Angular
+        outer frames with clean geometric lines, the kind of structural precision that
+        made Foundry engineers possessive. Inside the frames, visible through gaps in
+        the plating, organic components pulsed with a faint bioluminescence. Choir
+        tissue, or something very like it. The weapon mounts were crystalline, mounted
+        on articulated stalks that caught the light from the Sable Reach's running
+        lamps and refracted it into spectra Shan didn't have names for. And threading
+        through all of it, connecting frame to tissue to crystal, a web of fine filaments
+        that seemed to shift color as the units moved.
+      </p>
+      <p>
+        Every faction's design language in a single hull. Integrated. Harmonious.
+        Working.
+      </p>
+      <p>
+        "I'm recording this," Shan said. Unnecessary. The ship was always recording.
+        He said it because he wanted to hear someone acknowledge what he was looking at.
+      </p>
+      <p>
+        "Acknowledged," Voss said.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        They watched for three hours. The patrol pattern didn't vary. Not once. Shan
+        timed the cycles with the ship's chronometer and compared each one. The
+        deviation between any two cycles was less than a thousandth of a second. He
+        ran every analysis he could think of. Power signatures. Propulsion type. Weapon
+        capability estimates based on the crystal mounts and their probable energy
+        throughput.
+      </p>
+      <p>
+        The behavior was what held him. He'd spent enough years studying combat
+        movement to recognize what he was looking at, and what he was not looking at.
+        These units didn't adapt. When the Sable Reach shifted position at eight
+        hundred meters, they didn't adjust their pattern. They didn't change speed or
+        spacing. A living pilot would have noticed. A learning system would have
+        incorporated the new data. These units executed the same sequence regardless
+        of context, the way a nesting bird repeats its display whether a mate is
+        watching or not. Stimulus, response. Fixed action.
+      </p>
+      <p>
+        The power signatures matched the conduit network in the walls. Same frequency,
+        same waveform. The units were drawing power from the corridor itself. No
+        internal reactor. No fuel. They ran on the grid the way a building's lights
+        ran on mains power.
+      </p>
+      <p>
+        He reported this to Nava over the internal comm. She was quiet for a long time.
+      </p>
+      <p>
+        "The resonance," she said. "Check if it's synchronized with their patrol
+        timing."
+      </p>
+      <p>
+        He checked. It was. The low hum that had been building since they passed the
+        degradation boundary pulsed in exact time with the patrol cycle. When the
+        figure-eight units crossed paths at the center of the junction, the resonance
+        peaked. When they separated to the pattern's extremes, it ebbed. The units
+        weren't just powered by the grid. They were part of it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Voss wanted to pass through the junction. There was no other route forward.
+        Shan took the Sable Reach in at minimum speed, hugging the far wall, trying
+        to put maximum distance between the ship and the nearest patrol unit.
+      </p>
+      <p>
+        At four hundred meters, the two stationary units rotated to face them.
+      </p>
+      <p>
+        At two hundred meters, one of the figure-eight units broke pattern and moved
+        to intercept.
+      </p>
+      <p>
+        Shan had been flying for twenty-two years. Eight of those in Foundry military
+        service, running interdiction patrols in the mid-Rift corridors where faction
+        borders were suggestions and the rules of engagement changed with every shift
+        commander. He'd left that life to fly survey ships because survey ships weren't
+        supposed to get shot at. Reflex took over before the conscious decision arrived.
+        He rolled the Sable Reach ninety degrees, fired the lateral thrusters, and
+        pushed the main drive to full. The ship lurched sideways as a beam of focused
+        energy passed through the space they'd occupied half a second earlier. Crystal
+        weapon. Coherent light in a frequency that left afterimages on the corridor wall.
+      </p>
+      <p>
+        The maneuver was textbook. Roll, lateral displacement, full thrust. He'd executed it a hundred times in training and a dozen times in live engagement. His body remembered every one. The survey pilot wanted to negotiate distance; the interdiction pilot wanted to survive. The interdiction pilot was faster.
+      </p>
+      <p>
+        He didn't fire back. Survey vessels carried defensive armament, light pulse
+        guns meant for asteroid debris and small Bloom units. Against whatever these
+        were, shooting would accomplish nothing useful and might accomplish something
+        very bad.
+      </p>
+      <p>
+        The intercepting unit fired twice more. Both shots were placed ahead of the
+        Sable Reach's trajectory, forcing Shan to brake and redirect. Herding, not
+        hunting. He recognized the technique. It was pushing them back the way they'd
+        come.
+      </p>
+      <p class="short">
+        He let it.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        At six hundred meters from the junction, the intercepting unit stopped. It
+        held position for exactly four seconds, then turned and resumed its
+        figure-eight. The other three units returned to their original stations as if
+        nothing had happened. Within thirty seconds, the patrol was back to its
+        standard pattern. Precise. Mechanical. Patient. Shan checked behind him — reflex from interdiction work, looking for baffles, units positioned in the corridor behind you to cut off retreat while you focused on the threat ahead. Nothing. The corridor was empty. They hadn't needed to cut off his escape. They'd known he would leave.
+      </p>
+      <p>
+        Shan realized his hands were shaking. He flexed them on the controls and
+        took a slow breath. He hadn't had shaking hands since his last combat tour.
+        He'd thought that was behind him.
+      </p>
+      <p>
+        "It didn't chase us," Voss said from behind him.
+      </p>
+      <p>
+        "No."
+      </p>
+      <p>
+        "It had clear shots after the initial engagement. It stopped firing when we
+        moved away from the junction."
+      </p>
+      <p>
+        "Yes."
+      </p>
+      <p>
+        Voss was quiet for a moment. "That's not combat behavior. That's access
+        control."
+      </p>
+      <p>
+        Shan nodded. He knew the difference between something trying to kill you
+        and something telling you to leave. He'd been both. Bloom units attacked
+        until they were destroyed or you were. Pirates chased. Faction patrols
+        issued warnings first, then escalated. What he'd just experienced was
+        different from all of those. Engage, displace, resume. Like a guard who
+        draws a weapon, pushes you back past the gate, and holsters it again. The
+        response was proportional. Exactly proportional. Nothing more than necessary,
+        and nothing less.
+      </p>
+      <p>
+        The patrol unit had followed a script. Shan had been trained to follow
+        scripts too. Escalation protocols. Rules of engagement. Response
+        proportional to threat level. The Foundry had drilled it into him until
+        the patterns were reflexive. He recognized military discipline because he'd
+        been shaped by it. And what he saw in those four units wasn't the chaotic
+        iteration of the Bloom, wasn't the adapted-enough-to-survive pragmatism of
+        natural selection. It was doctrine.
+      </p>
+      <p>
+        Except there was no authority out here. No command structure. No officer
+        issuing orders. Just four units executing their assignment at a junction
+        in a corridor that no one in Compact space knew existed, running on power
+        from a grid that predated every civilization currently using the Rift.
+      </p>
+      <p class="short">
+        Executing it for no one. Or for someone who had never needed to issue the
+        order twice.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Shan filed his contact report with full sensor logs and weapon analysis. He
+        found a secondary corridor that bypassed the junction, narrower but unguarded.
+        The patrol units made no move to follow.
+      </p>
+      <p>
+        He kept the visual recording playing on a secondary screen for the rest of
+        his watch. The four units, circling their junction, precise and tireless.
+        The kind of consistency that only existed in textbook diagrams and in
+        machines that had never encountered a reason to deviate.
+      </p>
+      <p>
+        The Bloom iterated. Everyone knew that. Bloom production systems built
+        units, tested them against each other, scrapped the failures, and used the
+        survivors as templates for the next generation. Selection pressure without
+        intent. The results were effective but chaotic. Each generation a little
+        different, a little better adapted, a little further from whatever the
+        original design had been. The Bloom's strength was variation. Its weakness
+        was that it had no plan.
+      </p>
+      <p>
+        These units were the plan. First generation. Original production from an
+        original blueprint, maintained by original infrastructure, performing
+        their original function. Nothing had changed since they were built
+        because nothing needed to change. The design was already finished. They
+        didn't iterate because iteration was what happened when you were still
+        searching for the right answer. These units had the right answer. They'd
+        had it from the start.
+      </p>
+      <p>
+        Shan watched them circle and thought about the Bloom differently than he
+        had before. The Bloom's factories weren't inventing. They were
+        remembering, badly. Running the same production process with the blueprints
+        corrupted and the quality control gone, like a factory after the engineers
+        left and the machines kept running on their own. What came out the other
+        end still worked. It just wasn't what the factory had been built to make.
+      </p>
+      <p>
+        He turned off the secondary screen. His hands had stopped shaking.
+      </p>
+      <p>
+        They always stopped eventually. The interval was getting longer. On his last combat tour, the shaking had lasted minutes. Today it lasted twenty. He'd never timed it before. He didn't like knowing the number.
+      </p>
+      <p>
+        He flew the Sable Reach through the bypass corridor, steady and level, the
+        way he'd been trained to fly. The way those units had been built to
+        patrol.
+      </p>
+      <p class="short">
+        Same discipline. Different maker.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter Four</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="deeper-3.html">&larr; Chapter Three</a>
+      <a href="../lore/index.html">The Archives</a>
+      <a href="deeper-5.html">Chapter Five &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="../../favicon.ico">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Astral Rift — Deeper: Chapter 1</title>
+  <meta name="description" content="Past the last beacon. Cartographer Drel. The walls are wrong.">
+  <meta property="og:title" content="Astral Rift — Deeper: Past the Last Beacon">
+  <meta property="og:description" content="The walls are wrong.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/shared.min.css">
+</head>
+<body>
+
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars-twinkle"></div>
+<canvas id="rift-canvas"></canvas>
+<div class="nebula-field nebula-deep"></div>
+
+<header class="site-header">
+  <a href="/astral-rift/index.html" class="site-header-title">ASTRAL RIFT</a>
+  <nav class="site-header-links">
+    <a href="../lore/index.html">The Archives</a>
+  </nav>
+</header>
+<div class="page-content">
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-label">Deeper</div>
+  <div class="hero-chapter">Chapter One</div>
+  <h1 class="hero-title">Past the Last Beacon</h1>
+  <p class="hero-subtitle">Cartographer Drel<br>Survey Vessel <em>Sable Reach</em>, Outermark Expedition 9</p>
+</section>
+
+<!-- ==================== STORY ==================== -->
+<section class="story-section">
+  <div class="story-container">
+    <div class="story-text reveal">
+      <p>
+        Beacon 71-F was the last one. After that, nothing.
+      </p>
+      <p>
+        Drel marked the position in the log, tagged it with standard Compact notation,
+        and watched the reference signal fade from the nav display. Seven days of transit
+        to get here. Seven days of corridors that looked like every other corridor in mapped
+        Rift space: rough walls, mineral deposits, the occasional structural fracture where
+        something had shifted centuries ago. Unremarkable territory charted by unremarkable
+        surveys before them.
+      </p>
+      <p>
+        The Compact paid for the first thousand kilometers past Beacon 71-F. The Outermark
+        Cartographic Union paid for everything after that, at triple the rate. Nobody told
+        them why. Drel didn't ask. At triple rate, the contract would clear the last of
+        the debt from the survey firm she'd tried to start three years ago. Six months
+        of steady charting work, and the creditors would stop calling.
+      </p>
+      <p>
+        The creditors were patient, as creditors went. Two of them had been her employees. She'd hired them for the survey firm, couldn't pay their final invoices when the contracts dried up, and watched them file claims against her with the polite formality of people who understood that business failure wasn't personal. It felt personal. She wanted to pay them back in full and never speak to them again.
+      </p>
+      <p>
+        She tapped the edge of the nav console with her thumbnail, a habit she couldn't
+        break. The blank space past the beacon filled the display. Here there be nothing.
+        Every cartographer she'd trained with had a word for it, borrowed from an old
+        tradition none of them could trace: the unknown land. The place where the survey
+        ends and speculation begins. Her instructors at the Union academy had been
+        specific about the distinction. You draw what you measure. Everything else is
+        someone else's problem.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Fourteen hundred kilometers past the beacon, Drel noticed the walls.
+      </p>
+      <p>
+        She'd been running surface scans every fifty klicks since they left mapped space.
+        Standard survey work: mineral composition, structural density, erosion grade. The
+        first two hundred scans were normal. Rift walls decayed predictably with distance
+        from active traffic zones. Less energy throughput meant more degradation. She
+        knew the rates cold. Surface roughness increased as a power law of distance
+        from the nearest active junction, modified by material hardness and local flow
+        intensity. The relationship was as reliable as gravity. Every scan she'd ever
+        taken in three years of survey work had landed within two standard deviations
+        of the predicted curve.
+      </p>
+      <p>
+        Scan 229 didn't land on the curve at all.
+      </p>
+      <p>
+        The erosion grade dropped. Not by the margin of measurement error, either. A clean
+        step down, as if someone had drawn a line across the corridor and maintained
+        everything on the far side. She ran the roughness index twice. The surface had
+        gone from what she'd expect at the fringe of the Outermark to something she'd
+        only see near a high-traffic junction. In fifty kilometers.
+      </p>
+      <p>
+        She ran scan 230 at fifty klicks further. The grade dropped again.
+      </p>
+      <p class="short">
+        Drel sat with that for a long time.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        "The walls are getting better," she told Nava over the ship's internal comm.
+      </p>
+      <p>
+        A pause. Nava was the ship's engineer and didn't care about walls unless they were
+        about to collapse on top of the reactor.
+      </p>
+      <p>
+        "Better how?"
+      </p>
+      <p>
+        "Smoother. Less degradation. The erosion trend reversed about nine hundred klicks
+        back and it's been improving since. The scallops are wrong too — flow direction marks on the surface that should all point the same way. They've reversed. Whatever shaped these walls is moving in the opposite direction from anything that's flowed through here before. And I'm seeing weathering rates that should
+        take active maintenance to sustain. Not natural settling. Something is working
+        against the thermodynamic gradient here."
+      </p>
+      <p>
+        "Working against it how?"
+      </p>
+      <p>
+        "That's what I can't figure out. Surface erosion runs one direction. Things
+        break down. They don't un-break. These walls should be rougher than anything
+        in mapped space, and instead they're smoother than corridors near Compact
+        central."
+      </p>
+      <p>
+        Another pause. She heard Nava pull up something on the engineering console.
+      </p>
+      <p>
+        "Background resonance is elevated," Nava said. "I flagged it two hours ago. 0.3 hertz
+        above standard. Thought it was instrument drift."
+      </p>
+      <p class="short">
+        "It's not drift."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        By scan 270, the walls had no visible erosion at all.
+      </p>
+      <p>
+        Drel had charted hundreds of Rift corridors across three years of survey work. She'd
+        seen the full range: collapsed passages in dead zones where nothing had flowed for
+        millennia, pristine corridors near active junction points where traffic kept the
+        energy moving. She understood the lifecycle. Rift walls decayed when unused, the same
+        way roads crumbled when abandoned. Predictable. Quantifiable. She could look at a
+        wall surface and estimate how long since the last significant energy throughput the
+        way a geologist estimates riverbed age from sediment layering.
+      </p>
+      <p>
+        These walls weren't unused. Something was maintaining them. And the rate of
+        improvement didn't follow any maintenance model she knew. It wasn't patching.
+        It wasn't repair. The surface quality was increasing continuously, as though the
+        corridor was being rebuilt from within, molecule by molecule.
+      </p>
+      <p>
+        She pulled up the spectral overlay and stared at it until her eyes adjusted. The wall
+        composition had shifted too. Fewer mineral inclusions. The structure was purer, more
+        uniform, as if the original material had been deposited without contamination.
+        Corridors near Compact space were layered with centuries of residue like flowstone — energy deposits laid down one transit at a time, each layer a chemical record of whatever passed through: faction ship exhaust, weapons discharge, the fingerprints of civilizations passing through.
+      </p>
+      <p>
+        This corridor had none of that. Not scraped clean. Never contaminated in the first place.
+      </p>
+      <p>
+        She tabulated the data, attached the scans, and sent a burst to the ship's shared log.
+        Then she added a flag she'd never used before in her career.
+      </p>
+      <p class="short">
+        RECOMMEND: FULL STOP. CREW CONFERENCE.
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        Captain Voss listened to her report without interrupting. That was either a good sign
+        or a terrible one.
+      </p>
+      <p>
+        "How far does it go?" he asked when she finished.
+      </p>
+      <p>
+        "I don't know. The trend is consistent over five hundred klicks of observation. If it
+        continues, the corridor ahead is in better condition than anything near Compact
+        central."
+      </p>
+      <p>
+        "Near Compact central, there's traffic. Millions of transits per cycle. What's
+        maintaining this?"
+      </p>
+      <p>
+        Drel pulled up the resonance data Nava had flagged. A low-frequency vibration, consistent
+        since they crossed the degradation boundary, slowly increasing in amplitude the deeper
+        they went. She didn't know what it was. None of them did. But it was there, and it was
+        getting louder.
+      </p>
+      <p>
+        "I don't know," she said. She almost added a theory, then stopped. She drew what
+        she measured. Everything else was someone else's problem. Except out here, past
+        the last beacon, she was the only cartographer for a thousand klicks in any direction.
+        There was no one else to hand the problem to.
+      </p>
+      <p>
+        Voss looked at the corridor ahead on the main display. Smooth walls stretching into
+        darkness, curving gently to the left. Clean. Intact. Waiting.
+      </p>
+      <p class="short">
+        "Continue survey. Double the scan interval."
+      </p>
+    </div>
+
+    <div class="story-break reveal">* * *</div>
+
+    <div class="story-text reveal">
+      <p>
+        That night, Drel reviewed the full dataset in her bunk with the display propped
+        against her knees. Three thousand data points from fourteen hundred kilometers
+        of corridor, each one a small piece of a picture she wasn't sure she wanted to
+        see. She'd arranged them chronologically and then by distance, looking for the
+        shape of the thing. Old habit. Her thesis advisor at the Union had drilled it into
+        her: the data has a shape. Find the shape before you name it.
+      </p>
+      <p>
+        Her advisor had been a field cartographer before teaching — twenty years in the Outermark, eleven expeditions, a body of survey work that covered more corridor than anyone else in the Union's history. She'd retired because her hands started shaking. Not from age. From the accumulated weight of knowing that every corridor she charted was one she'd never see again. Drel understood that now, in a way she hadn't at the academy.
+      </p>
+      <p>
+        Rift walls degraded with distance from use. Every textbook, every survey, every
+        model built on two centuries of data said the same thing. The further you went from
+        active space, the worse the infrastructure got. It was the reason the Outermark existed
+        as a concept: the frontier where everything fell apart.
+      </p>
+      <p>
+        But the Outermark wasn't the edge of the system. It was the edge of the part they used.
+      </p>
+      <p>
+        She looked at the degradation curve on her display. A clean line from standard decay
+        at Beacon 71-F, through a transition zone, to something that shouldn't exist: walls
+        in better condition than the ones surrounding Compact headquarters, maintained by
+        something that didn't need ship traffic to do it. The curve reminded her of
+        elevation profiles she'd studied in academy, riverbeds that ran through granite
+        instead of sandstone. Same water, same flow, radically different erosion because
+        the substrate was different. She'd been assuming the substrate was the same out
+        here. Uniform Rift wall material, decaying at predictable rates.
+      </p>
+      <p>
+        The substrate wasn't the same. Or the force acting on it wasn't erosion at all.
+      </p>
+      <p>
+        Every cartographer learned the same lesson early: Rift infrastructure was old, and
+        it was breaking down. The whole network was in decline. This was the central assumption
+        of two centuries of mapping. Drel had built a career on it. She'd tried to build
+        a company on it, taking contracts to survey failing corridors and recommend
+        rerouting. The company had failed because there were too many failing corridors
+        and not enough clients who cared. But the assumption had never failed.
+      </p>
+      <p>
+        She closed the dataset.
+      </p>
+      <p>
+        She could hear the resonance now. Faint, through the hull.
+        A low pulse, steady, like something breathing. Virgin passage — the speleology term surfaced from an academy elective she'd half-forgotten. Corridors no one had entered. No footprints, no exhaust residue, no evidence of passage. Except these corridors weren't untouched. They were maintained. They just weren't maintained by anyone who left marks.
+      </p>
+      <p class="short">
+        The assumption was wrong.
+      </p>
+    </div>
+
+    <div class="story-end reveal">
+      <div class="story-end-label">End of Chapter One</div>
+    </div>
+
+    <div class="story-nav reveal">
+      <a href="../lore/index.html">The Archives</a>
+      <a href="deeper-2.html">Chapter Two &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="footer-title">ASTRAL RIFT</div>
+  <div class="footer-text">Built by Eric Suen</div>
+  <div class="footer-links">
+    <a href="../lore/index.html">The Archives</a>
+    <a href="../index.html">Game</a>
+    <a href="../../astral-rift.html">Technical Deep Dive</a>
+    <a href="../../index.html">Portfolio</a>
+    <a href="https://github.com/esuen">GitHub</a>
+  </div>
+</footer>
+
+</div>
+
+<script src="../assets/shared.min.js"></script>
+
+</body>
+</html>
