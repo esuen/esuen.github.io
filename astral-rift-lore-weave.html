@@ -262,7 +262,7 @@
 
 <script src="astral-rift-shared.min.js"></script>
 <script>
-  // Orb-weaver web — radial threads then spiral, builds and fades
+  // Particle network — drifting nodes with proximity connections
   (function() {
     const canvas = document.getElementById('filament-canvas');
     if (!canvas) return;
@@ -275,164 +275,44 @@
     resize();
     window.addEventListener('resize', resize);
 
-    class Web {
-      constructor() { this.reset(true); }
+    const NODE_COUNT = 30;
+    const CONNECT_DIST = 150;
+    const nodes = [];
 
-      reset(initial) {
-        this.cx = canvas.width * (0.1 + Math.random() * 0.8);
-        this.cy = canvas.height * (0.1 + Math.random() * 0.8);
-        this.radius = 50 + Math.random() * 120;
-        this.spokes = 5 + Math.floor(Math.random() * 10); // 5-14 radials
-        this.rings = 3 + Math.floor(Math.random() * 6);   // 3-8 spiral rings
-        this.rotation = Math.random() * Math.PI * 2;
-
-        // Timing
-        this.delay = initial ? Math.random() * 4 : 2 + Math.random() * 6;
-        this.buildTime = 3 + Math.random() * 3;
-        this.holdTime = 3 + Math.random() * 4;
-        this.fadeTime = 2 + Math.random() * 3;
-        this.totalLife = this.buildTime + this.holdTime + this.fadeTime;
-        this.time = -this.delay;
-
-        // Pre-compute spoke angles with heavy irregularity
-        this.spokeAngles = [];
-        this.spokeLengths = [];
-        for (let i = 0; i < this.spokes; i++) {
-          const base = (Math.PI * 2 / this.spokes) * i + this.rotation;
-          this.spokeAngles.push(base + (Math.random() - 0.5) * 0.6);
-          this.spokeLengths.push(0.5 + Math.random() * 0.5); // each spoke 50-100% of radius
-        }
-
-        // Pre-compute which ring segments are broken (gaps in the web)
-        this.ringGaps = [];
-        for (let r = 0; r < this.rings; r++) {
-          const gaps = [];
-          for (let s = 0; s < this.spokes; s++) {
-            gaps.push(Math.random() < 0.15); // 15% chance of gap per segment
-          }
-          this.ringGaps.push(gaps);
-        }
+    class Node {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
+        this.size = 1 + Math.random() * 2;
+        this.alpha = 0.3 + Math.random() * 0.4;
       }
 
       update(dt) {
-        this.time += dt;
-        if (this.time > this.totalLife) this.reset(false);
-      }
+        this.x += this.vx * dt;
+        this.y += this.vy * dt;
 
-      draw(ctx) {
-        if (this.time < 0) return;
+        // Gentle drift changes
+        this.vx += (Math.random() - 0.5) * 2 * dt;
+        this.vy += (Math.random() - 0.5) * 2 * dt;
 
-        let buildProgress, alpha;
-        if (this.time < this.buildTime) {
-          buildProgress = this.time / this.buildTime;
-          alpha = 0.3;
-        } else if (this.time < this.buildTime + this.holdTime) {
-          buildProgress = 1;
-          alpha = 0.3;
-        } else {
-          buildProgress = 1;
-          const fp = (this.time - this.buildTime - this.holdTime) / this.fadeTime;
-          alpha = (1 - fp) * 0.3;
+        // Clamp speed
+        const speed = Math.hypot(this.vx, this.vy);
+        if (speed > 12) {
+          this.vx *= 12 / speed;
+          this.vy *= 12 / speed;
         }
 
-        if (alpha < 0.01) return;
-
-        ctx.save();
-
-        // Phase 1: radial threads (first 40% of build) — varied lengths
-        const radialProgress = Math.min(1, buildProgress / 0.4);
-
-        ctx.strokeStyle = `rgba(48, 200, 192, ${alpha})`;
-        ctx.lineWidth = 0.8;
-
-        for (let i = 0; i < this.spokes; i++) {
-          const a = this.spokeAngles[i];
-          const len = this.radius * this.spokeLengths[i] * radialProgress;
-          ctx.beginPath();
-          ctx.moveTo(this.cx, this.cy);
-          ctx.lineTo(
-            this.cx + Math.cos(a) * len,
-            this.cy + Math.sin(a) * len
-          );
-          ctx.stroke();
-        }
-
-        // Phase 2: spiral rings (40%-100% of build) — with gaps
-        if (buildProgress > 0.4) {
-          const spiralProgress = (buildProgress - 0.4) / 0.6;
-          const ringsToShow = Math.ceil(spiralProgress * this.rings);
-
-          ctx.strokeStyle = `rgba(48, 200, 192, ${alpha * 0.7})`;
-          ctx.lineWidth = 0.5;
-
-          for (let r = 1; r <= ringsToShow; r++) {
-            const ringRadius = (this.radius / this.rings) * r;
-            const ringProgress = r === ringsToShow
-              ? (spiralProgress * this.rings - (r - 1))
-              : 1;
-            const gaps = this.ringGaps[r - 1] || [];
-
-            // Draw curved segments between spokes, skipping gaps
-            for (let s = 0; s < this.spokes; s++) {
-              const progress = s / this.spokes;
-              if (progress > ringProgress) break;
-              if (gaps[s]) continue;
-
-              const idx = s % this.spokes;
-              const nextIdx = (s + 1) % this.spokes;
-              const a1 = this.spokeAngles[idx];
-              const a2 = this.spokeAngles[nextIdx];
-
-              const r1 = ringRadius * (0.85 + this.spokeLengths[idx] * 0.3);
-              const r2 = ringRadius * (0.85 + this.spokeLengths[nextIdx] * 0.3);
-
-              const x1 = this.cx + Math.cos(a1) * r1;
-              const y1 = this.cy + Math.sin(a1) * r1;
-              const x2 = this.cx + Math.cos(a2) * r2;
-              const y2 = this.cy + Math.sin(a2) * r2;
-
-              // Control point: midpoint pushed inward toward center for sag
-              const midA = (a1 + a2) / 2;
-              const midR = (r1 + r2) / 2 * (0.88 + Math.random() * 0.08);
-              const cpx = this.cx + Math.cos(midA) * midR;
-              const cpy = this.cy + Math.sin(midA) * midR;
-
-              ctx.beginPath();
-              ctx.moveTo(x1, y1);
-              ctx.quadraticCurveTo(cpx, cpy, x2, y2);
-              ctx.stroke();
-            }
-          }
-        }
-
-        // Anchor dots at spoke tips — varied positions
-        if (radialProgress > 0.9) {
-          ctx.fillStyle = `rgba(80, 230, 220, ${alpha * 1.2})`;
-          for (let i = 0; i < this.spokes; i++) {
-            const a = this.spokeAngles[i];
-            const len = this.radius * this.spokeLengths[i];
-            ctx.beginPath();
-            ctx.arc(
-              this.cx + Math.cos(a) * len,
-              this.cy + Math.sin(a) * len,
-              1.5, 0, Math.PI * 2
-            );
-            ctx.fill();
-          }
-        }
-
-        // Center node
-        ctx.fillStyle = `rgba(48, 200, 192, ${alpha})`;
-        ctx.beginPath();
-        ctx.arc(this.cx, this.cy, 2, 0, Math.PI * 2);
-        ctx.fill();
-
-        ctx.restore();
+        // Wrap
+        if (this.x < -20) this.x = canvas.width + 20;
+        if (this.x > canvas.width + 20) this.x = -20;
+        if (this.y < -20) this.y = canvas.height + 20;
+        if (this.y > canvas.height + 20) this.y = -20;
       }
     }
 
-    const webs = [];
-    for (let i = 0; i < 3; i++) webs.push(new Web());
+    for (let i = 0; i < NODE_COUNT; i++) nodes.push(new Node());
 
     let lastTime = performance.now();
     const frameInterval = 1000 / 30;
@@ -444,7 +324,35 @@
       const dt = Math.min(elapsed / 1000, 0.05);
       lastTime = now - (elapsed % frameInterval);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const w of webs) { w.update(dt); w.draw(ctx); }
+
+      // Update nodes
+      for (const n of nodes) n.update(dt);
+
+      // Draw connections between nearby nodes
+      ctx.lineWidth = 0.6;
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < CONNECT_DIST) {
+            const alpha = (1 - dist / CONNECT_DIST) * 0.25;
+            ctx.strokeStyle = `rgba(48, 200, 192, ${alpha})`;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Draw nodes
+      for (const n of nodes) {
+        ctx.fillStyle = `rgba(48, 200, 192, ${n.alpha})`;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
     requestAnimationFrame(loop);
   })();
