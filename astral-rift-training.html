@@ -445,6 +445,43 @@
     </section>
 
     <section>
+      <h2>Constraints &amp; trade-offs</h2>
+      <p>
+        The simulation makes deliberate simplifications to hit 570K steps/sec. Each trade-off has a cost and a way we verify it doesn't break transfer to the real game.
+      </p>
+      <table>
+        <thead><tr><th>Trade-off</th><th>Cost</th><th>How we account for it</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>11 rotation bins</strong> (~16&deg; resolution)</td>
+            <td>Can't aim precisely between bins. Fine tracking limited.</td>
+            <td>Tested 21 bins in Phase 20&mdash;didn't improve win rate, but that test was confounded (started from scratch, not fine-tuned). Not conclusive. Would revisit if a strong model shows high engagement but low hit rate.</td>
+          </tr>
+          <tr>
+            <td><strong>Fast MIRV</strong> (8 missiles instantly, no 1&rarr;2&rarr;4&rarr;8 cascade)</td>
+            <td>Bot won't learn split timing or wall-bounce-then-split tactics.</td>
+            <td>Phase 25 hit 79% WR with fast MIRV. If timing matters for higher-skill play, we remove the flag and retrain.</td>
+          </tr>
+          <tr>
+            <td><strong>Fixed observation window</strong> (5 enemies, 5 bullets, 2 pickups)</td>
+            <td>Blind to threats outside the nearest 5. Would miss flankers in large battles.</td>
+            <td>FFA has 4 ships, so 5 enemy slots exceeds actual count. Needs revisiting for 8+ player modes.</td>
+          </tr>
+          <tr>
+            <td><strong>Simplified physics</strong> (2D, no visual effects)</td>
+            <td>Wall bounce angles, projectile inheritance, energy drain could diverge from UE5.</td>
+            <td>31 cross-check tests verify parity on every core mechanic. When C++ changes, Python must match.</td>
+          </tr>
+          <tr>
+            <td><strong>Single frozen opponent</strong> per training phase</td>
+            <td>Overspecialization. Phase 14 proved this&mdash;one strong opponent collapsed win rate to 31%.</td>
+            <td>Rotating opponents manually between phases. Automated opponent pool is the planned fix.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
       <h2>Reward shaping</h2>
       <p>
         The reward function has 9 tunable coefficients, each exposed as a CLI flag. The defaults were calibrated through iteration&mdash;the first 10 phases established which signals matter, and the eval pipeline tells us when to adjust.
@@ -516,7 +553,10 @@
     <section>
       <h2>Training history: what worked, what didn't</h2>
       <p>
-        26 training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
+        Each training phase follows a strict methodology: form a hypothesis ("increasing engage reward will fix passive play"), change one variable, train 2B steps, evaluate against multiple baselines (random, previous generations, best model), and diagnose using 40+ metrics&mdash;not just win rate. If the hypothesis was wrong, the metrics tell you <em>why</em>: was it passive play (high timeouts, low damage), overspecialization (beats one opponent, loses to random), or a reward imbalance (one ability dominates)?
+      </p>
+      <p>
+        26 phases, each building on the previous. The table below is an experiment log, not a changelog.
       </p>
 
       <table>
