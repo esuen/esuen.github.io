@@ -607,7 +607,7 @@
     <section>
       <h2>Deployment</h2>
       <p>
-        Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the 30-logit output into ship controls.
+        Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the 40-logit output into ship controls.
       </p>
 
       <div class="flow">
@@ -632,6 +632,25 @@
 
       <p>
         Model size is ~130KB (two 128-unit hidden layers). Inference runs in &lt;0.1ms per bot per frame. The game supports mixing RL bots with hand-coded bots for opponent variety.
+      </p>
+    </section>
+
+    <section>
+      <h2>Methodology limitations</h2>
+      <p>
+        This pipeline follows good experimental hygiene&mdash;single-variable changes, multiple baselines, behavioral metrics beyond win rate&mdash;but falls short of academic rigor in several ways worth being explicit about.
+      </p>
+      <p>
+        <strong>Single seed per experiment.</strong> Each phase runs once with one random seed. Phase 22 demonstrated seed sensitivity: identical hyperparameters produced 48% vs 37% depending on seed. The academic standard is 20+ seeds with confidence intervals. At 13 hours per run on a single RTX 3090, that's 10+ days per experiment&mdash;impractical here. Results should be read as "this seed produced X" rather than "this configuration reliably produces X."
+      </p>
+      <p>
+        <strong>No confidence intervals on evaluation.</strong> Win rates are reported as point estimates (e.g., 79.4%) without confidence intervals. With 500 evaluation matches, the 95% CI is roughly &plusmn;3-4%, which means the difference between Phase 23 (73%) and Phase 25 (79%) is likely significant, but Phase 24 (74%) vs Phase 23 (73%) probably isn't. Adding CIs to the eval script would make phase comparisons more rigorous.
+      </p>
+      <p>
+        <strong>Reward coefficients not ablated.</strong> The reward function has 9 tunable coefficients. We tune them based on hypotheses and diagnostic metrics, but haven't systematically ablated each one (train with coefficient set to zero, measure impact). Some of these coefficients may be doing nothing. A full ablation would require 9 additional training runs.
+      </p>
+      <p>
+        <strong>Learning curves underutilized.</strong> Training logs capture entropy, policy loss, and value loss per update, but these aren't systematically analyzed for plateau detection or collapse warnings. Plotting learning curves across phases would give earlier signal on whether a run is worth continuing.
       </p>
     </section>
 
