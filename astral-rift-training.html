@@ -596,15 +596,15 @@
     </section>
 
     <section>
-      <h2>What I'd do differently</h2>
+      <h2>What's next</h2>
       <p>
-        <strong>Population-based training:</strong> Instead of manually adjusting reward weights between phases, PBT would evolve reward configurations in parallel. Each phase currently takes 2-3 hours of wall time plus human analysis&mdash;PBT could explore the reward space automatically.
+        <strong>Fix passive play:</strong> Phase 25's 79% WR comes with 31% timeouts and low avg damage&mdash;the bot wins by outlasting, not outfighting. Phase 26 increases the engagement reward to push aggression while keeping FFA skills. The goal is high win rate <em>and</em> high damage dealt, so bots are fun to play against.
       </p>
       <p>
-        <strong>Diverse opponent pool:</strong> Self-play against a single frozen opponent caused Phase 14's regression. Training against a <em>pool</em> of 3-5 previous generations (weighted by recency) would prevent overspecialization while still pushing skill ceiling.
+        <strong>Opponent pool:</strong> Currently training against a single frozen opponent per phase. A pool of 3-5 previous generations (weighted by recency) would prevent overspecialization&mdash;the same problem that caused Phase 14's regression. Early phases rotate opponents manually; automating the pool is the next infrastructure step.
       </p>
       <p>
-        <strong>Accuracy reward:</strong> The current reward function rewards damage dealt but doesn't penalize missed shots. A hit-rate bonus would teach the model to choose <em>when</em> to fire, not just fire constantly. The challenge is measuring accuracy in a physics sim where "miss" is ambiguous (was it a dodge or a whiff?).
+        <strong>Population-based training:</strong> Reward weights are still tuned manually between phases. PBT would evolve reward configurations in parallel, exploring the reward space automatically instead of one experiment at a time.
       </p>
     </section>
 
