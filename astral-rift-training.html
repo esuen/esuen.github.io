@@ -422,7 +422,7 @@
         </tbody>
       </table>
 
-      <h3>Action space (9 discrete actions, 30 logits)</h3>
+      <h3>Action space (14 discrete actions, 40 logits)</h3>
       <table>
         <thead><tr><th>Action</th><th>Bins</th><th>What it controls</th></tr></thead>
         <tbody>
@@ -435,6 +435,11 @@
           <tr><td>MIRV</td><td>2</td><td>On/off</td></tr>
           <tr><td>Ripper</td><td>2</td><td>On/off</td></tr>
           <tr><td>Overdrive</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Rocket</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Stealth</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Burst</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Warp</td><td>2</td><td>On/off</td></tr>
+          <tr><td>Portal</td><td>2</td><td>On/off</td></tr>
         </tbody>
       </table>
     </section>
@@ -511,29 +516,24 @@
     <section>
       <h2>Training history: what worked, what didn't</h2>
       <p>
-        23 training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
+        26 training phases, each building on the previous. The progression tells a story about what RL training actually looks like in practice.
       </p>
 
       <table>
         <thead><tr><th>Phase</th><th>WR</th><th>Change</th><th>Result</th></tr></thead>
         <tbody>
           <tr><td>11</td><td>42%</td><td>Engage shaping 0.5&rarr;1.0</td><td>Baseline aggression established</td></tr>
-          <tr><td>12</td><td class="up">48%</td><td>+ Bullet bonus 0.5&rarr;0.8</td><td>Bullet usage doubled</td></tr>
-          <tr><td>13</td><td class="up">60%</td><td>Self-play vs Phase 12 (50% mix)</td><td><strong>Best model.</strong> All 7 abilities used.</td></tr>
-          <tr><td>14</td><td class="down">31%</td><td>Self-play vs Phase 13 (50% mix)</td><td><strong>Regression.</strong> Overspecialized.</td></tr>
-          <tr><td>15</td><td class="down">35%</td><td>Self-play vs Phase 13 (30% mix)</td><td>Lower mix didn't help. Still too narrow.</td></tr>
-          <tr><td>16</td><td class="down">32%</td><td>5B steps from scratch, no opponent</td><td>More steps didn't help without shaping.</td></tr>
-          <tr><td>18</td><td class="down">38%</td><td>Masked projectile observations</td><td>Feature ablation didn't transfer to training.</td></tr>
-          <tr><td>19</td><td class="down">43%</td><td>21 rotation bins from scratch (2B)</td><td>Finer aim, but plateaued at 43%.</td></tr>
-          <tr><td>20</td><td class="neutral">43%</td><td>21 rotation bins from scratch (5B)</td><td>More steps didn't help. But beat Phase 13 head-to-head (53%).</td></tr>
-          <tr><td>21</td><td class="down">45%</td><td>Self-play on Phase 20 (20% mix)</td><td>Self-play regression. Even 20% mix fails.</td></tr>
-          <tr><td>22</td><td class="down">37%</td><td>3B 11-bin foundation, new seed</td><td>Seed-sensitive. Same config, worse result.</td></tr>
-          <tr><td>23</td><td class="up">73%</td><td>FFA deathmatch (4 ships, team preset)</td><td><strong>FFA breakthrough.</strong> All 12 abilities used. Beat 3x Phase 13.</td></tr>
+          <tr><td>13</td><td class="up">60%</td><td>Self-play vs Phase 12 (50% mix)</td><td><strong>Duel breakthrough.</strong> All 7 abilities used.</td></tr>
+          <tr><td>14</td><td class="down">31%</td><td>Self-play vs Phase 13 (50% mix)</td><td><strong>Regression.</strong> Self-play past one round overspecializes.</td></tr>
+          <tr><td>20</td><td class="neutral">43%</td><td>21 rotation bins (5B steps)</td><td>Beat Phase 13 head-to-head (53%) but lost to random. Precision &ne; generalization.</td></tr>
+          <tr><td>23</td><td class="up">73%</td><td>FFA deathmatch (4 ships, team preset)</td><td><strong>FFA breakthrough.</strong> Paradigm shift from duel to 4-player free-for-all.</td></tr>
+          <tr><td>25</td><td class="up">79%</td><td>Updated sim, 18 abilities, --fast-mirv</td><td><strong>New best.</strong> But plays passively (31% timeouts), regressed vs Phase 13.</td></tr>
+          <tr><td>26</td><td>&mdash;</td><td>Aggression fix: engage reward 1.5, self-play vs Phase 13</td><td><em>In progress.</em></td></tr>
         </tbody>
       </table>
 
       <div class="callout callout-success" style="border-left: 3px solid #22c55e; background: rgba(34, 197, 94, 0.05); padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
-        <p><strong>Phase 23 breakthrough:</strong> Pivoting from duel (1v1) to FFA (4-ship) deathmatch produced the strongest model yet. 72.6% WR in 4-player FFA (25% is random baseline). The model uses all 12 abilities in the team action preset &mdash; rocket boost, stealth, burst spray, warp, portal &mdash; compared to 7 abilities in the best duel model. FFA's natural opponent diversity (4 ships, not 2) may explain why the model generalizes better than duel training ever did.</p>
+        <p><strong>Phase 25 best model:</strong> Fine-tuning Phase 23 with updated sim mechanics (linked bullets, Choir abilities, MIRV splitting, repulsor projectile push) produced 79.4% WR in 4-player FFA (25% is random baseline). The model uses all 18 abilities in the team action preset &mdash; including rocket, stealth, burst, warp, portal, and faction-specific specials &mdash; compared to 7 abilities in the best duel model. However, the model plays passively (31% timeouts) and regressed against Phase 13's aggressive duel style. Phase 26 targets this with engagement reward tuning.</p>
       </div>
 
       <div class="callout callout-warning">
@@ -586,7 +586,7 @@
         <div class="flow-node flow-node-accent">
           <div class="flow-node-label">UE5 Runtime</div>
           <div class="flow-node-title">Bot Controller</div>
-          <div class="flow-node-detail">96 obs &rarr; NNE &rarr; 30 logits</div>
+          <div class="flow-node-detail">96 obs &rarr; NNE &rarr; 40 logits</div>
         </div>
       </div>
 
