@@ -572,8 +572,135 @@
         </tbody>
       </table>
 
+      <!-- Win Rate Progression Chart -->
+      <div style="margin: 32px 0;">
+        <h3 style="margin-bottom: 16px;">Win rate across training phases</h3>
+        <svg viewBox="0 0 700 280" style="width:100%;max-width:700px;font-family:'Inter',sans-serif;">
+          <!-- Grid lines -->
+          <line x1="50" y1="20" x2="50" y2="240" stroke="#e5e5e5" stroke-width="1"/>
+          <line x1="50" y1="240" x2="680" y2="240" stroke="#e5e5e5" stroke-width="1"/>
+          <line x1="50" y1="200" x2="680" y2="200" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="50" y1="140" x2="680" y2="140" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="50" y1="80" x2="680" y2="80" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <!-- Y-axis labels -->
+          <text x="44" y="244" text-anchor="end" font-size="11" fill="#888">0%</text>
+          <text x="44" y="204" text-anchor="end" font-size="11" fill="#888">25%</text>
+          <text x="44" y="144" text-anchor="end" font-size="11" fill="#888">50%</text>
+          <text x="44" y="84" text-anchor="end" font-size="11" fill="#888">75%</text>
+          <text x="44" y="24" text-anchor="end" font-size="11" fill="#888">100%</text>
+          <!-- 25% random baseline -->
+          <line x1="50" y1="180" x2="680" y2="180" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+          <text x="684" y="184" font-size="10" fill="#d97706">random baseline</text>
+          <!-- Data line (phases 11-25) -->
+          <polyline fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"
+            points="50,139.2 98.5,124.8 147,96 195.5,165.6 244,156 292.5,163.2 341,148.8 389.5,136.8 438,136.8 486.5,132 535,151.2 583.5,64.8 632,62.4 680,50.4"/>
+          <!-- Data points with color coding -->
+          <!-- Phase 11: 42% (baseline) -->
+          <circle cx="50" cy="139.2" r="4" fill="#888"/>
+          <text x="50" y="155" text-anchor="middle" font-size="9" fill="#888">11</text>
+          <!-- Phase 12: 48% (up) -->
+          <circle cx="98.5" cy="124.8" r="4" fill="#16a34a"/>
+          <text x="98.5" y="155" text-anchor="middle" font-size="9" fill="#888">12</text>
+          <!-- Phase 13: 60% (up - breakthrough) -->
+          <circle cx="147" cy="96" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="147" y="88" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">60%</text>
+          <text x="147" y="155" text-anchor="middle" font-size="9" fill="#888">13</text>
+          <!-- Phase 14: 31% (down - regression) -->
+          <circle cx="195.5" cy="165.6" r="4" fill="#dc2626"/>
+          <text x="195.5" y="155" text-anchor="middle" font-size="9" fill="#888">14</text>
+          <!-- Phase 15: 35% -->
+          <circle cx="244" cy="156" r="3" fill="#dc2626"/>
+          <!-- Phase 16: 32% -->
+          <circle cx="292.5" cy="163.2" r="3" fill="#dc2626"/>
+          <!-- Phase 18: 38% -->
+          <circle cx="341" cy="148.8" r="3" fill="#dc2626"/>
+          <!-- Phase 19: 43% -->
+          <circle cx="389.5" cy="136.8" r="3" fill="#888"/>
+          <!-- Phase 20: 43% -->
+          <circle cx="438" cy="136.8" r="3" fill="#888"/>
+          <text x="438" y="155" text-anchor="middle" font-size="9" fill="#888">20</text>
+          <!-- Phase 21: 45% -->
+          <circle cx="486.5" cy="132" r="3" fill="#dc2626"/>
+          <!-- Phase 22: 37% -->
+          <circle cx="535" cy="151.2" r="3" fill="#dc2626"/>
+          <text x="535" y="155" text-anchor="middle" font-size="9" fill="#888">22</text>
+          <!-- Phase 23: 73% (FFA breakthrough) -->
+          <circle cx="583.5" cy="64.8" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="583.5" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">73%</text>
+          <text x="583.5" y="155" text-anchor="middle" font-size="9" fill="#888">23</text>
+          <!-- Phase 24: 74% -->
+          <circle cx="632" cy="62.4" r="3" fill="#888"/>
+          <!-- Phase 25: 79% (new best) -->
+          <circle cx="680" cy="50.4" r="5" fill="#2563eb" stroke="#2563eb" stroke-width="2"/>
+          <text x="680" y="42" text-anchor="middle" font-size="10" font-weight="600" fill="#2563eb">79%</text>
+          <text x="680" y="155" text-anchor="middle" font-size="9" fill="#888">25</text>
+          <!-- Annotations -->
+          <text x="365" y="172" text-anchor="middle" font-size="10" fill="#dc2626" font-style="italic">self-play regression</text>
+          <text x="583.5" y="76" text-anchor="middle" font-size="9" fill="#555">FFA pivot</text>
+          <!-- X-axis label -->
+          <text x="365" y="270" text-anchor="middle" font-size="11" fill="#888">Training Phase</text>
+        </svg>
+      </div>
+
       <div class="callout callout-success" style="border-left: 3px solid #22c55e; background: rgba(34, 197, 94, 0.05); padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
         <p><strong>Phase 25 best model:</strong> Fine-tuning Phase 23 with updated sim mechanics (linked bullets, Choir abilities, MIRV splitting, repulsor projectile push) produced 79.4% WR in 4-player FFA (25% is random baseline). The model uses all 18 abilities in the team action preset &mdash; including rocket, stealth, burst, warp, portal, and faction-specific specials &mdash; compared to 7 abilities in the best duel model. However, the model plays passively (31% timeouts) and regressed against Phase 13's aggressive duel style. Phase 26 targets this with engagement reward tuning.</p>
+      </div>
+
+      <!-- Phase 25 Ability Usage Chart -->
+      <div style="margin: 32px 0;">
+        <h3 style="margin-bottom: 16px;">Phase 25: ability usage per match</h3>
+        <svg viewBox="0 0 600 340" style="width:100%;max-width:600px;font-family:'Inter',sans-serif;">
+          <!-- Bars (sorted descending, max ~291) -->
+          <text x="80" y="24" text-anchor="end" font-size="11" fill="#555">MIRV</text>
+          <rect x="86" y="12" width="299" height="17" rx="2" fill="#2563eb" opacity="0.85"/>
+          <text x="389" y="25" font-size="10" fill="#2563eb">291</text>
+
+          <text x="80" y="49" text-anchor="end" font-size="11" fill="#555">Bullet</text>
+          <rect x="86" y="37" width="296" height="17" rx="2" fill="#2563eb" opacity="0.75"/>
+          <text x="386" y="50" font-size="10" fill="#2563eb">288</text>
+
+          <text x="80" y="74" text-anchor="end" font-size="11" fill="#555">Rocket</text>
+          <rect x="86" y="62" width="296" height="17" rx="2" fill="#2563eb" opacity="0.75"/>
+          <text x="386" y="75" font-size="10" fill="#2563eb">288</text>
+
+          <text x="80" y="99" text-anchor="end" font-size="11" fill="#555">Burst</text>
+          <rect x="86" y="87" width="294" height="17" rx="2" fill="#2563eb" opacity="0.7"/>
+          <text x="384" y="100" font-size="10" fill="#2563eb">286</text>
+
+          <text x="80" y="124" text-anchor="end" font-size="11" fill="#555">Stealth</text>
+          <rect x="86" y="112" width="290" height="17" rx="2" fill="#2563eb" opacity="0.7"/>
+          <text x="380" y="125" font-size="10" fill="#2563eb">282</text>
+
+          <text x="80" y="149" text-anchor="end" font-size="11" fill="#555">Ripper</text>
+          <rect x="86" y="137" width="251" height="17" rx="2" fill="#2563eb" opacity="0.65"/>
+          <text x="341" y="150" font-size="10" fill="#2563eb">244</text>
+
+          <text x="80" y="174" text-anchor="end" font-size="11" fill="#555">Mine</text>
+          <rect x="86" y="162" width="249" height="17" rx="2" fill="#2563eb" opacity="0.65"/>
+          <text x="339" y="175" font-size="10" fill="#2563eb">242</text>
+
+          <text x="80" y="199" text-anchor="end" font-size="11" fill="#555">Repulsor</text>
+          <rect x="86" y="187" width="215" height="17" rx="2" fill="#2563eb" opacity="0.6"/>
+          <text x="305" y="200" font-size="10" fill="#2563eb">209</text>
+
+          <text x="80" y="224" text-anchor="end" font-size="11" fill="#555">Bomb</text>
+          <rect x="86" y="212" width="127" height="17" rx="2" fill="#2563eb" opacity="0.5"/>
+          <text x="217" y="225" font-size="10" fill="#2563eb">123</text>
+
+          <text x="80" y="249" text-anchor="end" font-size="11" fill="#555">Overdrive</text>
+          <rect x="86" y="237" width="101" height="17" rx="2" fill="#2563eb" opacity="0.45"/>
+          <text x="191" y="250" font-size="10" fill="#2563eb">98</text>
+
+          <text x="80" y="274" text-anchor="end" font-size="11" fill="#555">Warp</text>
+          <rect x="86" y="262" width="16" height="17" rx="2" fill="#2563eb" opacity="0.35"/>
+          <text x="106" y="275" font-size="10" fill="#2563eb">16</text>
+
+          <text x="80" y="299" text-anchor="end" font-size="11" fill="#555">Portal</text>
+          <rect x="86" y="287" width="7" height="17" rx="2" fill="#2563eb" opacity="0.3"/>
+          <text x="97" y="300" font-size="10" fill="#2563eb">7</text>
+
+          <text x="340" y="330" text-anchor="middle" font-size="11" fill="#888">Average activations per match (500 matches vs random)</text>
+        </svg>
       </div>
 
       <div class="callout callout-warning">
@@ -592,13 +719,39 @@
       <p>
         Phase 13 was the first model to use all 7 combat abilities meaningfully. Prior models relied almost entirely on bullets and bombs. What changed:
       </p>
-      <ul style="color: var(--text-secondary); font-size: 0.95rem; padding-left: 24px; margin: 12px 0; line-height: 2;">
-        <li>MIRV usage: 0 &rarr; 148/match (missiles launched at chokepoints)</li>
-        <li>Repulsor usage: 15 &rarr; 179/match (deflecting incoming projectiles)</li>
-        <li>Damage dealt: 76 &rarr; 102 avg (+30%)</li>
-        <li>Damage taken: 69 &rarr; 71 avg (held steady while being more aggressive)</li>
-        <li>Rounds: 22.4s &rarr; 19.6s avg (faster kills)</li>
-      </ul>
+      <!-- Phase 13 Breakthrough Chart -->
+      <div style="margin: 16px 0;">
+        <svg viewBox="0 0 600 200" style="width:100%;max-width:600px;font-family:'Inter',sans-serif;">
+          <!-- Legend -->
+          <rect x="380" y="8" width="12" height="12" rx="2" fill="#cbd5e1"/>
+          <text x="396" y="18" font-size="11" fill="#888">Phase 12</text>
+          <rect x="460" y="8" width="12" height="12" rx="2" fill="#2563eb"/>
+          <text x="476" y="18" font-size="11" fill="#555">Phase 13</text>
+          <!-- MIRV usage: 0 → 148 -->
+          <text x="120" y="50" text-anchor="end" font-size="12" fill="#555">MIRV usage</text>
+          <rect x="130" y="38" width="1" height="18" rx="2" fill="#cbd5e1"/>
+          <rect x="130" y="38" width="198" height="18" rx="2" fill="#2563eb" opacity="0.85"/>
+          <text x="332" y="51" font-size="10" fill="#2563eb" font-weight="500">148/match</text>
+          <text x="134" y="51" font-size="10" fill="#fff">0 →</text>
+          <!-- Repulsor: 15 → 179 -->
+          <text x="120" y="85" text-anchor="end" font-size="12" fill="#555">Repulsor</text>
+          <rect x="130" y="73" width="20" height="18" rx="2" fill="#cbd5e1"/>
+          <rect x="130" y="73" width="240" height="18" rx="2" fill="#2563eb" opacity="0.85"/>
+          <text x="374" y="86" font-size="10" fill="#2563eb" font-weight="500">179/match</text>
+          <text x="134" y="86" font-size="10" fill="#fff">15 →</text>
+          <!-- Damage dealt: 76 → 102 -->
+          <text x="120" y="120" text-anchor="end" font-size="12" fill="#555">Damage dealt</text>
+          <rect x="130" y="108" width="152" height="18" rx="2" fill="#cbd5e1"/>
+          <rect x="130" y="108" width="204" height="18" rx="2" fill="#2563eb" opacity="0.85"/>
+          <text x="338" y="121" font-size="10" fill="#2563eb" font-weight="500">102 avg (+34%)</text>
+          <!-- Avg round: 22.4s → 19.6s (shorter is better) -->
+          <text x="120" y="155" text-anchor="end" font-size="12" fill="#555">Round time</text>
+          <rect x="130" y="143" width="224" height="18" rx="2" fill="#cbd5e1"/>
+          <text x="358" y="156" font-size="10" fill="#888">22.4s</text>
+          <rect x="130" y="143" width="196" height="18" rx="2" fill="#16a34a" opacity="0.85"/>
+          <text x="330" y="156" font-size="10" fill="#16a34a" font-weight="500">19.6s (−12%)</text>
+        </svg>
+      </div>
       <p>
         The recipe: strong base model (Phase 12, trained with engage + bullet shaping) + one round of self-play. The base model learned <em>what</em> to do. Self-play taught it <em>when</em>.
       </p>
