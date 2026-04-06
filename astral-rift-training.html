@@ -798,7 +798,7 @@
         <strong>Single seed per experiment.</strong> Each phase runs once with one random seed. Phase 22 demonstrated seed sensitivity: identical hyperparameters produced 48% vs 37% depending on seed. The academic standard is 20+ seeds with confidence intervals. At 13 hours per run on a single RTX 3090, that's 10+ days per experiment&mdash;impractical here. Results should be read as "this seed produced X" rather than "this configuration reliably produces X."
       </p>
       <p>
-        <strong>No confidence intervals on evaluation.</strong> Win rates are reported as point estimates (e.g., 79.4%) without confidence intervals. With 500 evaluation matches, the 95% CI is roughly &plusmn;3-4%, which means the difference between Phase 23 (73%) and Phase 25 (79%) is likely significant, but Phase 24 (74%) vs Phase 23 (73%) probably isn't. Adding CIs to the eval script would make phase comparisons more rigorous.
+        <strong>Confidence intervals added late.</strong> Phases 11-25 were evaluated without confidence intervals. CIs (Wilson score, 95%) are now computed in the eval script. With 500 matches, the 95% CI is roughly &plusmn;3-4%, which means Phase 23 (73%) vs Phase 25 (79%) is likely significant, but Phase 24 (74%) vs Phase 23 (73%) probably isn't. Future phases report CIs; historical phases are point estimates only.
       </p>
       <p>
         <strong>Reward coefficients not ablated.</strong> The reward function has 9 tunable coefficients. We tune them based on hypotheses and diagnostic metrics, but haven't systematically ablated each one (train with coefficient set to zero, measure impact). Some of these coefficients may be doing nothing. A full ablation would require 9 additional training runs.
