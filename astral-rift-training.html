@@ -641,23 +641,15 @@
       </div>
 
       <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phases 14&ndash;21):</strong> Self-play consistently causes regression at every opponent mix level tested (50%, 30%, 20%). One round works (Phase 12&rarr;13). Iterating beyond that causes overspecialization. WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is narrowing instead of improving.</p>
+        <p><strong>Self-play doesn't scale (Phases 14&ndash;21).</strong> One round of self-play works (Phase 12&rarr;13). Iterating beyond that causes overspecialization at every mix level tested (50%, 30%, 20%). WR vs random is the canary&mdash;if it drops while WR vs the frozen opponent rises, the model is narrowing. The FFA pivot (Phase 23) solved this by using natural opponent diversity instead of artificial self-play.</p>
       </div>
 
       <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phases 19&ndash;20):</strong> Finer action resolution (21 rotation bins vs 11) plateaus at 43% regardless of step count. The 21-bin model beat Phase 13 head-to-head (53%) but lost to random&mdash;it learned structured combat at the expense of generalization. Higher precision doesn't automatically produce better bots.</p>
+        <p><strong>More compute doesn't fix structural problems (Phases 19&ndash;22).</strong> Finer aim resolution (21 bins vs 11) plateaued at 43% regardless of step count. Different seeds with identical config produced 48% vs 37%. The breakthroughs (Phase 13, Phase 23) came from structural changes&mdash;self-play, FFA&mdash;not from more steps or finer control.</p>
       </div>
 
       <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phase 22):</strong> Training is seed-sensitive. Same hyperparameters, same reward shaping, different seed, dramatically different results (Phase 12: 48% vs Phase 22: 37%). Reproducibility requires controlling for this.</p>
-      </div>
-
-      <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phase 26):</strong> A converged policy can't be shifted by reward tuning. Increasing the engagement reward from 1.0 to 1.5 with self-play against Phase 13 produced identical behavior&mdash;same win rate, same kills, same timeouts, same damage. The model is in a local minimum that gradient descent can't escape with small reward changes.</p>
-      </div>
-
-      <div class="callout callout-warning">
-        <p><strong>Lesson learned (Phase 27):</strong> Ablation design matters as much as execution. Removing each of the 9 reward coefficients one at a time (500M fine-tuning steps from Phase 25) produced 9 identical models. Fine-tuning a converged checkpoint doesn't measure reward impact&mdash;the policy is locked regardless of reward changes. Valid ablation requires training from scratch (random init, full 2B steps per coefficient).</p>
+        <p><strong>Converged policies are stuck (Phases 26&ndash;27).</strong> Increasing engagement reward, adding self-play opponents, and ablating all 9 reward coefficients individually&mdash;none of it shifted the Phase 25 model. Every metric stayed identical. Fine-tuning a converged checkpoint can't escape a local minimum. Phase 28 tests training from scratch with minimal reward to find a different attractor.</p>
       </div>
 
       <h3>The Phase 13 breakthrough</h3>
