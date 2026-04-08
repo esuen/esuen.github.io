@@ -218,7 +218,7 @@
 
     <h2>Netflix: Designing for Failure at 325 Million Subscribers</h2>
 
-    <img src="../images/netflix-arch.png" alt="Netflix Microservices Architecture">
+    <img src="../images/netflix-arch.webp" alt="Netflix Microservices Architecture">
 
     <p>Netflix serves 325 million subscribers as of Q4 2025, all expecting instant playback across every device and connection type&mdash;from 5 Mbps DSL in rural India to gigabit fiber in Seoul.</p>
 
@@ -230,7 +230,7 @@
 
     <h3>The Request Path: Zuul, Eureka, and Hystrix</h3>
 
-    <img src="../images/netflix-request-flow.png" alt="Netflix Request Flow: Zuul, Eureka, Hystrix">
+    <img src="../images/netflix-request-flow.webp" alt="Netflix Request Flow: Zuul, Eureka, Hystrix">
 
     <p>When you hit play on a show, your request first hits <strong>Zuul</strong>, Netflix's API gateway. Zuul handles authentication, routing, rate limiting, and logging. But with 1,000+ services scaling up and down constantly, IP addresses changing by the minute, you cannot hard-code routing.</p>
 
@@ -242,13 +242,13 @@
 
     <h3>Chaos Engineering: Breaking Things on Purpose</h3>
 
-    <img src="../images/chaos-monkey.png" alt="Netflix Chaos Monkey and Simian Army">
+    <img src="../images/chaos-monkey.webp" alt="Netflix Chaos Monkey and Simian Army">
 
     <p>In 2011, Netflix built <strong>Chaos Monkey</strong>&mdash;a tool that randomly kills production instances. Real servers serving real users, on purpose. They expanded it into the <strong>Simian Army</strong>: Chaos Gorilla simulates an entire AWS availability zone going down, Latency Monkey adds artificial delays to test timeout handling. Chaos engineering is now an entire discipline&mdash;all because Netflix decided to break their own stuff on purpose.</p>
 
     <h3>Open Connect: 73 Tbps at the Edge</h3>
 
-    <img src="../images/netflix-cdn.png" alt="Netflix Open Connect CDN">
+    <img src="../images/netflix-cdn.webp" alt="Netflix Open Connect CDN">
 
     <p><strong>Open Connect</strong> is Netflix's custom CDN. Netflix literally installs its own hardware at ISPs around the world. The numbers: 73 terabits per second served at the edge, with a 98% cache hit rate. Origin servers handle only about 1.46 Tbps&mdash;2% of total traffic.</p>
 
@@ -258,13 +258,13 @@
 
     <h2>Uber: Hexagons, Matching, and Real-Time Pricing</h2>
 
-    <img src="../images/uber-h3.png" alt="Uber H3 Hexagonal Geospatial Index">
+    <img src="../images/uber-h3.webp" alt="Uber H3 Hexagonal Geospatial Index">
 
     <p>Uber processes 36 to 42 million trips per day across 202 million monthly active users. The engineering problem is fundamentally different from Netflix. Netflix delivers bits. Uber moves objects through physical space&mdash;real cars on real roads in real traffic. Every driver is sending GPS updates constantly, which means millions of pings per second hitting Uber's servers, each carrying the same question: is there a rider nearby who needs me right now?</p>
 
     <h3>Why Hexagons Beat Squares</h3>
 
-    <img src="../images/hex-vs-square.png" alt="Square Grid vs Hexagonal Grid Distance Comparison">
+    <img src="../images/hex-vs-square.webp" alt="Square Grid vs Hexagonal Grid Distance Comparison">
 
     <p>Uber built <strong>H3</strong>, a hexagonal hierarchical geospatial index that divides the entire surface of the Earth into hexagons&mdash;like a giant honeycomb draped over the globe. Why hexagons instead of a simpler square grid? The math actually matters. With a square grid, you have eight neighbors: four share a full edge, four share only a corner point. The edge neighbor is 1.0 units away, but the diagonal neighbor is 1.41 units away&mdash;the square root of two, or 41% farther. That inconsistency creates real problems for proximity queries at massive scale. Distance calculations are not uniform, and you need special cases for diagonals.</p>
 
@@ -274,7 +274,7 @@
 
     <h3>Bipartite Matching</h3>
 
-    <img src="../images/uber-matching.png" alt="Uber Ride Matching as a Bipartite Graph">
+    <img src="../images/uber-matching.webp" alt="Uber Ride Matching as a Bipartite Graph">
 
     <p>Finding nearby drivers is only half the problem. Uber uses a <strong>bipartite graph</strong>&mdash;imagine two columns, riders on the left, available drivers on the right, with lines connecting possible matches. Each line carries a cost: distance to pickup, estimated drive time, current traffic. The system uses a variation of the <strong>Hungarian Algorithm</strong> to minimize total wait time across all riders&mdash;not just yours. The closest driver is not always the best match, because sending them to you might leave someone else with a 20-minute wait. The algorithm sees the whole board, optimizing globally rather than locally. Averaged across millions of trips, everyone waits less.</p>
 
@@ -286,7 +286,7 @@
 
     <h3>Hot Path / Cold Path</h3>
 
-    <img src="../images/uber-hot-cold.png" alt="Uber Hot Path vs Cold Path Architecture">
+    <img src="../images/uber-hot-cold.webp" alt="Uber Hot Path vs Cold Path Architecture">
 
     <p>The <strong>hot path</strong> feeds GPS updates into an in-memory geospatial index for live ride matching&mdash;milliseconds matter. Drop this data and you drop a ride. The <strong>cold path</strong> routes the same data through Kafka into a time-series database for analytics, route optimization, and demand forecasting&mdash;predicting where riders will be at 5 PM on Friday. This data does not need to arrive in milliseconds; minutes or hours is fine. But it needs to be complete, no gaps, no dropped events. Same data, two priorities: speed versus completeness.</p>
 
@@ -296,7 +296,7 @@
 
     <h2>YouTube: 500 Hours Per Minute and Custom Silicon</h2>
 
-    <img src="../images/youtube-pipeline.png" alt="YouTube Video Processing Pipeline">
+    <img src="../images/youtube-pipeline.webp" alt="YouTube Video Processing Pipeline">
 
     <p>500 hours of video are uploaded to YouTube every single minute&mdash;over 720,000 hours of new video every day. Served to 2.7 billion monthly users who collectively watch 1 billion hours per day. YouTube is roughly 15% of global internet traffic. One platform, 15% of the internet.</p>
 
@@ -323,7 +323,7 @@
 
     <h3>Custom Silicon: The VCU</h3>
 
-    <img src="../images/youtube-vcu.png" alt="Google VCU Custom ASIC vs CPU">
+    <img src="../images/youtube-vcu.webp" alt="Google VCU Custom ASIC vs CPU">
 
     <p>At 500 hours per minute, general-purpose CPUs could not keep up. Google built a custom ASIC called the <strong>Video transCoding Unit (VCU)</strong>&mdash;purpose-built silicon that does one thing: encode video. A general-purpose CPU is a Swiss Army knife; an ASIC is a custom surgical instrument. A CPU wastes energy on branch prediction, speculative execution, and general-purpose logic&mdash;overhead that is irrelevant for video encoding. The VCU strips all of that away, dedicating every transistor to the task. At YouTube's scale, that is a meaningful dent in both the power bill and the carbon footprint. Custom silicon is cheaper than buying more CPUs, even after spending millions on R&D and fabrication&mdash;a level of scale maybe five companies on Earth can justify.</p>
 
@@ -341,7 +341,7 @@
 
     <h2>Spotify: Engineering Taste at 751 Million Users</h2>
 
-    <img src="../images/spotify-pipeline.png" alt="Spotify Recommendation Pipeline">
+    <img src="../images/spotify-pipeline.webp" alt="Spotify Recommendation Pipeline">
 
     <p>Spotify has 751 million monthly active users and 290 million premium subscribers. Their real product is not music&mdash;Apple Music, Amazon Music, and YouTube Music all have the same catalog. The catalog is basically commoditized. What keeps 290 million people paying is Discover Weekly, Release Radar, Daily Mixes&mdash;the feeling that Spotify <em>gets</em> you. That is not magic. That is engineering.</p>
 
@@ -401,11 +401,11 @@
 
     <h3>Consistent Hashing</h3>
 
-    <img src="../images/consistent-hashing.png" alt="Consistent Hashing Ring">
+    <img src="../images/consistent-hashing.webp" alt="Consistent Hashing Ring">
 
     <h3>Raft Consensus</h3>
 
-    <img src="../images/raft-consensus.png" alt="Raft Consensus: Leader and Follower Log Replication">
+    <img src="../images/raft-consensus.webp" alt="Raft Consensus: Leader and Follower Log Replication">
 
     <p>Raft solves distributed agreement with one key constraint: only servers with up-to-date logs can become leader. This simplifies everything downstream. Raft now powers etcd (Kubernetes), CockroachDB, TiDB, and Consul.</p>
 
