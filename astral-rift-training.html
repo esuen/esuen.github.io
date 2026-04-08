@@ -11,73 +11,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Code+Pro:wght@400;500&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
   <style>
     :root {
-      --text: #1a1a1a;
-      --text-secondary: #555;
-      --text-tertiary: #888;
-      --accent: #2563eb;
-      --border: #e5e5e5;
-      --bg: #fafafa;
       --code-bg: #f5f5f5;
       --green: #16a34a;
       --red: #dc2626;
       --amber: #d97706;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .container { max-width: 800px; }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container { max-width: 800px; margin: 0 auto; padding: 80px 24px 60px; }
-
-    .back {
-      display: inline-block;
-      font-size: 0.9rem;
-      color: var(--text-tertiary);
-      text-decoration: none;
-      margin-bottom: 40px;
-      transition: color 0.15s;
-    }
-    .back:hover { color: var(--accent); }
+    .back { font-size: 0.9rem; }
+    .back::before { content: none; }
 
     header { margin-bottom: 48px; }
 
-    .project-label {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-tertiary);
-      margin-bottom: 8px;
-    }
+    h1 { font-size: 2rem; margin-bottom: 12px; }
 
-    h1 {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 2rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 12px;
-    }
-
-    .subtitle { font-size: 1rem; color: var(--text-secondary); margin-bottom: 24px; }
+    .subtitle { font-size: 1rem; }
 
     section { margin-bottom: 48px; }
 
-    h2 {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 1.3rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      margin-bottom: 16px;
-    }
+    h2 { font-size: 1.3rem; }
 
     h3 {
       font-size: 0.95rem;
@@ -85,14 +41,6 @@
       margin-bottom: 8px;
       margin-top: 24px;
     }
-
-    p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.75;
-      margin-bottom: 16px;
-    }
-    p:last-child { margin-bottom: 0; }
 
     pre, pre[class*="language-"] {
       background: var(--code-bg) !important;
@@ -194,7 +142,6 @@
       text-align: center;
     }
 
-    /* Styled flow diagrams */
     .flow {
       display: flex;
       align-items: center;
@@ -260,7 +207,6 @@
       padding: 6px 0;
     }
 
-    /* Pipeline flow — horizontal with wrap */
     .pipeline {
       display: flex;
       align-items: center;
@@ -307,18 +253,7 @@
       border-top: 1px dashed var(--border);
     }
 
-    footer {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
-    }
-    footer a { color: var(--text-tertiary); text-decoration: none; }
-    footer a:hover { color: var(--accent); }
-
     @media (max-width: 600px) {
-      .container { padding: 48px 20px 40px; }
       h1 { font-size: 1.6rem; }
       .metric-grid { grid-template-columns: repeat(2, 1fr); }
       .flow { flex-direction: column; }
@@ -556,7 +491,7 @@
         Each training phase follows a strict methodology: form a hypothesis ("increasing engage reward will fix passive play"), change one variable, train 2B steps, evaluate against multiple baselines (random, previous generations, best model), and diagnose using 40+ metrics&mdash;not just win rate. If the hypothesis was wrong, the metrics tell you <em>why</em>: was it passive play (high timeouts, low damage), overspecialization (beats one opponent, loses to random), or a reward imbalance (one ability dominates)?
       </p>
       <p>
-        26 phases, each building on the previous. The table below is an experiment log, not a changelog.
+        28 phases, each building on the previous. The table below is an experiment log, not a changelog.
       </p>
 
       <table>
@@ -568,7 +503,9 @@
           <tr><td>20</td><td class="neutral">43%</td><td>21 rotation bins (5B steps)</td><td>Beat Phase 13 head-to-head (53%) but lost to random. Precision &ne; generalization.</td></tr>
           <tr><td>23</td><td class="up">73%</td><td>FFA deathmatch (4 ships, team preset)</td><td><strong>FFA breakthrough.</strong> Paradigm shift from duel to 4-player free-for-all.</td></tr>
           <tr><td>25</td><td class="up">79%</td><td>Updated sim, 18 abilities, --fast-mirv</td><td><strong>New best.</strong> But plays passively (31% timeouts), regressed vs Phase 13.</td></tr>
-          <tr><td>26</td><td>&mdash;</td><td>Aggression fix: engage reward 1.5, self-play vs Phase 13</td><td><em>In progress.</em></td></tr>
+          <tr><td>26</td><td class="neutral">79%</td><td>Engage reward 1.5, self-play vs Phase 13</td><td><strong>Null result.</strong> Every metric identical to Phase 25.</td></tr>
+          <tr><td>27</td><td class="neutral">79%</td><td>Ablation: 9 coefficients removed, 500M steps each</td><td><strong>All identical.</strong> Converged policy can't be shifted by fine-tuning.</td></tr>
+          <tr><td>28</td><td>&mdash;</td><td>From scratch, minimal reward (kill/death/damage only)</td><td><em>In progress.</em> Tests if shaping causes passivity.</td></tr>
         </tbody>
       </table>
 
@@ -643,7 +580,7 @@
       </div>
 
       <div class="callout callout-success" style="border-left: 3px solid #22c55e; background: rgba(34, 197, 94, 0.05); padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
-        <p><strong>Phase 25 best model:</strong> Fine-tuning Phase 23 with updated sim mechanics (linked bullets, Choir abilities, MIRV splitting, repulsor projectile push) produced 79.4% WR in 4-player FFA (25% is random baseline). The model uses all 18 abilities in the team action preset &mdash; including rocket, stealth, burst, warp, portal, and faction-specific specials &mdash; compared to 7 abilities in the best duel model. However, the model plays passively (31% timeouts) and regressed against Phase 13's aggressive duel style. Phase 26 targets this with engagement reward tuning.</p>
+        <p><strong>Phase 25 best model:</strong> Fine-tuning Phase 23 with updated sim mechanics (linked bullets, Choir abilities, MIRV splitting, repulsor projectile push) produced 79.4% WR in 4-player FFA (25% is random baseline). The model uses all 18 abilities in the team action preset &mdash; including rocket, stealth, burst, warp, portal, and faction-specific specials &mdash; compared to 7 abilities in the best duel model. However, the model plays passively (31% timeouts) and regressed against Phase 13's aggressive duel style.</p>
       </div>
 
       <!-- Phase 25 Ability Usage Chart -->
@@ -713,6 +650,14 @@
 
       <div class="callout callout-warning">
         <p><strong>Lesson learned (Phase 22):</strong> Training is seed-sensitive. Same hyperparameters, same reward shaping, different seed, dramatically different results (Phase 12: 48% vs Phase 22: 37%). Reproducibility requires controlling for this.</p>
+      </div>
+
+      <div class="callout callout-warning">
+        <p><strong>Lesson learned (Phase 26):</strong> A converged policy can't be shifted by reward tuning. Increasing the engagement reward from 1.0 to 1.5 with self-play against Phase 13 produced identical behavior&mdash;same win rate, same kills, same timeouts, same damage. The model is in a local minimum that gradient descent can't escape with small reward changes.</p>
+      </div>
+
+      <div class="callout callout-warning">
+        <p><strong>Lesson learned (Phase 27):</strong> Ablation design matters as much as execution. Removing each of the 9 reward coefficients one at a time (500M fine-tuning steps from Phase 25) produced 9 identical models. Fine-tuning a converged checkpoint doesn't measure reward impact&mdash;the policy is locked regardless of reward changes. Valid ablation requires training from scratch (random init, full 2B steps per coefficient).</p>
       </div>
 
       <h3>The Phase 13 breakthrough</h3>
@@ -801,7 +746,7 @@
         <strong>Confidence intervals added late.</strong> Phases 11-25 were evaluated without confidence intervals. CIs (Wilson score, 95%) are now computed in the eval script. With 500 matches, the 95% CI is roughly &plusmn;3-4%, which means Phase 23 (73%) vs Phase 25 (79%) is likely significant, but Phase 24 (74%) vs Phase 23 (73%) probably isn't. Future phases report CIs; historical phases are point estimates only.
       </p>
       <p>
-        <strong>Reward coefficients not ablated.</strong> The reward function has 9 tunable coefficients. We tune them based on hypotheses and diagnostic metrics, but haven't systematically ablated each one (train with coefficient set to zero, measure impact). Some of these coefficients may be doing nothing. A full ablation would require 9 additional training runs.
+        <strong>Ablation requires from-scratch training.</strong> Phase 27 attempted to ablate 9 reward coefficients by fine-tuning from a converged checkpoint (500M steps each). All 9 produced identical behavior&mdash;the policy was locked. A valid ablation would need training from random initialization (2B steps &times; 9 runs = ~5 days on one GPU). Phase 28 tests the most extreme version: all shaping zeroed, train from scratch.
       </p>
       <p>
         <strong>Learning curves underutilized.</strong> Training logs capture entropy, policy loss, and value loss per update, but these aren't systematically analyzed for plateau detection or collapse warnings. Plotting learning curves across phases would give earlier signal on whether a run is worth continuing.
@@ -811,13 +756,16 @@
     <section>
       <h2>What's next</h2>
       <p>
-        <strong>Fix passive play:</strong> Phase 25's 79% WR comes with 31% timeouts and low avg damage&mdash;the bot wins by outlasting, not outfighting. Phase 26 increases the engagement reward to push aggression while keeping FFA skills. The goal is high win rate <em>and</em> high damage dealt, so bots are fun to play against.
+        <strong>Break out of the local minimum.</strong> Phases 25-27 proved the current policy is stuck. Phase 28 trains from scratch with only kill/death/damage reward&mdash;testing whether shaping signals caused the passivity or whether the problem is structural (observation space, action space, or network capacity).
       </p>
       <p>
-        <strong>Opponent pool:</strong> Currently training against a single frozen opponent per phase. A pool of 3-5 previous generations (weighted by recency) would prevent overspecialization&mdash;the same problem that caused Phase 14's regression. Early phases rotate opponents manually; automating the pool is the next infrastructure step.
+        <strong>From-scratch ablation.</strong> If Phase 28 produces different behavior, the next step is systematic from-scratch ablation: train 9 models from random init (2B steps each), each with one reward coefficient removed. This would finally answer which coefficients are load-bearing.
       </p>
       <p>
-        <strong>Population-based training:</strong> Reward weights are still tuned manually between phases. PBT would evolve reward configurations in parallel, exploring the reward space automatically instead of one experiment at a time.
+        <strong>Opponent pool.</strong> Currently training against a single frozen opponent per phase. A pool of 3-5 previous generations (weighted by recency) would prevent overspecialization. Early phases rotate opponents manually; automating the pool is the next infrastructure step.
+      </p>
+      <p>
+        <strong>Population-based training.</strong> Reward weights are still tuned manually between phases. PBT would evolve reward configurations in parallel, exploring the reward space automatically instead of one experiment at a time.
       </p>
     </section>
 
