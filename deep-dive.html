@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deep Dive - Eric Suen</title>
+  <meta name="description" content="AI-powered research and content production pipeline. Research any topic, verify claims, generate podcasts and blog posts — automatically.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .container { max-width: 800px; }
+
+    h1 { margin-bottom: 8px; }
+
+    section { margin-bottom: 56px; }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .flow-vertical { flex-direction: column; align-items: center; }
+    .flow-vertical .flow-arrow { padding: 6px 0; }
+    .flow-node {
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 20px;
+      text-align: center;
+      min-width: 110px;
+    }
+    .flow-node-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-tertiary);
+      margin-bottom: 4px;
+    }
+    .flow-node-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+    .flow-node-detail {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .flow-node-research { border-color: #93c5fd; background: #eff6ff; }
+    .flow-node-research .flow-node-title { color: #1e40af; }
+    .flow-node-content { border-color: #86efac; background: #f0fdf4; }
+    .flow-node-content .flow-node-title { color: #166534; }
+    .flow-node-output { border-color: #fcd34d; background: #fffbeb; }
+    .flow-node-output .flow-node-title { color: #92400e; }
+    .flow-arrow {
+      font-size: 1.2rem;
+      color: var(--text-tertiary);
+      padding: 0 12px;
+      flex-shrink: 0;
+    }
+    .flow-branch {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .arch-diagram {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 32px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .arch-diagram .layer { display: flex; justify-content: center; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+    .arch-diagram .box { padding: 10px 20px; border-radius: 8px; font-size: 0.8rem; font-weight: 500; }
+    .arch-diagram .research { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+    .arch-diagram .content { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+    .arch-diagram .output { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+    .arch-diagram .arrow-down { color: var(--text-tertiary); font-size: 1.2rem; margin: 4px 0; }
+    .arch-diagram .layer-label { font-size: 0.75rem; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+
+    pre {
+      background: #f5f5f5;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin: 16px 0;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: var(--text);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .metric {
+      text-align: center;
+      padding: 20px 12px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+    .metric-value {
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .metric-label { font-size: 0.75rem; color: var(--text-tertiary); margin-top: 4px; }
+
+    @media (max-width: 600px) {
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+      .flow:not(.flow-vertical) { flex-direction: column; }
+      .flow:not(.flow-vertical) > .flow-arrow { transform: rotate(90deg); padding: 6px 0; }
+      .flow-branch { flex-direction: column; align-items: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <a href="index.html" class="back"></a>
+
+    <header>
+      <div class="project-label">Project</div>
+      <h1>Deep Dive</h1>
+      <p class="subtitle">Research any topic deeply, verify every claim, and convert it to multiple content formats&mdash;podcast, blog post, video with synchronized visuals&mdash;automatically.</p>
+      <div class="tech-tags">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Dagster</span>
+        <span class="tech-tag">OpenAI TTS</span>
+        <span class="tech-tag">OpenAI Whisper</span>
+        <span class="tech-tag">ffmpeg</span>
+        <span class="tech-tag">Pillow</span>
+        <span class="tech-tag">Praat</span>
+        <span class="tech-tag">Pydantic</span>
+      </div>
+      <div class="quick-facts">
+        <span>45-min episodes</span>
+        <span>&middot;</span>
+        <span>Multi-format output</span>
+        <span>&middot;</span>
+        <span>Automated test suite</span>
+        <span>&middot;</span>
+        <span>Modular package architecture</span>
+      </div>
+    </header>
+
+    <section>
+      <h2>What it does</h2>
+      <p>
+        Deep Dive is a content production pipeline that researches any topic, verifies every factual claim against sources, and converts the research into multiple output formats: a voiced podcast with per-line emotional delivery directions, a blog post with comparison tables and diagrams, and a video with frame-accurate synchronized visuals.
+      </p>
+      <p>
+        The research layer is format-agnostic&mdash;the same verified, confidence-tagged research produces a podcast, a blog post, or a presentation. Research once, output to multiple formats.
+      </p>
+
+      <div class="metrics">
+        <div class="metric">
+          <div class="metric-value">5</div>
+          <div class="metric-label">Episodes produced</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">11</div>
+          <div class="metric-label">DAG assets</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">8</div>
+          <div class="metric-label">Quality checks</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value">130+</div>
+          <div class="metric-label">Automated tests</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Architecture</h2>
+      <p>Three-layer architecture separating research (reusable), content generation (format-specific), and output (publishing). The research layer is designed to be format-agnostic&mdash;any verified research can produce any output format.</p>
+
+      <div class="arch-diagram">
+        <div class="layer-label">Research Layer (reusable)</div>
+        <div class="layer">
+          <span class="box research">Web Search</span>
+          <span class="box research">Source Verification</span>
+          <span class="box research">Confidence Tagging</span>
+          <span class="box research">Claim Cross-referencing</span>
+        </div>
+        <div class="arrow-down">&darr;</div>
+        <div class="layer-label">Content Layer (format-specific)</div>
+        <div class="layer">
+          <span class="box content">Podcast Script</span>
+          <span class="box content">Blog Post</span>
+          <span class="box content">Number Normalization</span>
+          <span class="box content">Pronunciation Fixing</span>
+          <span class="box content">Line Merging</span>
+        </div>
+        <div class="arrow-down">&darr;</div>
+        <div class="layer-label">Output Layer</div>
+        <div class="layer">
+          <span class="box output">TTS Voicing</span>
+          <span class="box output">Voice Consistency Fix</span>
+          <span class="box output">Image Generation</span>
+          <span class="box output">Progressive Slides</span>
+          <span class="box output">Video Assembly</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>The pipeline</h2>
+      <p>Orchestrated with Dagster as a DAG of software-defined assets. Each asset declares its dependencies&mdash;Dagster handles execution order, retries, and tracks which outputs are stale. Quality checks gate each stage: Whisper verification after voicing, content timing after video assembly, OCR after diagram generation.</p>
+
+      <div class="flow-vertical flow" style="max-width: 540px; margin: 24px auto;">
+        <div class="flow-node flow-node-research" style="width: 100%;">
+          <div class="flow-node-label">Research</div>
+          <div class="flow-node-title">verified_research</div>
+          <div class="flow-node-detail">Web search, URL reachability, confidence tagging, source density</div>
+        </div>
+        <div class="flow-arrow">&darr;</div>
+        <div class="flow-node flow-node-content" style="width: 100%;">
+          <div class="flow-node-label">Script Processing</div>
+          <div class="flow-node-title">normalized &rarr; pronounced &rarr; tagged &rarr; merged</div>
+          <div class="flow-node-detail">Number normalization, tech pronunciation, slide candidate tagging, line merging</div>
+        </div>
+        <div class="flow-arrow">&darr;</div>
+        <div class="flow-node flow-node-content" style="width: 100%; border-color: #fbbf24; background: #fffbeb;">
+          <div class="flow-node-title">voice_ready_script</div>
+          <div class="flow-node-detail">Pre-voice transform: period-separated lists &rarr; comma format to prevent TTS hallucination</div>
+        </div>
+        <div class="flow-arrow">&darr;</div>
+        <div class="flow-node flow-node-content" style="width: 100%;">
+          <div class="flow-node-label">Audio</div>
+          <div class="flow-node-title">raw_audio &rarr; voice_fixed &rarr; finalized</div>
+          <div class="flow-node-detail">TTS voicing + Whisper verification, Praat voice consistency, disclaimer + loudnorm</div>
+        </div>
+        <div class="flow-arrow">&darr;</div>
+        <div class="flow-node flow-node-output" style="width: 100%;">
+          <div class="flow-node-label">Visuals</div>
+          <div class="flow-node-title">slide_images &rarr; episode_video</div>
+          <div class="flow-node-detail">Progressive slides, diagrams, stock photos, frame-accurate assembly</div>
+        </div>
+      </div>
+
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 16px;"><strong>Quality checks at each stage:</strong> slide coverage (intro/conclusion tagged), adjacent-block contamination (Whisper), silence padding detection, manifest completeness, content timing verification, visual gap detection, diagram OCR accuracy.</p>
+    </section>
+
+    <section>
+      <h2>Under the hood</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-title">Confidence-aware claims</div>
+          <p class="feature-desc">Research tags every claim as [VERIFIED] (2+ sources), [SINGLE SOURCE], or [CLAUDE KNOWLEDGE]. The script automatically hedges low-confidence claims. Verification checks URLs are reachable and flags unsourced numbers. Three-layer verification: research quality, script-vs-research accuracy, and structural quality.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Per-line TTS delivery directions</div>
+          <p class="feature-desc">Every line includes a delivery instruction: &ldquo;stunned disbelief, emphasizing SEED&rdquo; or &ldquo;rattling off data with confidence.&rdquo; Generated inline with the script so the writer knows the emotional intent. Baseline voice instruction prevents gender switching.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Automated diagram generation</div>
+          <p class="feature-desc">Scans the script for technical concepts, generates image prompts, calls OpenAI&rsquo;s image API, OCR-verifies for spelling errors and stray text, and regenerates on failure (up to 3 attempts). Also detects any visual gap &gt;2 minutes and suggests diagrams for it.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Slide-aware line merging</div>
+          <p class="feature-desc">Consecutive lines merge into single TTS calls for natural flow&mdash;but lines tagged as slide candidates stay separate so progressive bullet slides sync precisely to audio. Merging reduces TTS calls by ~50% while preserving visual timing.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Context-aware number normalization</div>
+          <p class="feature-desc">Converts spelled-out numbers to digits while respecting context: &ldquo;one hundred twenty-six&rdquo; &rarr; &ldquo;126&rdquo; but keeps &ldquo;this one is&rdquo; as a word. Handles compound hundreds/thousands. 22 test cases prevent regression of a bug that shipped wrong numbers in two episodes before being caught.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Frame-accurate video assembly + verification</div>
+          <p class="feature-desc">Video built frame-by-frame using PIL&mdash;no segment concatenation (which causes timing drift). After assembly, automated verification extracts frames at the start, middle, and end of every visual segment and compares against the expected image using pixel similarity. Episode 3: 60/60 segments verified correct.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Voice consistency detection</div>
+          <p class="feature-desc">OpenAI TTS switches voice on short utterances because each API call is stateless. Solved with three fixes: pinned model snapshots for deterministic behavior, concise voice instructions (verbose ones cause drift&mdash;confirmed OpenAI bug), and Praat-based acoustic analysis that builds a per-episode voice profile (F0, formants, HNR) and flags blocks deviating on multiple dimensions. Flagged blocks are automatically re-voiced and spliced back at exact timestamps.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Content timing verification</div>
+          <p class="feature-desc">Slides must show when their content is spoken, not just when their block starts. Each slide carries metadata mapping it to keywords in the audio. After video assembly, a verifier checks every slide&rsquo;s timestamp against the durations file&mdash;confirming the audio at that moment matches the slide content. Catches the disclaimer offset bug that shifted all visuals by 11.5 seconds.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Spoken-to-visual text conversion</div>
+          <p class="feature-desc">TTS scripts spell out numbers (&ldquo;99 point 9 percent&rdquo;) but slides need the visual form (&ldquo;99.9%&rdquo;). A conversion layer handles percentages, currency ($12.5B), data units (2.7 TB), time units (200ms), bit rates (80 Gbps), multipliers (4x), ordinals (#1), and degrees (45&deg;). For lines where spoken text is an analogy (&ldquo;Half a nanosecond to read it&rdquo;), a slide_display field provides the visual override (&ldquo;L1 Cache &mdash; 0.5ns&rdquo;). 33 tests cover the conversion rules.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">DAG-based pipeline orchestration</div>
+          <p class="feature-desc">Migrated from a sequential CLI to Dagster software-defined assets. Each pipeline step is an asset with declared dependencies&mdash;Dagster resolves execution order, tracks which outputs are stale when inputs change, and provides a web UI for pipeline observability. Quality checks gate each stage: Whisper hallucination detection after voicing, adjacent-block contamination check, silence padding detection, content timing verification after video assembly, and OCR diagram accuracy.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">TTS hallucination prevention</div>
+          <p class="feature-desc">Two-tier detection: duration check (free&mdash;if a block with &lt;15 words generates &gt;1.5x expected duration, flag it) then Whisper verification (transcribe flagged blocks, compare word count, re-voice up to 3 times). A pre-voice transform converts period-separated lists (&ldquo;Servers. Databases. Caches.&rdquo;) to comma format with &ldquo;and&rdquo; before the last item&mdash;preventing TTS from pattern-completing and hallucinating repeated words. Adjacent-block contamination check verifies the next block doesn&rsquo;t start with leaked words from the current block.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Multi-format output</div>
+          <p class="feature-desc">Same verified research produces multiple formats. Podcast scripts convert to blog posts with comparison tables and embedded diagrams. Social media clips slice from the actual episode audio using duration timestamps. Auto-generated descriptions with exact timestamps for YouTube and Spotify.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Decisions and tradeoffs</h2>
+      <p>
+        <strong>Single host over two hosts.</strong> Tested every OpenAI and ElevenLabs voice. All two-voice combinations sounded detectably AI. A single male voice with per-line emotional directions sounds more natural. The script uses rhetorical questions instead of a second host.
+      </p>
+      <p>
+        <strong>Never overwrite inputs.</strong> Each pipeline step outputs to a new file. We lost a 30-minute generated script early on by running normalize and merge in-place. Now enforced by the tools refusing identical input/output paths.
+      </p>
+      <p>
+        <strong>Frame-by-frame video over concatenation.</strong> Early versions concatenated ffmpeg segments, causing audible stuttering and timing drift. Now the video is built frame-by-frame&mdash;one continuous audio track with images placed at exact timestamps.
+      </p>
+      <p>
+        <strong>Verification at every layer.</strong> Research verification, script-vs-research fact-checking, number normalization tests, pronunciation fixing, voice consistency detection, visual spelling verification. The project has more verification code than generation code.
+      </p>
+    </section>
+
+    <section>
+      <h2>Learnings</h2>
+      <p>
+        <strong>Constraints drive better design.</strong> Single host, immutable files, confidence tags&mdash;each constraint initially felt like a limitation but produced a better system.
+      </p>
+      <p>
+        <strong>Verification matters more than generation.</strong> The project has more verification code (research sourcing, claim checking, pronunciation fixing, voice consistency detection, video timing verification) than generation code. AI-generated content without a trust layer is just automated misinformation.
+      </p>
+      <p>
+        <strong>Automate the tedious, review the creative.</strong> Image generation, pronunciation, number normalization, volume leveling&mdash;automate. Script quality, diagram accuracy, content depth&mdash;human review. The pipeline removes you from mechanical tasks but keeps you in for judgment calls.
+      </p>
+      <p>
+        <strong>TTS consistency is an unsolved problem.</strong> OpenAI&rsquo;s TTS is nondeterministic&mdash;no seed parameter, no temperature control. Short utterances like &ldquo;Stop.&rdquo; or &ldquo;Passes.&rdquo; give the model too little context to anchor voice identity, causing gender or timbre switches. Zero-crossing rate pitch detection misses subtle changes. Switching to Praat-based acoustic profiling (fundamental frequency, formants, harmonics-to-noise ratio) catches more, but the real fix was upstream: pin the model snapshot and shorten the voice instruction. Verbose instructions cause the model to drift&mdash;a confirmed OpenAI bug.
+      </p>
+      <p>
+        <strong>Spoken text and visual text are different languages.</strong> TTS needs &ldquo;99 point 9 percent&rdquo; but a slide needs &ldquo;99.9%.&rdquo; Analogies like &ldquo;Half a nanosecond to read it&rdquo; work in audio but mean nothing on screen without the label &ldquo;L1 Cache.&rdquo; The fix was two layers: an automatic converter for mechanical formatting (percentages, units, currency) and a slide_display field on every data line for cases where the spoken form is a narrative the viewer can&rsquo;t parse visually.
+      </p>
+      <p>
+        <strong>Timing bugs compound across layers.</strong> The disclaimer prepended to the audio shifted all visual timestamps by 11.5 seconds. The durations file used raw timestamps, but the video used final timestamps. Progressive slides used hardcoded 4-second intervals instead of slide_candidate block times. Each layer assumed the previous layer&rsquo;s coordinates. The fix: every timestamp flows from one source of truth (the durations file), with the disclaimer offset applied once at video assembly.
+      </p>
+      <p>
+        <strong>AI doesn&rsquo;t enforce its own rules.</strong> Claude&rsquo;s global settings say &ldquo;never guess, never assume.&rdquo; It guessed anyway&mdash;wrong slide timestamps, wrong bullet content, wrong diagram architecture. Adding more instructions didn&rsquo;t help. The fix was encoding rules into pipeline code: automated tests that block bad output, verification steps that compare against source-of-truth data, and pipeline pauses that force human review. Instructions are suggestions. Code is enforcement.
+      </p>
+      <p>
+        <strong>The pipeline is the product.</strong> The podcast episodes are outputs, but the real value is the system: a tool that can research any topic, verify its claims, and convert it to consumable content across multiple formats.
+      </p>
+    </section>
+
+    <section>
+      <h2>What&rsquo;s next</h2>
+      <p>
+        <strong>Parallel asset execution.</strong> Dagster supports parallelizing independent assets&mdash;voice consistency check, visual generation, and social clips can run simultaneously instead of sequentially.
+      </p>
+      <p>
+        <strong>More output formats.</strong> Presentation slides, newsletter, short-form video clips. Same verified research, more surfaces.
+      </p>
+    </section>
+
+    <section>
+      <h2>Project structure</h2>
+<pre>dagster_pipeline/   DAG-based orchestration, assets, quality checks, resources
+research/           Research prompts, source verification, claim cross-referencing
+content/podcast/    Script generation, normalization, TTS voicing, voice consistency
+content/blog/       Research-to-blog conversion
+visuals/            Diagrams, progressive slides, video assembly, content verification
+social/             Clips, timestamps, descriptions
+tests/              130+ tests: pipeline, normalize, merge, pronunciation, slides, timing</pre>
+    </section>
+
+    <section>
+      <h2>Published content</h2>
+      <p style="margin-bottom: 16px;">
+        <a href="https://youtube.com/@DeepDiveAIShow" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 500;">YouTube</a>
+        <span style="color: var(--text-tertiary); margin: 0 8px;">&middot;</span>
+        <a href="https://open.spotify.com/show/3NTPj63CSZxExK1nQBmspF" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.9rem; font-weight: 500;">Spotify</a>
+      </p>
+      <p style="font-size: 0.85rem; color: var(--text-tertiary); margin-bottom: 16px;">Episodes 1&ndash;2 were produced during early pipeline development. Episodes 3&ndash;5 use the full pipeline with content-verified visual timing.</p>
+      <p><strong>AI in the Physical World</strong> <span style="font-size: 0.8rem; color: var(--text-tertiary);">(early pipeline)</span>&mdash;Periodic Labs ($300M seed), Physical Intelligence ($1.1B), Seneca (firefighting drones), Carbon Robotics ($100M revenue).</p>
+      <p><strong>How LLM Inference Actually Works</strong> <span style="font-size: 0.8rem; color: var(--text-tertiary);">(early pipeline)</span>&mdash;Tokenization through economics. The 300x cost collapse.</p>
+      <p><strong>How Netflix, Uber, and YouTube Handle Scale</strong>&mdash;Real architectures: 1,000+ microservices, hexagonal geospatial indexing, custom transcoding ASICs. Full visual pipeline with 13 diagrams and progressive comparison slides. Also published as a <a href="blog/how-netflix-uber-youtube-handle-scale.html" style="color: var(--accent); text-decoration: none;">blog post</a>.</p>
+      <p><strong>System Design Interview: What Interviewers Look For</strong>&mdash;47 minutes. HelloInterview framework, level expectations, back-of-envelope numbers. 25 content-verified slide sets, 6 Pillow-generated architecture diagrams.</p>
+      <p><strong>AI and Dogs: The Technology That Could Give Your Dog More Years</strong>&mdash;39 minutes. Loyal for Dogs lifespan extension, ImpriMed cancer treatment crossover to humans, bark translation science vs hype, Praat voice profiling, 5 Pillow diagrams, content-matched stock photography.</p>
+    </section>
+
+    <footer>
+      <a href="index.html">Eric Suen</a> &middot; San Francisco Bay Area
+    </footer>
+
+  </div>
+</body>
+</html>
