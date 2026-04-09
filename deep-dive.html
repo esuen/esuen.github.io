@@ -142,21 +142,22 @@
       <div class="tech-tags">
         <span class="tech-tag">Python</span>
         <span class="tech-tag">Dagster</span>
+        <span class="tech-tag">Playwright</span>
         <span class="tech-tag">OpenAI TTS</span>
         <span class="tech-tag">OpenAI Whisper</span>
+        <span class="tech-tag">GPT-4.1-mini</span>
+        <span class="tech-tag">Pexels API</span>
         <span class="tech-tag">ffmpeg</span>
-        <span class="tech-tag">Pillow</span>
         <span class="tech-tag">Praat</span>
-        <span class="tech-tag">Pydantic</span>
       </div>
       <div class="quick-facts">
-        <span>45-min episodes</span>
+        <span>Multi-platform output</span>
         <span>&middot;</span>
-        <span>Multi-format output</span>
+        <span>One script, multiple lengths</span>
         <span>&middot;</span>
-        <span>Automated test suite</span>
+        <span>16 DAG assets</span>
         <span>&middot;</span>
-        <span>Modular package architecture</span>
+        <span>130+ automated tests</span>
       </div>
     </header>
 
@@ -175,7 +176,7 @@
           <div class="metric-label">Episodes produced</div>
         </div>
         <div class="metric">
-          <div class="metric-value">11</div>
+          <div class="metric-value">16</div>
           <div class="metric-label">DAG assets</div>
         </div>
         <div class="metric">
@@ -252,64 +253,54 @@
         <div class="flow-arrow">&darr;</div>
         <div class="flow-node flow-node-output" style="width: 100%;">
           <div class="flow-node-label">Visuals</div>
-          <div class="flow-node-title">slide_images &rarr; episode_video</div>
-          <div class="flow-node-detail">Progressive slides, diagrams, stock photos, frame-accurate assembly</div>
+          <div class="flow-node-title">visual_plan &rarr; slide_images &rarr; rewritten_slide_text</div>
+          <div class="flow-node-detail">LLM visual plan, HTML slides via Playwright, stock media from Pexels, stat callouts with animated counters, AI title cards</div>
+        </div>
+        <div class="flow-arrow">&darr;</div>
+        <div class="flow-branch">
+          <div class="flow-node flow-node-output">
+            <div class="flow-node-label">Spotify</div>
+            <div class="flow-node-title">Full Audio (32 min)</div>
+            <div class="flow-node-detail">Complete deep dive</div>
+          </div>
+          <div class="flow-node flow-node-output">
+            <div class="flow-node-label">YouTube</div>
+            <div class="flow-node-title">Cut Video (22 min)</div>
+            <div class="flow-node-detail">LLM-trimmed + visuals + music</div>
+          </div>
+          <div class="flow-node flow-node-output">
+            <div class="flow-node-label">Blog</div>
+            <div class="flow-node-title">Article</div>
+            <div class="flow-node-detail">LLM rewrite + diagrams</div>
+          </div>
         </div>
       </div>
 
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 16px;"><strong>Quality checks at each stage:</strong> slide coverage (intro/conclusion tagged), adjacent-block contamination (Whisper), silence padding detection, manifest completeness, content timing verification, visual gap detection, diagram OCR accuracy.</p>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 16px;"><strong>Quality checks (8):</strong> script quality audit (AI anti-patterns, rhythm, contractions), slide coverage, adjacent-block contamination (Whisper), silence padding, manifest completeness, content timing, visual coverage, diagram OCR accuracy.</p>
     </section>
 
     <section>
       <h2>Under the hood</h2>
       <div class="features">
         <div class="feature">
-          <div class="feature-title">Confidence-aware claims</div>
-          <p class="feature-desc">Research tags every claim as [VERIFIED] (2+ sources), [SINGLE SOURCE], or [CLAUDE KNOWLEDGE]. The script automatically hedges low-confidence claims. Verification checks URLs are reachable and flags unsourced numbers. Three-layer verification: research quality, script-vs-research accuracy, and structural quality.</p>
+          <div class="feature-title">DAG-based orchestration with quality gates</div>
+          <p class="feature-desc">16 Dagster software-defined assets with 8 quality checks at each stage. Whisper hallucination detection after voicing, adjacent-block contamination checks, content timing verification after video assembly, script quality audit for AI anti-patterns. Dagster tracks which outputs are stale and provides a web UI for pipeline observability.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Per-line TTS delivery directions</div>
-          <p class="feature-desc">Every line includes a delivery instruction: &ldquo;stunned disbelief, emphasizing SEED&rdquo; or &ldquo;rattling off data with confidence.&rdquo; Generated inline with the script so the writer knows the emotional intent. Baseline voice instruction prevents gender switching.</p>
+          <div class="feature-title">Multi-platform output from one voicing pass</div>
+          <p class="feature-desc">One full script (32 min) is voiced once ($2&ndash;3). An LLM cuts it to 22 min for YouTube by identifying the weakest sections (~$0.004)&mdash;audio spliced at block boundaries, no re-voicing. Spotify gets the full deep dive, YouTube gets a tighter edit optimized for algorithmic distribution. Blog posts and short clips derive from the same source.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Automated diagram generation</div>
-          <p class="feature-desc">Scans the script for technical concepts, generates image prompts, calls OpenAI&rsquo;s image API, OCR-verifies for spelling errors and stray text, and regenerates on failure (up to 3 attempts). Also detects any visual gap &gt;2 minutes and suggests diagrams for it.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Slide-aware line merging</div>
-          <p class="feature-desc">Consecutive lines merge into single TTS calls for natural flow&mdash;but lines tagged as slide candidates stay separate so progressive bullet slides sync precisely to audio. Merging reduces TTS calls by ~50% while preserving visual timing.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Context-aware number normalization</div>
-          <p class="feature-desc">Converts spelled-out numbers to digits while respecting context: &ldquo;one hundred twenty-six&rdquo; &rarr; &ldquo;126&rdquo; but keeps &ldquo;this one is&rdquo; as a word. Handles compound hundreds/thousands. 22 test cases prevent regression of a bug that shipped wrong numbers in two episodes before being caught.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Frame-accurate video assembly + verification</div>
-          <p class="feature-desc">Video built frame-by-frame using PIL&mdash;no segment concatenation (which causes timing drift). After assembly, automated verification extracts frames at the start, middle, and end of every visual segment and compares against the expected image using pixel similarity. Episode 3: 60/60 segments verified correct.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Voice consistency detection</div>
-          <p class="feature-desc">OpenAI TTS switches voice on short utterances because each API call is stateless. Solved with three fixes: pinned model snapshots for deterministic behavior, concise voice instructions (verbose ones cause drift&mdash;confirmed OpenAI bug), and Praat-based acoustic analysis that builds a per-episode voice profile (F0, formants, HNR) and flags blocks deviating on multiple dimensions. Flagged blocks are automatically re-voiced and spliced back at exact timestamps.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Content timing verification</div>
-          <p class="feature-desc">Slides must show when their content is spoken, not just when their block starts. Each slide carries metadata mapping it to keywords in the audio. After video assembly, a verifier checks every slide&rsquo;s timestamp against the durations file&mdash;confirming the audio at that moment matches the slide content. Catches the disclaimer offset bug that shifted all visuals by 11.5 seconds.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">Spoken-to-visual text conversion</div>
-          <p class="feature-desc">TTS scripts spell out numbers (&ldquo;99 point 9 percent&rdquo;) but slides need the visual form (&ldquo;99.9%&rdquo;). A conversion layer handles percentages, currency ($12.5B), data units (2.7 TB), time units (200ms), bit rates (80 Gbps), multipliers (4x), ordinals (#1), and degrees (45&deg;). For lines where spoken text is an analogy (&ldquo;Half a nanosecond to read it&rdquo;), a slide_display field provides the visual override (&ldquo;L1 Cache &mdash; 0.5ns&rdquo;). 33 tests cover the conversion rules.</p>
-        </div>
-        <div class="feature">
-          <div class="feature-title">DAG-based pipeline orchestration</div>
-          <p class="feature-desc">Migrated from a sequential CLI to Dagster software-defined assets. Each pipeline step is an asset with declared dependencies&mdash;Dagster resolves execution order, tracks which outputs are stale when inputs change, and provides a web UI for pipeline observability. Quality checks gate each stage: Whisper hallucination detection after voicing, adjacent-block contamination check, silence padding detection, content timing verification after video assembly, and OCR diagram accuracy.</p>
+          <div class="feature-title">LLM-driven visual planning + rendering</div>
+          <p class="feature-desc">GPT-4.1-mini analyzes the script and plans every visual: bullet slides for data, stock photos/video for narrative gaps (auto-fetched from Pexels), full-screen stat callouts with animated counters for impactful numbers. Slides rendered via Playwright from HTML/CSS templates with section-specific accent colors. An LLM rewrites spoken-form bullets into concise visual text. Total visual automation cost: ~$0.01 per episode.</p>
         </div>
         <div class="feature">
           <div class="feature-title">TTS hallucination prevention</div>
-          <p class="feature-desc">Two-tier detection: duration check (free&mdash;if a block with &lt;15 words generates &gt;1.5x expected duration, flag it) then Whisper verification (transcribe flagged blocks, compare word count, re-voice up to 3 times). A pre-voice transform converts period-separated lists (&ldquo;Servers. Databases. Caches.&rdquo;) to comma format with &ldquo;and&rdquo; before the last item&mdash;preventing TTS from pattern-completing and hallucinating repeated words. Adjacent-block contamination check verifies the next block doesn&rsquo;t start with leaked words from the current block.</p>
+          <p class="feature-desc">Two-tier detection: duration check (free), then Whisper transcription verification (re-voice up to 3 times). A pre-voice transform converts period-separated lists to comma format&mdash;preventing TTS from hallucinating repeated words. Adjacent-block contamination check catches words leaking from one block into the next. Voice consistency profiling via Praat (F0, formants, HNR) detects and fixes gender/timbre switches.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Multi-format output</div>
-          <p class="feature-desc">Same verified research produces multiple formats. Podcast scripts convert to blog posts with comparison tables and embedded diagrams. Social media clips slice from the actual episode audio using duration timestamps. Auto-generated descriptions with exact timestamps for YouTube and Spotify.</p>
+          <div class="feature-title">Script quality enforcement</div>
+          <p class="feature-desc">Automated quality check scans for AI writing anti-patterns: banned phrases, stacking emphasis (&ldquo;not 2x, not 5x, 28x&rdquo;), missing contractions, monotonous rhythm. The scriptwriter prompt encodes data presentation rules: every number needs comparison or analogy, one stat per beat, cold open hook before the intro. Catches the patterns that make AI content feel like AI content.</p>
         </div>
       </div>
     </section>
@@ -333,49 +324,33 @@
     <section>
       <h2>Learnings</h2>
       <p>
-        <strong>Constraints drive better design.</strong> Single host, immutable files, confidence tags&mdash;each constraint initially felt like a limitation but produced a better system.
+        <strong>AI doesn&rsquo;t enforce its own rules.</strong> Instructions say &ldquo;never guess.&rdquo; It guesses anyway&mdash;wrong timestamps, wrong slide content, wrong diagram labels. Adding more instructions didn&rsquo;t help. The fix: encode every rule as a test or pipeline gate. 8 automated quality checks block bad output before it ships. Instructions are suggestions. Code is enforcement.
       </p>
       <p>
-        <strong>Verification matters more than generation.</strong> The project has more verification code (research sourcing, claim checking, pronunciation fixing, voice consistency detection, video timing verification) than generation code. AI-generated content without a trust layer is just automated misinformation.
+        <strong>Verification matters more than generation.</strong> The project has more verification code than generation code. Research sourcing, claim checking, voice consistency detection, visual timing verification, script anti-pattern scanning, adjacent-block contamination checks. AI-generated content without a trust layer is automated misinformation.
       </p>
       <p>
-        <strong>Automate the tedious, review the creative.</strong> Image generation, pronunciation, number normalization, volume leveling&mdash;automate. Script quality, diagram accuracy, content depth&mdash;human review. The pipeline removes you from mechanical tasks but keeps you in for judgment calls.
-      </p>
-      <p>
-        <strong>TTS consistency is an unsolved problem.</strong> OpenAI&rsquo;s TTS is nondeterministic&mdash;no seed parameter, no temperature control. Short utterances like &ldquo;Stop.&rdquo; or &ldquo;Passes.&rdquo; give the model too little context to anchor voice identity, causing gender or timbre switches. Zero-crossing rate pitch detection misses subtle changes. Switching to Praat-based acoustic profiling (fundamental frequency, formants, harmonics-to-noise ratio) catches more, but the real fix was upstream: pin the model snapshot and shorten the voice instruction. Verbose instructions cause the model to drift&mdash;a confirmed OpenAI bug.
-      </p>
-      <p>
-        <strong>Spoken text and visual text are different languages.</strong> TTS needs &ldquo;99 point 9 percent&rdquo; but a slide needs &ldquo;99.9%.&rdquo; Analogies like &ldquo;Half a nanosecond to read it&rdquo; work in audio but mean nothing on screen without the label &ldquo;L1 Cache.&rdquo; The fix was two layers: an automatic converter for mechanical formatting (percentages, units, currency) and a slide_display field on every data line for cases where the spoken form is a narrative the viewer can&rsquo;t parse visually.
-      </p>
-      <p>
-        <strong>Timing bugs compound across layers.</strong> The disclaimer prepended to the audio shifted all visual timestamps by 11.5 seconds. The durations file used raw timestamps, but the video used final timestamps. Progressive slides used hardcoded 4-second intervals instead of slide_candidate block times. Each layer assumed the previous layer&rsquo;s coordinates. The fix: every timestamp flows from one source of truth (the durations file), with the disclaimer offset applied once at video assembly.
-      </p>
-      <p>
-        <strong>AI doesn&rsquo;t enforce its own rules.</strong> Claude&rsquo;s global settings say &ldquo;never guess, never assume.&rdquo; It guessed anyway&mdash;wrong slide timestamps, wrong bullet content, wrong diagram architecture. Adding more instructions didn&rsquo;t help. The fix was encoding rules into pipeline code: automated tests that block bad output, verification steps that compare against source-of-truth data, and pipeline pauses that force human review. Instructions are suggestions. Code is enforcement.
-      </p>
-      <p>
-        <strong>The pipeline is the product.</strong> The podcast episodes are outputs, but the real value is the system: a tool that can research any topic, verify its claims, and convert it to consumable content across multiple formats.
+        <strong>The pipeline is the product.</strong> The episodes are outputs, but the real value is the system: research any topic, verify claims, produce platform-optimized content automatically. One voicing pass produces Spotify audio, YouTube video, and blog posts. The marginal cost of a new episode is $2&ndash;3 TTS + ~$0.05 LLM.
       </p>
     </section>
 
     <section>
       <h2>What&rsquo;s next</h2>
       <p>
-        <strong>Parallel asset execution.</strong> Dagster supports parallelizing independent assets&mdash;voice consistency check, visual generation, and social clips can run simultaneously instead of sequentially.
+        <strong>Auto-generated Mermaid diagrams.</strong> The visual plan identifies where diagrams are needed&mdash;the next step is having the LLM generate Mermaid syntax directly from the description and render it automatically.
       </p>
       <p>
-        <strong>More output formats.</strong> Presentation slides, newsletter, short-form video clips. Same verified research, more surfaces.
+        <strong>Short-form clips.</strong> LLM identifies the best 60-second segments from each episode, extracts them with matching visuals for YouTube Shorts and TikTok.
       </p>
     </section>
 
     <section>
       <h2>Project structure</h2>
-<pre>dagster_pipeline/   DAG-based orchestration, assets, quality checks, resources
+<pre>dagster_pipeline/   16 DAG assets, 8 quality checks, multi-output config
 research/           Research prompts, source verification, claim cross-referencing
 content/podcast/    Script generation, normalization, TTS voicing, voice consistency
-content/blog/       Research-to-blog conversion
-visuals/            Diagrams, progressive slides, video assembly, content verification
-social/             Clips, timestamps, descriptions
+visuals/            HTML slides, stat callouts, stock media, thumbnails, video builder
+visuals/templates/  HTML/CSS templates for Playwright rendering
 tests/              130+ tests: pipeline, normalize, merge, pronunciation, slides, timing</pre>
     </section>
 
@@ -391,7 +366,7 @@ tests/              130+ tests: pipeline, normalize, merge, pronunciation, slide
       <p><strong>How LLM Inference Actually Works</strong> <span style="font-size: 0.8rem; color: var(--text-tertiary);">(early pipeline)</span>&mdash;Tokenization through economics. The 300x cost collapse.</p>
       <p><strong>How Netflix, Uber, and YouTube Handle Scale</strong>&mdash;Real architectures: 1,000+ microservices, hexagonal geospatial indexing, custom transcoding ASICs. Full visual pipeline with 13 diagrams and progressive comparison slides. Also published as a <a href="blog/how-netflix-uber-youtube-handle-scale.html" style="color: var(--accent); text-decoration: none;">blog post</a>.</p>
       <p><strong>System Design Interview: What Interviewers Look For</strong>&mdash;47 minutes. HelloInterview framework, level expectations, back-of-envelope numbers. 25 content-verified slide sets, 6 Pillow-generated architecture diagrams.</p>
-      <p><strong>AI and Dogs: The Technology That Could Give Your Dog More Years</strong>&mdash;39 minutes. Loyal for Dogs lifespan extension, ImpriMed cancer treatment crossover to humans, bark translation science vs hype, Praat voice profiling, 5 Pillow diagrams, content-matched stock photography.</p>
+      <p><strong>The Science That Could Give Your Dog More Years</strong>&mdash;39 minutes. Loyal for Dogs lifespan extension, ImpriMed cancer treatment crossover to humans, bark translation science vs hype. HTML-rendered slides with section colors, stock video clips, animated stat callouts, AI-generated thumbnail.</p>
     </section>
 
     <footer>
