@@ -15,50 +15,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
   <style>
-    :root {
-      --text: #1a1a1a;
-      --text-secondary: #555;
-      --text-tertiary: #888;
-      --accent: #2563eb;
-      --border: #e5e5e5;
-      --bg: #fafafa;
-    }
+    .container { max-width: 680px; }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text);
-      background: var(--bg);
-      line-height: 1.7;
-      font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .container {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 80px 24px 60px;
-    }
-
-    /* Header */
-    header {
-      margin-bottom: 56px;
-    }
-
-    h1 {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 2.25rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-      margin-bottom: 16px;
-    }
+    h1 { margin-bottom: 16px; }
 
     .tagline {
       font-size: 0.95rem;
@@ -79,38 +40,23 @@
       transition: color 0.15s;
     }
 
-    .links a:hover {
-      color: var(--accent);
-    }
+    .links a:hover { color: var(--accent); }
 
     .links .separator {
       color: var(--border);
       user-select: none;
     }
 
-    /* Sections */
-    section {
-      margin-bottom: 48px;
-    }
+    section { margin-bottom: 48px; }
 
     h2 {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 1.35rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
       margin-bottom: 20px;
       padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
 
-    /* Projects */
-    .project {
-      margin-bottom: 24px;
-    }
-
-    .project:last-child {
-      margin-bottom: 0;
-    }
+    .project { margin-bottom: 24px; }
+    .project:last-child { margin-bottom: 0; }
 
     .project-header {
       display: flex;
@@ -121,15 +67,9 @@
       margin-bottom: 2px;
     }
 
-    .project-name {
-      font-weight: 600;
-      font-size: 1rem;
-    }
+    .project-name { font-weight: 600; font-size: 1rem; }
 
-    .project-tech {
-      font-size: 0.85rem;
-      color: var(--text-tertiary);
-    }
+    .project-tech { font-size: 0.85rem; color: var(--text-tertiary); }
 
     .project-description {
       font-size: 0.95rem;
@@ -137,30 +77,11 @@
       line-height: 1.7;
     }
 
-    /* Footer */
-    footer {
-      margin-top: 48px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-      font-size: 0.8rem;
-      color: var(--text-tertiary);
-    }
-
-    /* Responsive */
     @media (max-width: 600px) {
-      .container {
-        padding: 48px 20px 40px;
-      }
-
-      h1 {
-        font-size: 1.75rem;
-      }
-
       .project-header {
         flex-direction: column;
         gap: 0;
       }
-
     }
   </style>
 </head>
@@ -177,8 +98,6 @@
         <a href="https://linkedin.com/in/sueneric" target="_blank" rel="noopener">LinkedIn</a>
         <span class="separator">/</span>
         <a href="https://github.com/esuen" target="_blank" rel="noopener">GitHub</a>
-        <span class="separator">/</span>
-        <a href="blog/">Blog</a>
       </div>
     </header>
 
