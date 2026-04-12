@@ -145,7 +145,7 @@
         <span class="tech-tag">Playwright</span>
         <span class="tech-tag">OpenAI TTS</span>
         <span class="tech-tag">OpenAI Whisper</span>
-        <span class="tech-tag">GPT-4.1-mini</span>
+        <span class="tech-tag">Manim</span>
         <span class="tech-tag">Pexels API</span>
         <span class="tech-tag">ffmpeg</span>
         <span class="tech-tag">Praat</span>
@@ -157,7 +157,7 @@
         <span>&middot;</span>
         <span>16 DAG assets</span>
         <span>&middot;</span>
-        <span>130+ automated tests</span>
+        <span>980+ automated tests</span>
       </div>
     </header>
 
@@ -172,8 +172,8 @@
 
       <div class="metrics">
         <div class="metric">
-          <div class="metric-value">5</div>
-          <div class="metric-label">Episodes produced</div>
+          <div class="metric-value">10</div>
+          <div class="metric-label">Episodes published</div>
         </div>
         <div class="metric">
           <div class="metric-value">16</div>
@@ -184,7 +184,7 @@
           <div class="metric-label">Quality checks</div>
         </div>
         <div class="metric">
-          <div class="metric-value">130+</div>
+          <div class="metric-value">980+</div>
           <div class="metric-label">Automated tests</div>
         </div>
       </div>
@@ -254,7 +254,7 @@
         <div class="flow-node flow-node-output" style="width: 100%;">
           <div class="flow-node-label">Visuals</div>
           <div class="flow-node-title">visual_plan &rarr; slide_images &rarr; rewritten_slide_text</div>
-          <div class="flow-node-detail">LLM visual plan, HTML slides via Playwright, stock media from Pexels, stat callouts with animated counters, AI title cards</div>
+          <div class="flow-node-detail">24 Manim animated visuals, word-level narration sync, stock media from Pexels, stat callouts, AI title cards</div>
         </div>
         <div class="flow-arrow">&darr;</div>
         <div class="flow-branch">
@@ -291,8 +291,8 @@
           <p class="feature-desc">One full script (32 min) is voiced once ($2&ndash;3). An LLM cuts it to 22 min for YouTube by identifying the weakest sections (~$0.004)&mdash;audio spliced at block boundaries, no re-voicing. Spotify gets the full deep dive, YouTube gets a tighter edit optimized for algorithmic distribution. Blog posts and short clips derive from the same source.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">LLM-driven visual planning + rendering</div>
-          <p class="feature-desc">GPT-4.1-mini analyzes the script and plans every visual: bullet slides for data, stock photos/video for narrative gaps (auto-fetched from Pexels), full-screen stat callouts with animated counters for impactful numbers. Slides rendered via Playwright from HTML/CSS templates with section-specific accent colors. An LLM rewrites spoken-form bullets into concise visual text. Total visual automation cost: ~$0.01 per episode.</p>
+          <div class="feature-title">Narration-synced animated visuals</div>
+          <p class="feature-desc">24 Manim animated visuals per episode, synced to the exact word being spoken via Whisper word-level timestamps. Animations trigger on specific narration words&mdash;a map zooms out when the host says &ldquo;geographically,&rdquo; ship icons appear on &ldquo;ships,&rdquo; a stat card flashes on the key number. Script-line-aware matching prevents common-word false triggers. Drift compensation handles untracked camera animations. Templates: GridDashboard, PriceLine, ScaleComparison, MapScene (with matplotlib backgrounds), TypewriterQuote.</p>
         </div>
         <div class="feature">
           <div class="feature-title">TTS hallucination prevention</div>
@@ -337,10 +337,10 @@
     <section>
       <h2>What&rsquo;s next</h2>
       <p>
-        <strong>Auto-generated Mermaid diagrams.</strong> The visual plan identifies where diagrams are needed&mdash;the next step is having the LLM generate Mermaid syntax directly from the description and render it automatically.
+        <strong>Multi-agent research.</strong> Parallel sub-agents research different angles (economic, technical, geopolitical, human impact) simultaneously, producing deeper coverage per topic. Quality metrics track claim density and source diversity across episodes.
       </p>
       <p>
-        <strong>Short-form clips.</strong> LLM identifies the best 60-second segments from each episode, extracts them with matching visuals for YouTube Shorts and TikTok.
+        <strong>Short-form clips.</strong> Automated vertical crop of Manim visuals + audio segments for YouTube Shorts and TikTok. Infrastructure built, needs per-visual optimization for 9:16 framing.
       </p>
     </section>
 
@@ -351,13 +351,18 @@ research/           Research prompts, source verification, claim cross-referenci
 content/podcast/    Script generation, normalization, TTS voicing, voice consistency
 visuals/            HTML slides, stat callouts, stock media, thumbnails, video builder
 visuals/templates/  HTML/CSS templates for Playwright rendering
-tests/              130+ tests: pipeline, normalize, merge, pronunciation, slides, timing</pre>
+tests/              980+ tests: pipeline, normalize, merge, pronunciation, timing, visual QA</pre>
     </section>
 
     <section>
       <h2>Episodes</h2>
-      <p><strong>How AI Agents Actually Work</strong> &mdash; 24 minutes. The agent loop, tool calling, MCP protocol, compounding error math, enterprise adoption reality. 5 animated Manim diagrams with per-node highlights synced to narration, stat callouts with animated counters, section-colored HTML slides.</p>
-      <p><strong>Behavioral Interviews: What Big Tech Actually Evaluates</strong> &mdash; 22 minutes. Amazon, Google, Netflix, Meta, Apple, Anthropic, OpenAI. CARL framework, strong vs weak answer examples, scoring rubrics, the 80% inconsistency finding. Built as audio-only podcast.</p>
+      <p><strong>Claude Mythos: The AI That Breaks Everything</strong> &mdash; 15 min. $50 to find a 27-year-old vulnerability. Cybench 100%. The first AI model gated for national security reasons.</p>
+      <p><strong>The Strait of Hormuz: The World&rsquo;s Most Dangerous Chokepoint</strong> &mdash; 17 min. 24 animated Manim visuals with camera zoom, ship animations, word-level narration sync. Geographic maps with pixel-verified water routes.</p>
+      <p><strong>Why the Fed Summoned Wall Street&rsquo;s CEOs Over an AI Model</strong> &mdash; 36 min. The Mythos sequel. Bangladesh Bank heist, COBOL crisis, cyber insurance gap.</p>
+      <p><strong>How AI Agents Actually Work</strong> &mdash; 24 min. The agent loop, tool calling, MCP protocol, compounding error math.</p>
+      <p><strong>How LLM Inference Actually Works</strong> &mdash; 45 min. From tokenization to wafer-scale engines. KV cache, attention, quantization, speculative decoding.</p>
+      <p><strong>How Netflix, Uber, and YouTube Handle Scale</strong> &mdash; 44 min. Chaos Monkey, hexagonal geospatial indexing, VP9 transcoding, consistent hashing.</p>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Plus: System Design Interviews, Behavioral Interviews, AI in the Physical World, Dog Science.</p>
     </section>
 
     <footer>
