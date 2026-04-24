@@ -273,7 +273,7 @@
     <header>
       <div class="project-label">Deep Dive</div>
       <h1>RL Training Pipeline</h1>
-      <p class="subtitle">How neural network bots learn to fight through billions of simulated rounds, with automated evaluation and reward shaping that adapts between training phases.</p>
+      <p class="subtitle">How neural network bots learn to fight through billions of simulated rounds&mdash;from a critical bug fix to ship-specific abilities, with surprises at every stage.</p>
     </header>
 
     <section>
@@ -285,7 +285,7 @@
       <div class="pipeline">
         <div class="pipeline-step">
           <div class="pipeline-step-label">Train</div>
-          <div class="pipeline-step-desc">GPU, 2-7 hrs</div>
+          <div class="pipeline-step-desc">GPU, 7&ndash;44 hrs</div>
         </div>
         <div class="pipeline-arrow">&rarr;</div>
         <div class="pipeline-step">
@@ -320,7 +320,7 @@
           <div class="metric-label">Steps/sec (GPU)</div>
         </div>
         <div class="metric">
-          <div class="metric-value">23</div>
+          <div class="metric-value">44</div>
           <div class="metric-label">Training phases</div>
         </div>
         <div class="metric">
@@ -333,7 +333,7 @@
     <section>
       <h2>The simulation</h2>
       <p>
-        Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 4,096 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and all 9 combat abilities.
+        Training happens in a custom JAX physics simulation that mirrors the C++ game engine. 4,096 arenas run in parallel on a single GPU, each simulating complete combat with Newtonian physics, projectile collision, energy management, and up to 17 combat abilities (14 base + 3 ship-specific).
       </p>
       <p>
         The simulation must match the game exactly or the trained model won't transfer. 31 cross-check tests verify parity: thrust values, wall bouncing, bullet damage, bomb splash radius, mine proximity triggers, ship-specific stats, ability mechanics. When a value changes in C++, the same change must be made in Python. 189 behavior tests and 86 visual tests verify the UE5 side.
@@ -357,7 +357,8 @@
         </tbody>
       </table>
 
-      <h3>Action space (14 discrete actions, 40 logits)</h3>
+      <h3>Action space (14&ndash;17 discrete actions, 40&ndash;46 logits)</h3>
+      <p>The base "team" preset has 14 actions (40 logits). Ship-specific presets add 1&ndash;3 extra binary actions for unique abilities:</p>
       <table>
         <thead><tr><th>Action</th><th>Bins</th><th>What it controls</th></tr></thead>
         <tbody>
@@ -395,7 +396,7 @@
           <tr>
             <td><strong>Fast MIRV</strong> (8 missiles instantly, no 1&rarr;2&rarr;4&rarr;8 cascade)</td>
             <td>Bot won't learn split timing or wall-bounce-then-split tactics.</td>
-            <td>Phase 25 hit 79% WR with fast MIRV. If timing matters for higher-skill play, we remove the flag and retrain.</td>
+            <td>Phase 38 hit 95% WR with fast MIRV. If timing matters for higher-skill play, we remove the flag and retrain.</td>
           </tr>
           <tr>
             <td><strong>Fixed observation window</strong> (5 enemies, 5 bullets, 2 pickups)</td>
@@ -409,8 +410,8 @@
           </tr>
           <tr>
             <td><strong>Single frozen opponent</strong> per training phase</td>
-            <td>Overspecialization. Phase 14 proved this&mdash;one strong opponent collapsed win rate to 31%.</td>
-            <td>Rotating opponents manually between phases. Automated opponent pool is the planned fix.</td>
+            <td>Overspecialization. Phases 14, 36, 39 all regressed from equal-strength opponents.</td>
+            <td>Self-play works once against a clearly weaker opponent (Phase 35 recipe). Multi-opponent rollout code exists but only uses <code>frozen_pool[0]</code>&mdash;fix pending.</td>
           </tr>
         </tbody>
       </table>
@@ -437,7 +438,7 @@
       </table>
 
       <div class="callout">
-        <p><strong>Key insight:</strong> The reward function is a hypothesis. Each coefficient is a bet about what behavior matters. The eval pipeline tests the hypothesis and recommends adjustments. "Changed X because eval showed Y, expect Z" is the discipline that prevents random tuning.</p>
+        <p><strong>Key insight:</strong> The best model (Phase 38) uses <em>none</em> of the shaping rewards. Pure kill/death + zone reward (0.3/step for KOTH) outperformed every shaped variant. The 9 coefficients above were useful for early exploration but the LR bug fix (Phase 32) eliminated the need for them&mdash;a properly trained optimizer finds aggressive play on its own.</p>
       </div>
     </section>
 
@@ -491,7 +492,7 @@
         Each training phase follows a strict methodology: form a hypothesis ("increasing engage reward will fix passive play"), change one variable, train 2B steps, evaluate against multiple baselines (random, previous generations, best model), and diagnose using 40+ metrics&mdash;not just win rate. If the hypothesis was wrong, the metrics tell you <em>why</em>: was it passive play (high timeouts, low damage), overspecialization (beats one opponent, loses to random), or a reward imbalance (one ability dominates)?
       </p>
       <p>
-        28 phases, each building on the previous. The table below is an experiment log, not a changelog.
+        44 phases, each building on the previous. The table below is an experiment log, not a changelog.
       </p>
 
       <table>
@@ -505,20 +506,29 @@
           <tr><td>25</td><td class="up">79%</td><td>Updated sim, 18 abilities, --fast-mirv</td><td><strong>New best.</strong> But plays passively (31% timeouts), regressed vs Phase 13.</td></tr>
           <tr><td>26</td><td class="neutral">79%</td><td>Engage reward 1.5, self-play vs Phase 13</td><td><strong>Null result.</strong> Every metric identical to Phase 25.</td></tr>
           <tr><td>27</td><td class="neutral">79%</td><td>Ablation: 9 coefficients removed, 500M steps each</td><td><strong>All identical.</strong> Converged policy can't be shifted by fine-tuning.</td></tr>
-          <tr><td>28</td><td>&mdash;</td><td>From scratch, minimal reward (kill/death/damage only)</td><td><em>In progress.</em> Tests if shaping causes passivity.</td></tr>
+          <tr><td>28&ndash;31</td><td>&mdash;</td><td>Various from-scratch experiments</td><td><strong>All invalidated.</strong> LR schedule bug discovered&mdash;see below.</td></tr>
+          <tr style="border-top: 3px solid var(--accent);"><td colspan="4" style="text-align: center; font-size: 0.8rem; color: var(--accent); padding: 6px; font-weight: 600;">LR BUG FIX &mdash; ALL PHASES BELOW USE CORRECT LR SCHEDULE</td></tr>
+          <tr><td>32</td><td class="up">94%</td><td>Fresh start, pure kill/death reward, fixed LR</td><td><strong>First real training.</strong> More improvement in 7h than 31 prior phases.</td></tr>
+          <tr><td>33</td><td class="up">94%</td><td>Warm-start P32 +2B steps</td><td>Broken arena curriculum acted as accidental regularizer&mdash;beat P32 62% H2H.</td></tr>
+          <tr><td>35</td><td class="up">96%</td><td>Self-play vs P32 at 30% mix</td><td><strong>New best FFA.</strong> 76.8% vs Phase 13. Self-play recipe validated.</td></tr>
+          <tr><td>36</td><td class="down">96%</td><td>Self-play vs P33 (equal strength)</td><td><strong>Regression.</strong> Equal-strength opponent causes overspecialization.</td></tr>
+          <tr><td>38</td><td class="up">95%</td><td>KOTH zone reward (0.3/step), 6 ships</td><td><strong>Best overall.</strong> 99.6% 6-ship. Zone reward = engagement regularizer.</td></tr>
+          <tr><td>41</td><td class="neutral">86%</td><td>Viper + FocusFire (fresh, new action space)</td><td>Ship-specific ability learned (344 uses/match). Fresh start gap vs P38.</td></tr>
+          <tr><td>43</td><td class="neutral">82%</td><td>Lurker + MineDash (fresh, new action space)</td><td>99.4% in 6-ship despite 4.3M training kills. MineDash used strategically.</td></tr>
+          <tr><td>44</td><td>&mdash;</td><td>Tempest + ShrapnelBurst (fresh)</td><td><em>Training.</em></td></tr>
         </tbody>
       </table>
 
       <!-- Win Rate Progression Chart -->
       <div style="margin: 32px 0;">
-        <h3 style="margin-bottom: 16px;">Win rate across training phases</h3>
-        <svg viewBox="0 0 700 280" style="width:100%;max-width:700px;font-family:'Inter',sans-serif;">
+        <h3 style="margin-bottom: 16px;">Win rate across training phases (vs random, 4-ship FFA)</h3>
+        <svg viewBox="0 0 940 280" style="width:100%;max-width:940px;font-family:'Inter',sans-serif;">
           <!-- Grid lines -->
           <line x1="50" y1="20" x2="50" y2="240" stroke="#e5e5e5" stroke-width="1"/>
-          <line x1="50" y1="240" x2="680" y2="240" stroke="#e5e5e5" stroke-width="1"/>
-          <line x1="50" y1="200" x2="680" y2="200" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
-          <line x1="50" y1="140" x2="680" y2="140" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
-          <line x1="50" y1="80" x2="680" y2="80" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="50" y1="240" x2="910" y2="240" stroke="#e5e5e5" stroke-width="1"/>
+          <line x1="50" y1="200" x2="910" y2="200" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="50" y1="140" x2="910" y2="140" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
+          <line x1="50" y1="80" x2="910" y2="80" stroke="#e5e5e5" stroke-width="0.5" stroke-dasharray="2,4"/>
           <!-- Y-axis labels -->
           <text x="44" y="244" text-anchor="end" font-size="11" fill="#888">0%</text>
           <text x="44" y="204" text-anchor="end" font-size="11" fill="#888">25%</text>
@@ -526,61 +536,89 @@
           <text x="44" y="84" text-anchor="end" font-size="11" fill="#888">75%</text>
           <text x="44" y="24" text-anchor="end" font-size="11" fill="#888">100%</text>
           <!-- 25% random baseline -->
-          <line x1="50" y1="180" x2="680" y2="180" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
-          <text x="684" y="184" font-size="10" fill="#d97706">random baseline</text>
-          <!-- Data line (phases 11-25) -->
+          <line x1="50" y1="180" x2="910" y2="180" stroke="#d97706" stroke-width="1.5" stroke-dasharray="6,4" opacity="0.6"/>
+          <text x="914" y="184" font-size="10" fill="#d97706">random</text>
+
+          <!-- === PRE-FIX ERA (Phases 11-25, all trained with LR≈0) === -->
           <polyline fill="none" stroke="#2563eb" stroke-width="2" stroke-linejoin="round"
-            points="50,139.2 98.5,124.8 147,96 195.5,165.6 244,156 292.5,163.2 341,148.8 389.5,136.8 438,136.8 486.5,132 535,151.2 583.5,64.8 632,62.4 680,50.4"/>
-          <!-- Data points with color coding -->
-          <!-- Phase 11: 42% (baseline) -->
-          <circle cx="50" cy="139.2" r="4" fill="#888"/>
-          <text x="50" y="155" text-anchor="middle" font-size="9" fill="#888">11</text>
-          <!-- Phase 12: 48% (up) -->
-          <circle cx="98.5" cy="124.8" r="4" fill="#16a34a"/>
-          <text x="98.5" y="155" text-anchor="middle" font-size="9" fill="#888">12</text>
-          <!-- Phase 13: 60% (up - breakthrough) -->
-          <circle cx="147" cy="96" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
-          <text x="147" y="88" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">60%</text>
-          <text x="147" y="155" text-anchor="middle" font-size="9" fill="#888">13</text>
-          <!-- Phase 14: 31% (down - regression) -->
-          <circle cx="195.5" cy="165.6" r="4" fill="#dc2626"/>
-          <text x="195.5" y="155" text-anchor="middle" font-size="9" fill="#888">14</text>
-          <!-- Phase 15: 35% -->
-          <circle cx="244" cy="156" r="3" fill="#dc2626"/>
-          <!-- Phase 16: 32% -->
-          <circle cx="292.5" cy="163.2" r="3" fill="#dc2626"/>
-          <!-- Phase 18: 38% -->
-          <circle cx="341" cy="148.8" r="3" fill="#dc2626"/>
-          <!-- Phase 19: 43% -->
-          <circle cx="389.5" cy="136.8" r="3" fill="#888"/>
-          <!-- Phase 20: 43% -->
-          <circle cx="438" cy="136.8" r="3" fill="#888"/>
-          <text x="438" y="155" text-anchor="middle" font-size="9" fill="#888">20</text>
-          <!-- Phase 21: 45% -->
-          <circle cx="486.5" cy="132" r="3" fill="#dc2626"/>
-          <!-- Phase 22: 37% -->
-          <circle cx="535" cy="151.2" r="3" fill="#dc2626"/>
-          <text x="535" y="155" text-anchor="middle" font-size="9" fill="#888">22</text>
-          <!-- Phase 23: 73% (FFA breakthrough) -->
-          <circle cx="583.5" cy="64.8" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
-          <text x="583.5" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">73%</text>
-          <text x="583.5" y="155" text-anchor="middle" font-size="9" fill="#888">23</text>
-          <!-- Phase 24: 74% -->
-          <circle cx="632" cy="62.4" r="3" fill="#888"/>
-          <!-- Phase 25: 79% (new best) -->
-          <circle cx="680" cy="50.4" r="5" fill="#2563eb" stroke="#2563eb" stroke-width="2"/>
-          <text x="680" y="42" text-anchor="middle" font-size="10" font-weight="600" fill="#2563eb">79%</text>
-          <text x="680" y="155" text-anchor="middle" font-size="9" fill="#888">25</text>
-          <!-- Annotations -->
-          <text x="365" y="172" text-anchor="middle" font-size="10" fill="#dc2626" font-style="italic">self-play regression</text>
-          <text x="583.5" y="76" text-anchor="middle" font-size="9" fill="#555">FFA pivot</text>
+            points="50,139.2 82,124.8 114,96 146,165.6 178,156 210,163.2 242,148.8 274,136.8 306,136.8 338,132 370,151.2 402,64.8 434,62.4 466,50.4"/>
+          <!-- Phase 11: 42% -->
+          <circle cx="50" cy="139.2" r="3" fill="#888"/>
+          <text x="50" y="255" text-anchor="middle" font-size="9" fill="#888">11</text>
+          <!-- Phase 12: 48% -->
+          <circle cx="82" cy="124.8" r="3" fill="#16a34a"/>
+          <!-- Phase 13: 60% (breakthrough) -->
+          <circle cx="114" cy="96" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="114" y="88" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">60%</text>
+          <text x="114" y="255" text-anchor="middle" font-size="9" fill="#888">13</text>
+          <!-- Phases 14-22: self-play regression -->
+          <circle cx="146" cy="165.6" r="3" fill="#dc2626"/>
+          <circle cx="178" cy="156" r="3" fill="#dc2626"/>
+          <circle cx="210" cy="163.2" r="3" fill="#dc2626"/>
+          <circle cx="242" cy="148.8" r="3" fill="#dc2626"/>
+          <circle cx="274" cy="136.8" r="3" fill="#888"/>
+          <circle cx="306" cy="136.8" r="3" fill="#888"/>
+          <text x="306" y="255" text-anchor="middle" font-size="9" fill="#888">20</text>
+          <circle cx="338" cy="132" r="3" fill="#dc2626"/>
+          <circle cx="370" cy="151.2" r="3" fill="#dc2626"/>
+          <!-- Phase 23: 73% (FFA pivot) -->
+          <circle cx="402" cy="64.8" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="402" y="56" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">73%</text>
+          <text x="402" y="255" text-anchor="middle" font-size="9" fill="#888">23</text>
+          <!-- Phase 25: 79% -->
+          <circle cx="434" cy="62.4" r="3" fill="#888"/>
+          <circle cx="466" cy="50.4" r="4" fill="#2563eb"/>
+          <text x="466" y="42" text-anchor="middle" font-size="10" font-weight="600" fill="#2563eb">79%</text>
+          <text x="466" y="255" text-anchor="middle" font-size="9" fill="#888">25</text>
+
+          <!-- Annotations (pre-fix) -->
+          <text x="260" y="172" text-anchor="middle" font-size="9" fill="#dc2626" font-style="italic">self-play regression</text>
+          <text x="402" y="76" text-anchor="middle" font-size="8" fill="#555">FFA pivot</text>
+
+          <!-- === GAP: Phases 26-31 invalidated === -->
+          <rect x="490" y="20" width="100" height="220" fill="#f5f5f5" opacity="0.7" rx="4"/>
+          <text x="540" y="135" text-anchor="middle" font-size="10" fill="#999" font-style="italic">LR=0 bug</text>
+          <text x="540" y="148" text-anchor="middle" font-size="9" fill="#bbb">phases 26&ndash;31</text>
+          <text x="540" y="161" text-anchor="middle" font-size="9" fill="#bbb">invalidated</text>
+
+          <!-- === POST-FIX ERA (Phases 32-44, proper LR schedule) === -->
+          <!-- Phase 32: 94.4% — y = 240 - 0.944*220 = 32.3 -->
+          <circle cx="620" cy="32.3" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="620" y="24" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">94%</text>
+          <text x="620" y="255" text-anchor="middle" font-size="9" fill="#888">32</text>
+          <!-- Phase 35: 96.2% — y = 28.4 -->
+          <circle cx="680" cy="28.4" r="5" fill="#16a34a" stroke="#16a34a" stroke-width="2"/>
+          <text x="680" y="20" text-anchor="middle" font-size="10" font-weight="600" fill="#16a34a">96%</text>
+          <text x="680" y="255" text-anchor="middle" font-size="9" fill="#888">35</text>
+          <!-- Phase 38: 95.2% (KOTH) — y = 30.6 -->
+          <circle cx="740" cy="30.6" r="6" fill="#7c3aed" stroke="#7c3aed" stroke-width="2"/>
+          <text x="740" y="22" text-anchor="middle" font-size="10" font-weight="600" fill="#7c3aed">95%</text>
+          <text x="740" y="255" text-anchor="middle" font-size="9" fill="#888">38</text>
+          <!-- Phase 41: 85.8% (Viper) — y = 51.2 -->
+          <circle cx="800" cy="51.2" r="4" fill="#f59e0b"/>
+          <text x="800" y="44" text-anchor="middle" font-size="9" fill="#f59e0b">86%</text>
+          <text x="800" y="255" text-anchor="middle" font-size="9" fill="#888">41</text>
+          <!-- Phase 43: 82.0% (Lurker) — y = 59.6 -->
+          <circle cx="860" cy="59.6" r="4" fill="#f59e0b"/>
+          <text x="860" y="52" text-anchor="middle" font-size="9" fill="#f59e0b">82%</text>
+          <text x="860" y="255" text-anchor="middle" font-size="9" fill="#888">43</text>
+
+          <!-- Post-fix data line -->
+          <polyline fill="none" stroke="#16a34a" stroke-width="2" stroke-linejoin="round"
+            points="620,32.3 680,28.4 740,30.6 800,51.2 860,59.6"/>
+
+          <!-- Post-fix annotations -->
+          <text x="650" y="46" text-anchor="middle" font-size="8" fill="#555">LR fix</text>
+          <text x="740" y="42" text-anchor="middle" font-size="8" fill="#7c3aed">KOTH</text>
+          <text x="830" y="70" text-anchor="middle" font-size="8" fill="#f59e0b" font-style="italic">ship-specific (new action space)</text>
+
           <!-- X-axis label -->
-          <text x="365" y="270" text-anchor="middle" font-size="11" fill="#888">Training Phase</text>
+          <text x="480" y="270" text-anchor="middle" font-size="11" fill="#888">Training Phase</text>
         </svg>
       </div>
 
       <div class="callout callout-success" style="border-left: 3px solid #22c55e; background: rgba(34, 197, 94, 0.05); padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
-        <p><strong>Phase 25 best model:</strong> Fine-tuning Phase 23 with updated sim mechanics (linked bullets, Choir abilities, MIRV splitting, repulsor projectile push) produced 79.4% WR in 4-player FFA (25% is random baseline). The model uses all 18 abilities in the team action preset &mdash; including rocket, stealth, burst, warp, portal, and faction-specific specials &mdash; compared to 7 abilities in the best duel model. However, the model plays passively (31% timeouts) and regressed against Phase 13's aggressive duel style.</p>
+        <p><strong>Phase 38 best model (post-LR fix):</strong> KOTH training with zone reward (0.3/step) warm-started from Phase 35 produced 95.2% WR in 4-ship FFA, 99.6% in 6-ship, and 73.4% vs Phase 35 head-to-head. The zone reward acted as an engagement regularizer&mdash;pulling ships toward center forced more combat, producing a stronger fighter than direct FFA training. Ship-specific models (Viper, Lurker) achieve 97&ndash;99% in 6-ship with their unique abilities.</p>
       </div>
 
       <!-- Phase 25 Ability Usage Chart -->
@@ -649,8 +687,68 @@
       </div>
 
       <div class="callout callout-warning">
-        <p><strong>Converged policies are stuck (Phases 26&ndash;27).</strong> Increasing engagement reward, adding self-play opponents, and ablating all 9 reward coefficients individually&mdash;none of it shifted the Phase 25 model. Every metric stayed identical. Fine-tuning a converged checkpoint can't escape a local minimum. Phase 28 tests training from scratch with minimal reward to find a different attractor.</p>
+        <p><strong>Converged policies are stuck (Phases 26&ndash;27).</strong> Increasing engagement reward, adding self-play opponents, and ablating all 9 reward coefficients individually&mdash;none of it shifted the Phase 25 model. Every metric stayed identical. Fine-tuning a converged checkpoint can't escape a local minimum.</p>
       </div>
+
+      <h3>The LR bug (Phases 28&ndash;31 invalidated)</h3>
+      <p>
+        Phase 28 ran from scratch with minimal reward. Results looked promising. Then a code review revealed the learning rate schedule was counting <em>minibatch steps</em> instead of <em>PPO updates</em>&mdash;the LR decayed to zero after less than one real update. Every model from Phase 1 through Phase 31 had trained with LR&asymp;0 for 99%+ of compute. Phase 25's "79% WR" came from less than half a gradient step of actual learning.
+      </p>
+      <p>
+        The fix was one line in the optimizer setup. Phase 32 REDO&mdash;the first properly trained model&mdash;hit 94.4% vs random in a single 2B-step run. More improvement in 7 hours than the previous 31 phases combined.
+      </p>
+
+      <h3>Self-play works, once (Phases 33&ndash;37)</h3>
+      <p>
+        Phase 35 warm-started from Phase 33 with Phase 32 as a frozen opponent at 30% mix. Result: 96.2% vs random, 76.8% vs Phase 13&mdash;new best across all benchmarks. But the recipe has strict constraints:
+      </p>
+      <div class="callout callout-warning">
+        <p><strong>Opponent must be clearly weaker.</strong> Phase 36 used Phase 33 (roughly equal strength) as opponent. Universal regression&mdash;every benchmark dropped. Phase 37 repeated Phase 35's recipe from Phase 35 itself. Plateau&mdash;identical results. Self-play against an equal or same-strength opponent causes overspecialization. Against a weaker one (Phase 35 beat Phase 32 66%), it works exactly once.</p>
+      </div>
+
+      <h3>Zone reward as engagement regularizer (Phase 38)</h3>
+      <p>
+        KOTH training added a per-step zone reward (0.3, vs kill reward of 1.0) pulling ships toward the map center. The intended effect was zone-seeking behavior. The actual effect was stronger: the KOTH model beat the best FFA model 73.4% head-to-head in pure FFA combat. Zone reward forced more engagements (ships near center fight more often), producing richer gradient signal. The best combat model came from training for an objective other than combat.
+      </p>
+
+      <h3>Ship-specific abilities (Phases 41&ndash;44)</h3>
+      <p>
+        Each ship archetype gets a unique ability added to the sim and action space. The model trains from scratch with the expanded preset and learns when to use the ability alongside the 14 base combat actions.
+      </p>
+      <div style="margin: 16px 0;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
+          <tr style="border-bottom: 2px solid var(--border);">
+            <th style="text-align: left; padding: 8px;">Ship</th>
+            <th style="text-align: left; padding: 8px;">Ability</th>
+            <th style="text-align: left; padding: 8px;">Mechanic</th>
+            <th style="text-align: right; padding: 8px;">6-ship WR</th>
+            <th style="text-align: right; padding: 8px;">Usage/match</th>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;">Viper</td>
+            <td style="padding: 8px;">FocusFire</td>
+            <td style="padding: 8px;">+25% bullet dmg, +50% speed for 4s</td>
+            <td style="text-align: right; padding: 8px;">97.2%</td>
+            <td style="text-align: right; padding: 8px;">344</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;">Lurker</td>
+            <td style="padding: 8px;">MineDash</td>
+            <td style="padding: 8px;">Dash 3x speed + drop 2 mines</td>
+            <td style="text-align: right; padding: 8px;">99.4%</td>
+            <td style="text-align: right; padding: 8px;">24</td>
+          </tr>
+          <tr style="border-bottom: 1px solid var(--border);">
+            <td style="padding: 8px;">Tempest</td>
+            <td style="padding: 8px;">ShrapnelBurst</td>
+            <td style="padding: 8px;">8 bullets in 60&deg; forward cone</td>
+            <td style="text-align: right; padding: 8px;" colspan="2"><em>training</em></td>
+          </tr>
+        </table>
+      </div>
+      <p>
+        Usage patterns reveal strategic learning: FocusFire activates 344 times per match (pre-engagement buff), while MineDash fires only 24 times (escape/engage tool, not spam). The models discover ability timing from reward signal alone&mdash;no explicit "use ability before fighting" shaping.
+      </p>
 
       <h3>The Phase 13 breakthrough</h3>
       <p>
@@ -698,31 +796,31 @@
     <section>
       <h2>Deployment</h2>
       <p>
-        Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the 40-logit output into ship controls.
+        Trained models export from JAX (Flax parameters) to ONNX format, which UE5's Neural Network Engine (NNE) runs on CPU at inference time. The bot controller builds the same 96-float observation vector as the training sim and decodes the logit output into ship controls. Ship-specific models use different action presets (42&ndash;46 logits) but share the same observation space, so one inference pipeline handles all ship types.
       </p>
 
       <div class="flow">
         <div class="flow-node">
           <div class="flow-node-label">JAX Training</div>
           <div class="flow-node-title">Flax Params</div>
-          <div class="flow-node-detail">.msgpack</div>
+          <div class="flow-node-detail">.msgpack per ship</div>
         </div>
         <div class="flow-arrow">&rarr;</div>
         <div class="flow-node">
           <div class="flow-node-label">Export</div>
           <div class="flow-node-title">ONNX</div>
-          <div class="flow-node-detail">~130KB model</div>
+          <div class="flow-node-detail">~130&ndash;140KB</div>
         </div>
         <div class="flow-arrow">&rarr;</div>
         <div class="flow-node flow-node-accent">
           <div class="flow-node-label">UE5 Runtime</div>
           <div class="flow-node-title">Bot Controller</div>
-          <div class="flow-node-detail">96 obs &rarr; NNE &rarr; 40 logits</div>
+          <div class="flow-node-detail">96 obs &rarr; NNE &rarr; ship preset</div>
         </div>
       </div>
 
       <p>
-        Model size is ~130KB (two 128-unit hidden layers). Inference runs in &lt;0.1ms per bot per frame. The game supports mixing RL bots with hand-coded bots for opponent variety.
+        Model size is ~130&ndash;140KB (two 128-unit hidden layers). Inference runs in &lt;0.1ms per bot per frame. The game loads the correct model per ship archetype via the ability loadout system&mdash;Viper bots use the FocusFire model, Lurker bots use the MineDash model, and generic ships fall back to the base KOTH model.
       </p>
     </section>
 
@@ -738,7 +836,7 @@
         <strong>Confidence intervals added late.</strong> Phases 11-25 were evaluated without confidence intervals. CIs (Wilson score, 95%) are now computed in the eval script. With 500 matches, the 95% CI is roughly &plusmn;3-4%, which means Phase 23 (73%) vs Phase 25 (79%) is likely significant, but Phase 24 (74%) vs Phase 23 (73%) probably isn't. Future phases report CIs; historical phases are point estimates only.
       </p>
       <p>
-        <strong>Ablation requires from-scratch training.</strong> Phase 27 attempted to ablate 9 reward coefficients by fine-tuning from a converged checkpoint (500M steps each). All 9 produced identical behavior&mdash;the policy was locked. A valid ablation would need training from random initialization (2B steps &times; 9 runs = ~5 days on one GPU). Phase 28 tests the most extreme version: all shaping zeroed, train from scratch.
+        <strong>Ablation requires from-scratch training.</strong> Phase 27 attempted to ablate 9 reward coefficients by fine-tuning from a converged checkpoint (500M steps each). All 9 produced identical behavior&mdash;the policy was locked. Post-LR-fix, Phase 32 REDO trained from scratch with pure kill/death reward (all shaping zeroed) and achieved 94.4% immediately&mdash;confirming the problem was the LR bug, not reward design.
       </p>
       <p>
         <strong>Learning curves underutilized.</strong> Training logs capture entropy, policy loss, and value loss per update, but these aren't systematically analyzed for plateau detection or collapse warnings. Plotting learning curves across phases would give earlier signal on whether a run is worth continuing.
@@ -748,16 +846,13 @@
     <section>
       <h2>What's next</h2>
       <p>
-        <strong>Break out of the local minimum.</strong> Phases 25-27 proved the current policy is stuck. Phase 28 trains from scratch with only kill/death/damage reward&mdash;testing whether shaping signals caused the passivity or whether the problem is structural (observation space, action space, or network capacity).
+        <strong>More ship abilities.</strong> Three Lattice-faction item abilities are designed (Hex Burst, Cascade Bomb, Stun Mine) and planned for Bastion and Titan. The action space is forward-compatible&mdash;reserved slots for faction-specific items avoid retraining existing models.
       </p>
       <p>
-        <strong>From-scratch ablation.</strong> If Phase 28 produces different behavior, the next step is systematic from-scratch ablation: train 9 models from random init (2B steps each), each with one reward coefficient removed. This would finally answer which coefficients are load-bearing.
+        <strong>Fix multi-opponent rollout.</strong> The <code>--opponent</code> flag accepts multiple paths but only uses the first (<code>frozen_pool[0]</code>). Fixing this would enable opponent diversity without manual rotation&mdash;training against a pool of 3&ndash;5 prior generations simultaneously.
       </p>
       <p>
-        <strong>Opponent pool.</strong> Currently training against a single frozen opponent per phase. A pool of 3-5 previous generations (weighted by recency) would prevent overspecialization. Early phases rotate opponents manually; automating the pool is the next infrastructure step.
-      </p>
-      <p>
-        <strong>Population-based training.</strong> Reward weights are still tuned manually between phases. PBT would evolve reward configurations in parallel, exploring the reward space automatically instead of one experiment at a time.
+        <strong>Larger models for ship-specific training.</strong> Ship-specific models start from scratch and need 4B+ steps to match the generic model's accumulated lineage (6B+ across P32&rarr;P38). A 256&times;256 network or longer training budget would close this gap.
       </p>
     </section>
 
