@@ -138,41 +138,43 @@
     <header>
       <div class="project-label">Project</div>
       <h1>Deep Dive</h1>
-      <p class="subtitle">Research any topic deeply, verify every claim, and convert it to multiple content formats&mdash;podcast, blog post, video with synchronized visuals&mdash;automatically.</p>
+      <p class="subtitle">Research any topic deeply, verify every claim, and turn it into a podcast&mdash;automatically. Optional video output with synchronized visuals.</p>
       <div class="tech-tags">
         <span class="tech-tag">Python</span>
         <span class="tech-tag">Dagster</span>
-        <span class="tech-tag">Playwright</span>
+        <span class="tech-tag">Anthropic Claude</span>
         <span class="tech-tag">OpenAI TTS</span>
         <span class="tech-tag">OpenAI Whisper</span>
         <span class="tech-tag">Manim</span>
+        <span class="tech-tag">Playwright</span>
+        <span class="tech-tag">Notion MCP</span>
         <span class="tech-tag">Pexels API</span>
         <span class="tech-tag">ffmpeg</span>
         <span class="tech-tag">Praat</span>
       </div>
       <div class="quick-facts">
-        <span>Multi-platform output</span>
+        <span>28 episodes published</span>
         <span>&middot;</span>
-        <span>One script, multiple lengths</span>
+        <span>Multi-agent research</span>
         <span>&middot;</span>
-        <span>16 DAG assets</span>
+        <span>News-scout pipeline</span>
         <span>&middot;</span>
-        <span>980+ automated tests</span>
+        <span>1,100+ automated tests</span>
       </div>
     </header>
 
     <section>
       <h2>What it does</h2>
       <p>
-        Deep Dive is a content production pipeline that researches any topic, verifies every factual claim against sources, and converts the research into multiple output formats: a voiced podcast with per-line emotional delivery directions, a blog post with comparison tables and diagrams, and a video with frame-accurate synchronized visuals.
+        Deep Dive is a podcast production pipeline that researches any topic, verifies every factual claim against sources, and converts the research into a voiced podcast with per-line emotional delivery directions. The same verified research can be repurposed for video (with frame-accurate synchronized visuals) or a blog post when needed.
       </p>
       <p>
-        The research layer is format-agnostic&mdash;the same verified, confidence-tagged research produces a podcast, a blog post, or a presentation. Research once, output to multiple formats.
+        The research layer is format-agnostic&mdash;the same verified, confidence-tagged research synthesis can drive any output format. Research once, output to whichever platform fits the topic.
       </p>
 
       <div class="metrics">
         <div class="metric">
-          <div class="metric-value">10</div>
+          <div class="metric-value">28</div>
           <div class="metric-label">Episodes published</div>
         </div>
         <div class="metric">
@@ -180,11 +182,11 @@
           <div class="metric-label">DAG assets</div>
         </div>
         <div class="metric">
-          <div class="metric-value">8</div>
-          <div class="metric-label">Quality checks</div>
+          <div class="metric-value">~$2</div>
+          <div class="metric-label">Cost per episode</div>
         </div>
         <div class="metric">
-          <div class="metric-value">980+</div>
+          <div class="metric-value">1,100+</div>
           <div class="metric-label">Automated tests</div>
         </div>
       </div>
@@ -197,28 +199,28 @@
       <div class="arch-diagram">
         <div class="layer-label">Research Layer (reusable)</div>
         <div class="layer">
-          <span class="box research">Web Search</span>
+          <span class="box research">News Scout</span>
+          <span class="box research">Multi-Agent Research</span>
           <span class="box research">Source Verification</span>
           <span class="box research">Confidence Tagging</span>
-          <span class="box research">Claim Cross-referencing</span>
         </div>
         <div class="arrow-down">&darr;</div>
         <div class="layer-label">Content Layer (format-specific)</div>
         <div class="layer">
           <span class="box content">Podcast Script</span>
-          <span class="box content">Blog Post</span>
+          <span class="box content">Two-Pass Review</span>
+          <span class="box content">Tic Audit</span>
           <span class="box content">Number Normalization</span>
           <span class="box content">Pronunciation Fixing</span>
-          <span class="box content">Line Merging</span>
         </div>
         <div class="arrow-down">&darr;</div>
         <div class="layer-label">Output Layer</div>
         <div class="layer">
           <span class="box output">TTS Voicing</span>
-          <span class="box output">Voice Consistency Fix</span>
-          <span class="box output">Image Generation</span>
-          <span class="box output">Progressive Slides</span>
-          <span class="box output">Video Assembly</span>
+          <span class="box output">Listen Pass</span>
+          <span class="box output">Voice Consistency</span>
+          <span class="box output">Cover Art</span>
+          <span class="box output">Video Assembly (optional)</span>
         </div>
       </div>
     </section>
@@ -252,31 +254,31 @@
         </div>
         <div class="flow-arrow">&darr;</div>
         <div class="flow-node flow-node-output" style="width: 100%;">
-          <div class="flow-node-label">Visuals</div>
+          <div class="flow-node-label">Visuals (optional)</div>
           <div class="flow-node-title">visual_plan &rarr; slide_images &rarr; rewritten_slide_text</div>
-          <div class="flow-node-detail">24 Manim animated visuals, word-level narration sync, stock media from Pexels, stat callouts, AI title cards</div>
+          <div class="flow-node-detail">Manim animated visuals when topic warrants, word-level narration sync, stock media from Pexels, stat callouts, AI title cards</div>
         </div>
         <div class="flow-arrow">&darr;</div>
         <div class="flow-branch">
           <div class="flow-node flow-node-output">
             <div class="flow-node-label">Spotify</div>
-            <div class="flow-node-title">Full Audio (32 min)</div>
-            <div class="flow-node-detail">Complete deep dive</div>
+            <div class="flow-node-title">Full Audio (~20 min)</div>
+            <div class="flow-node-detail">Audience-signal target runtime</div>
           </div>
           <div class="flow-node flow-node-output">
             <div class="flow-node-label">YouTube</div>
-            <div class="flow-node-title">Cut Video (22 min)</div>
-            <div class="flow-node-detail">LLM-trimmed + visuals + music</div>
+            <div class="flow-node-title">Video (when produced)</div>
+            <div class="flow-node-detail">Synchronized visuals + audio</div>
           </div>
           <div class="flow-node flow-node-output">
             <div class="flow-node-label">Blog</div>
             <div class="flow-node-title">Article</div>
-            <div class="flow-node-detail">LLM rewrite + diagrams</div>
+            <div class="flow-node-detail">LLM rewrite (config ready)</div>
           </div>
         </div>
       </div>
 
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 16px;"><strong>Quality checks (8):</strong> script quality audit (AI anti-patterns, rhythm, contractions), slide coverage, adjacent-block contamination (Whisper), silence padding, manifest completeness, content timing, visual coverage, diagram OCR accuracy.</p>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 16px;"><strong>Quality gates:</strong> script flow check (sequencing, redundancy, pacing), tic audit (quantitative scriptwriting tics), two-pass review (style + fact-check sub-agents), Whisper hallucination detection, adjacent-block contamination, audio listen pass (interactive block-by-block), content timing verification, slide coverage, diagram OCR accuracy.</p>
     </section>
 
     <section>
@@ -284,23 +286,35 @@
       <div class="features">
         <div class="feature">
           <div class="feature-title">DAG-based orchestration with quality gates</div>
-          <p class="feature-desc">16 Dagster software-defined assets with 8 quality checks at each stage. Whisper hallucination detection after voicing, adjacent-block contamination checks, content timing verification after video assembly, script quality audit for AI anti-patterns. Dagster tracks which outputs are stale and provides a web UI for pipeline observability.</p>
+          <p class="feature-desc">16 Dagster software-defined assets with 8 quality checks at each stage. Whisper hallucination detection after voicing, adjacent-block contamination checks, content timing verification after video assembly. Dagster tracks which outputs are stale and provides a web UI for pipeline observability.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Multi-agent research synthesis</div>
+          <p class="feature-desc">Each episode kicks off four parallel sub-agents (~3 hours wall time): technical/benchmark, strategic/business, alignment/safety (or domain-specific), and labor/political. Each produces a 3,000&ndash;5,000-word brief with confidence tags ([VERIFIED], [SINGLE SOURCE], [ANALYTIC]) and direct WebFetch citations. A synthesis pass compresses 12,000&ndash;17,000 words of backing into a 6,000-word unified brief with cold-open candidates, section structure, contradictions and hedges, and 5 testable predictions.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">News-scout pipeline</div>
+          <p class="feature-desc">Daily 6 AM PDT launchd job runs Claude headless across ~50 sources. Scores each candidate 0&ndash;70 across 7 dimensions: depth, numbers, underexplored, stakes, verifiability, timeliness, fit. Dedup window prevents re-rescoring same story across consecutive days. Topics in PRIORITIZE tier (&ge;50) feed episode selection. Discovery rate: ~3&ndash;5 strong candidates per day, ~1 episode-worthy story per week.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-title">Two-pass review + tic audit before voicing</div>
+          <p class="feature-desc">Every script goes through two parallel sub-agents: style/balance/pacing review (AI tics, em-dash density, transitions) and fact-check against research briefs (every numeric claim, quote attribution, date). Fact-check has caught 3&ndash;7 errors per episode. Then <code>tic_audit.py</code> runs a quantitative validator: weighted-tag percentage, em-dashes per 1000 words, section-opener forms, trailing 1&ndash;4 word fragments, compound word years, "Confidence high/medium" spoken stamps, "Not X &mdash; Y" patterns, stacked stats, short-line floor, slide-candidate density. Each upstream gate is cheaper than the operation it protects.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Multi-platform output from one voicing pass</div>
-          <p class="feature-desc">One full script (32 min) is voiced once ($2&ndash;3). An LLM cuts it to 22 min for YouTube by identifying the weakest sections (~$0.004)&mdash;audio spliced at block boundaries, no re-voicing. Spotify gets the full deep dive, YouTube gets a tighter edit optimized for algorithmic distribution. Blog posts and short clips derive from the same source.</p>
+          <p class="feature-desc">One full script (~20 min, Spotify) is voiced once (~$1.50). An LLM cuts it for YouTube by identifying the weakest sections&mdash;audio spliced at block boundaries, no re-voicing. Blog posts and short clips derive from the same source. Marginal cost of new platform output: ~$0.05 LLM.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Narration-synced animated visuals</div>
-          <p class="feature-desc">24 Manim animated visuals per episode, synced to the exact word being spoken via Whisper word-level timestamps. Animations trigger on specific narration words&mdash;a map zooms out when the host says &ldquo;geographically,&rdquo; ship icons appear on &ldquo;ships,&rdquo; a stat card flashes on the key number. Script-line-aware matching prevents common-word false triggers. Drift compensation handles untracked camera animations. Templates: GridDashboard, PriceLine, ScaleComparison, MapScene (with matplotlib backgrounds), TypewriterQuote.</p>
+          <div class="feature-title">Narration-synced animated visuals (when video required)</div>
+          <p class="feature-desc">For episodes that ship video, Manim animated visuals are synced to the exact word being spoken via Whisper word-level timestamps. Animations trigger on specific narration words&mdash;a map zooms out when the host says &ldquo;geographically,&rdquo; ship icons appear on &ldquo;ships,&rdquo; a stat card flashes on the key number. Script-line-aware matching prevents common-word false triggers. Templates: GridDashboard, PriceLine, ScaleComparison, MapScene (with matplotlib backgrounds), TypewriterQuote. The Strait of Hormuz episode used 24 Manim visuals; most episodes ship audio-first.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">TTS hallucination prevention</div>
-          <p class="feature-desc">Two-tier detection: duration check (free), then Whisper transcription verification (re-voice up to 3 times). A pre-voice transform converts period-separated lists to comma format&mdash;preventing TTS from hallucinating repeated words. Adjacent-block contamination check catches words leaking from one block into the next. Voice consistency profiling via Praat (F0, formants, HNR) detects and fixes gender/timbre switches.</p>
+          <div class="feature-title">TTS hallucination + dropout prevention</div>
+          <p class="feature-desc">Two-tier detection: duration check (free), then Whisper transcription verification (re-voice up to 3 times). A pre-voice transform converts period-separated lists to comma format&mdash;preventing TTS from hallucinating repeated words. Trailing 1&ndash;4 word fragments after long sentences (recurring TTS dropout) caught by the tic-audit validator pre-voice. Adjacent-block contamination check catches words leaking across blocks. Voice consistency profiling via Praat (F0, formants, HNR) detects and fixes gender/timbre switches.</p>
         </div>
         <div class="feature">
-          <div class="feature-title">Script quality enforcement</div>
-          <p class="feature-desc">Automated quality check scans for AI writing anti-patterns: banned phrases, stacking emphasis (&ldquo;not 2x, not 5x, 28x&rdquo;), missing contractions, monotonous rhythm. The scriptwriter prompt encodes data presentation rules: every number needs comparison or analogy, one stat per beat, cold open hook before the intro. Catches the patterns that make AI content feel like AI content.</p>
+          <div class="feature-title">Notion-integrated production system</div>
+          <p class="feature-desc">Four databases under "Deep Dive" workspace, integrated via MCP: Episodes (28 rows with Status, Topic Tier, Duration, Hero Stat, Spotify URL), Predictions (40+ rows with check-in dates, powering callbacks in future episodes), Topic Ideas (researched backlog with demand-check notes), Production Tasks. The Predictions DB is a compounding asset&mdash;6 months of predictions become the 6-month-retrospective episode.</p>
         </div>
       </div>
     </section>
@@ -314,7 +328,7 @@
         <strong>Never overwrite inputs.</strong> Each pipeline step outputs to a new file. We lost a 30-minute generated script early on by running normalize and merge in-place. Now enforced by the tools refusing identical input/output paths.
       </p>
       <p>
-        <strong>Frame-by-frame video over concatenation.</strong> Early versions concatenated ffmpeg segments, causing audible stuttering and timing drift. Now the video is built frame-by-frame&mdash;one continuous audio track with images placed at exact timestamps.
+        <strong>Single-pass audio chain over multi-encode.</strong> Each lossy MP3 re-encoding compounds artifacts. EP25 went through three re-encodings (per-block 128k &rarr; custom rebuild &rarr; finalize at 192k 48kHz) and audibly degraded vs episodes that went through two. Standardized on a single concatenation pass at 192k 48kHz, with explicit ffmpeg <code>-b:a 192k</code> parameter (pydub's <code>bitrate=</code> kwarg silently defaults to 32 kbps in some configurations).
       </p>
       <p>
         <strong>Verification at every layer.</strong> Research verification, script-vs-research fact-checking, number normalization tests, pronunciation fixing, voice consistency detection, visual spelling verification. The project has more verification code than generation code.
@@ -330,39 +344,42 @@
         <strong>Verification matters more than generation.</strong> The project has more verification code than generation code. Research sourcing, claim checking, voice consistency detection, visual timing verification, script anti-pattern scanning, adjacent-block contamination checks. AI-generated content without a trust layer is automated misinformation.
       </p>
       <p>
-        <strong>The pipeline is the product.</strong> The episodes are outputs, but the real value is the system: research any topic, verify claims, produce platform-optimized content automatically. One voicing pass produces Spotify audio, YouTube video, and blog posts. The marginal cost of a new episode is $2&ndash;3 TTS + ~$0.05 LLM.
+        <strong>The pipeline is the product.</strong> The episodes are outputs, but the real value is the system: research any topic, verify claims, produce platform-optimized content automatically. The marginal cost of a new episode is ~$1.50 TTS + ~$0.05 LLM.
       </p>
     </section>
 
     <section>
       <h2>What&rsquo;s next</h2>
       <p>
-        <strong>Multi-agent research.</strong> Parallel sub-agents research different angles (economic, technical, geopolitical, human impact) simultaneously, producing deeper coverage per topic. Quality metrics track claim density and source diversity across episodes.
+        <strong>Short-form clips pipeline.</strong> Each episode has 5&ndash;10 60&ndash;90s segments with strong hooks. Automating vertical-crop with caption overlay for X, TikTok, and Reels. The single biggest discoverability lever for podcast growth in 2026.
       </p>
       <p>
-        <strong>Short-form clips.</strong> Automated vertical crop of Manim visuals + audio segments for YouTube Shorts and TikTok. Infrastructure built, needs per-visual optimization for 9:16 framing.
+        <strong>Predictions check-in workflow.</strong> 40+ predictions logged in Notion DB with check-in dates. Every landed prediction is a &ldquo;we called this 90 days ago&rdquo; moment that drives back-catalog discovery. Building automated check-in + retrospective-episode generation.
       </p>
     </section>
 
     <section>
       <h2>Project structure</h2>
 <pre>dagster_pipeline/   16 DAG assets, 8 quality checks, multi-output config
-research/           Research prompts, source verification, claim cross-referencing
-content/podcast/    Script generation, normalization, TTS voicing, voice consistency
-visuals/            HTML slides, stat callouts, stock media, thumbnails, video builder
-visuals/templates/  HTML/CSS templates for Playwright rendering
-tests/              980+ tests: pipeline, normalize, merge, pronunciation, timing, visual QA</pre>
+research/           News scout, multi-agent research, source verification
+content/podcast/    Script generation, tic_audit, normalization, TTS voicing,
+                    voice consistency, listen.py interactive review
+visuals/            HTML slides, Manim diagrams, stat callouts, stock media,
+                    cover art generation, video builder
+tests/              1,100+ tests: pipeline, normalize, merge, pronunciation,
+                    timing, visual QA, audio verification</pre>
     </section>
 
     <section>
-      <h2>Episodes</h2>
-      <p><strong>Claude Mythos: The AI That Breaks Everything</strong> &mdash; 15 min. $50 to find a 27-year-old vulnerability. Cybench 100%. The first AI model gated for national security reasons.</p>
-      <p><strong>The Strait of Hormuz: The World&rsquo;s Most Dangerous Chokepoint</strong> &mdash; 17 min. 24 animated Manim visuals with camera zoom, ship animations, word-level narration sync. Geographic maps with pixel-verified water routes.</p>
-      <p><strong>Why the Fed Summoned Wall Street&rsquo;s CEOs Over an AI Model</strong> &mdash; 36 min. The Mythos sequel. Bangladesh Bank heist, COBOL crisis, cyber insurance gap.</p>
-      <p><strong>How AI Agents Actually Work</strong> &mdash; 24 min. The agent loop, tool calling, MCP protocol, compounding error math.</p>
-      <p><strong>How LLM Inference Actually Works</strong> &mdash; 45 min. From tokenization to wafer-scale engines. KV cache, attention, quantization, speculative decoding.</p>
-      <p><strong>How Netflix, Uber, and YouTube Handle Scale</strong> &mdash; 44 min. Chaos Monkey, hexagonal geospatial indexing, VP9 transcoding, consistent hashing.</p>
-      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Plus: System Design Interviews, Behavioral Interviews, AI in the Physical World, Dog Science.</p>
+      <h2>Recent episodes</h2>
+      <p><strong>Mythos Triggered the Regulation Anthropic Asked For</strong> &mdash; 16 min. The third Mythos episode. Trump White House considers mandatory pre-release AI vetting EO five days after drafting an order to bring Anthropic back. Same destination, different roads, very different executors.</p>
+      <p><strong>The Loop Closed in the Sandbox</strong> &mdash; 20 min. Anthropic's AAR experiment: nine Claude agents recovered 97% of an alignment benchmark gap in 5 days at $18K, vs 2 humans recovering 23% in 7 days. Then they showed it didn't transfer to production. Both findings same paper.</p>
+      <p><strong>The Two Apples</strong> &mdash; 20 min. Apple buys AI from Google while writing its iOS code with Anthropic. The CLAUDE.md file shipped accidentally in a Support app update. Distribution play, not an AI play.</p>
+      <p><strong>AI Deanonymization</strong> &mdash; 24 min. Claude Opus 4.7 identifies Kelsey Piper from 125 words. The threshold drop: 1964 needed 1,500 words / 2 candidates; 2026 needs 125 words / the open set of every public writer. Sub-symbolic identification. Symbolic confabulation.</p>
+      <p><strong>The Bifurcation</strong> &mdash; 21 min. The AI industry split in three places in seven days. Pentagon picks Google over Anthropic. Microsoft-OpenAI ends Azure exclusivity. Conditional Misalignment paper.</p>
+      <p><strong>Iran Blockade</strong> &mdash; 36 min. The Strait of Hormuz closes. War Powers deadline. Project Freedom convoys. Day-by-day chronology integrated as the news moved.</p>
+      <p><strong>How LLM Inference Actually Works</strong> &mdash; 45 min. Most-popular episode. From tokenization to wafer-scale engines. KV cache, attention, quantization, speculative decoding. The audience-signal benchmark that drives format decisions.</p>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px;">Full back catalog: 28 episodes spanning AI, geopolitics, technical mechanism, system design, and interview prep.</p>
     </section>
 
     <footer>
