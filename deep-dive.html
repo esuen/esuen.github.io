@@ -141,7 +141,6 @@
       <p class="subtitle">Research any topic deeply, verify every claim, and turn it into a podcast&mdash;automatically. Optional video output with synchronized visuals.</p>
       <div class="tech-tags">
         <span class="tech-tag">Python</span>
-        <span class="tech-tag">Dagster</span>
         <span class="tech-tag">Anthropic Claude</span>
         <span class="tech-tag">OpenAI TTS</span>
         <span class="tech-tag">OpenAI Whisper</span>
@@ -227,7 +226,7 @@
 
     <section>
       <h2>The pipeline</h2>
-      <p>Dual orchestration. Production episodes run through <code>pipeline.py</code>&mdash;a CLI of composable steps that I drive episode-by-episode, with manual confirmation gates before expensive operations like voicing and video assembly. The same steps are also wired into a Dagster DAG (16 software-defined assets with declared dependencies, web UI, and 8 quality checks) for batch reruns and observability when I need it. CLI for production control, DAG for pipeline introspection. Quality checks gate each stage either way: Whisper verification after voicing, content timing after video assembly, OCR after diagram generation.</p>
+      <p>Episodes run through <code>pipeline.py</code>&mdash;a CLI of 16 composable steps that I drive episode-by-episode, with manual confirmation gates before expensive operations like voicing and video assembly. Quality checks gate each stage: Whisper verification after voicing, content timing after video assembly, OCR after diagram generation. The CLI handles dependencies between steps, tracks which outputs are stale, and aborts cleanly when checks fail.</p>
 
       <div class="flow-vertical flow" style="max-width: 540px; margin: 24px auto;">
         <div class="flow-node flow-node-research" style="width: 100%;">
@@ -285,8 +284,8 @@
       <h2>Under the hood</h2>
       <div class="features">
         <div class="feature">
-          <div class="feature-title">Dual orchestration with quality gates</div>
-          <p class="feature-desc">A <code>pipeline.py</code> CLI of composable steps drives episode-by-episode production with manual confirmation before expensive operations. The same steps are wired into a Dagster DAG (16 software-defined assets, 8 quality checks, web UI) for batch reruns and observability. CLI for production control, DAG for introspection. Quality checks gate each stage either way: Whisper hallucination detection after voicing, adjacent-block contamination checks, content timing verification after video assembly.</p>
+          <div class="feature-title">Composable CLI with quality gates</div>
+          <p class="feature-desc">A <code>pipeline.py</code> CLI of 16 composable steps drives episode-by-episode production with manual confirmation before expensive operations. 8 quality checks gate each stage: Whisper hallucination detection after voicing, adjacent-block contamination checks, content timing verification after video assembly. Manual gates beat automated re-execution for one-at-a-time production where each episode has bespoke voice fixes.</p>
         </div>
         <div class="feature">
           <div class="feature-title">Multi-agent research synthesis</div>
@@ -360,8 +359,7 @@
 
     <section>
       <h2>Project structure</h2>
-<pre>pipeline.py         CLI of composable steps (production driver)
-dagster_pipeline/   Same steps as DAG: 16 assets, 8 quality checks, web UI
+<pre>pipeline.py         CLI of 16 composable steps with 8 quality gates
 research/           News scout, multi-agent research, source verification
 content/podcast/    Script generation, tic_audit, normalization, TTS voicing,
                     voice consistency, listen.py interactive review
