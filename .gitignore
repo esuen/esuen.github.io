@@ -16,3 +16,6 @@ Thumbs.db
 *.swp
 *.swo
 *~
+
+# Private project pages (kept locally, not published)
+deep-dive.html
