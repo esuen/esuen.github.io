@@ -107,10 +107,10 @@
       <div class="project">
         <div class="project-header">
           <span class="project-name"><a href="https://github.com/esuen/launchpad" target="_blank" rel="noopener" style="color: inherit; text-decoration: none; border-bottom: 1px solid var(--border); transition: border-color 0.15s;">Launchpad</a></span>
-          <span class="project-tech">Go, Kubernetes, Helm, GitHub Actions, Postgres, Prometheus, Grafana</span>
+          <span class="project-tech">Go, Kubernetes, Helm, Argo CD, Argo Rollouts, NGINX, GitHub Actions, Postgres, Prometheus, Grafana</span>
         </div>
         <p class="project-description">
-          A deployment tracking platform built to mirror what a strong startup runs in production. A Go API backed by Postgres, deployed to Kubernetes via Helm with GitOps through Argo CD, automated CI/CD, HTTPS ingress, and full observability through Prometheus and Grafana. Features environment separation (staging/production) with declarative deployments where git is the single source of truth. <a href="https://github.com/esuen/launchpad" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">See the project &rarr;</a>
+          A deployment tracking platform built to mirror what a strong startup runs in production. A Go API backed by Postgres, deployed to Kubernetes via Helm with GitOps through Argo CD, automated CI/CD, HTTPS ingress, and full observability through Prometheus and Grafana. Production releases run as <strong>Argo Rollouts canaries</strong> with NGINX ingress-based traffic splitting&mdash;each step auto-promotes only after a Prometheus query confirms the canary's HTTP success rate, and auto-aborts on regression while preserving the canary pods for forensic inspection. <a href="https://github.com/esuen/launchpad" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none; font-size: 0.9rem;">See the project &rarr;</a>
         </p>
       </div>
 
