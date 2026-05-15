@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch ↔ iPhone Sync — State Model</title>
+<style>
+  :root{
+    --bg:#0a0a0c; --panel:#121214; --panel2:#1c1c1e; --line:#2a2a2c;
+    --text:#fff; --text2:rgba(235,235,245,0.62); --text3:rgba(235,235,245,0.34);
+    --accent:#408CFF; --accent-dim:rgba(64,140,255,0.18);
+    --green:#30D158; --red:#FF453A; --amber:#FF9F0A;
+    --ctrl:#2C2C2E; --ctrl2:#3A3A3C;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    line-height:1.5; padding:40px 24px 90px; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{ max-width:1080px; margin:0 auto; }
+  h1{ font-size:26px; font-weight:800; letter-spacing:-0.4px; }
+  h2{ font-size:19px; font-weight:700; margin:44px 0 14px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .lede{ color:var(--text2); margin-top:8px; font-size:15px; max-width:760px; }
+
+  .principle{
+    margin-top:20px; padding:16px 18px; background:var(--accent-dim);
+    border:1px solid rgba(64,140,255,0.35); border-radius:12px; font-size:14px;
+  }
+  .principle b{ color:#9cc4ff; }
+
+  /* ---- legend ---- */
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 22px; margin-top:18px; font-size:12.5px; color:var(--text2); }
+  .legend .grp{ display:flex; align-items:center; gap:7px; }
+  .dot{ width:10px; height:10px; border-radius:50%; flex:none; }
+  .dot.green{ background:var(--green); } .dot.red{ background:var(--red); }
+  .badge{
+    display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700;
+    padding:3px 8px; border-radius:6px; background:var(--ctrl); color:var(--text2);
+    letter-spacing:0.2px; white-space:nowrap;
+  }
+  .badge.owner{ background:rgba(64,140,255,0.16); color:#9cc4ff; }
+  .badge.owner-watch{ background:rgba(255,159,10,0.16); color:#ffce80; }
+  .badge.owner-none{ background:var(--ctrl); color:var(--text3); }
+  .badge.conn-on{ background:rgba(48,209,88,0.15); color:#7ee29a; }
+  .badge.conn-off{ background:rgba(255,69,58,0.15); color:#ff9b93; }
+
+  /* ---- state cards ---- */
+  .state{
+    display:flex; gap:22px; margin-top:18px; padding:18px;
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    align-items:flex-start;
+  }
+  .state.bug{ border-color:rgba(255,69,58,0.55); background:rgba(255,69,58,0.05); }
+  .state.good{ border-color:rgba(48,209,88,0.4); }
+  .state .info{ flex:1; min-width:240px; }
+  .state .snum{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:8px; background:var(--accent); color:#fff;
+    font-weight:800; font-size:14px; flex:none;
+  }
+  .state.bug .snum{ background:var(--red); }
+  .state .stitle{ display:flex; align-items:center; gap:10px; }
+  .state .stitle h3{ font-size:16px; font-weight:700; }
+  .state .sbadges{ display:flex; flex-wrap:wrap; gap:6px; margin:10px 0 10px; }
+  .state .sdesc{ font-size:13.5px; color:var(--text2); }
+  .state .sdesc .hl{ color:var(--text); font-weight:600; }
+  .state .note{
+    margin-top:10px; font-size:12.5px; padding:8px 10px; border-radius:8px;
+    background:var(--panel2); border-left:3px solid var(--line);
+  }
+  .state .note.bad{ border-left-color:var(--red); color:#ff9b93; }
+  .state .note.fix{ border-left-color:var(--green); color:#7ee29a; }
+  .devices{ display:flex; gap:14px; flex:none; }
+
+  /* ---- iPhone frame ---- */
+  .iphone{
+    width:178px; background:#000; border-radius:30px; padding:7px;
+    border:1px solid var(--line); flex:none;
+  }
+  .iscreen{ height:178px; background:#000; border-radius:24px; overflow:hidden; position:relative; }
+  .istatus{ height:22px; }
+  .ibody{ padding:8px 9px; height:156px; }
+
+  /* ---- Watch frame ---- */
+  .watch{
+    width:150px; background:#000; border-radius:36px; padding:8px;
+    border:1px solid var(--line); flex:none; position:relative;
+  }
+  .watch::after{ content:""; position:absolute; right:-3px; top:40%; width:5px; height:24px; background:#3a3a3c; border-radius:2px; }
+  .wscreen{ height:150px; background:#000; border-radius:30px; overflow:hidden; }
+  .wbody{ padding:10px 9px; height:150px; display:flex; flex-direction:column; }
+  .devlabel{ text-align:center; font-size:9.5px; color:var(--text3); margin-top:5px; letter-spacing:1px; text-transform:uppercase; }
+
+  /* ---- shared mockup bits ---- */
+  .scrim{ position:absolute; inset:0; background:rgba(0,0,0,0.55); }
+  .topbar{ display:flex; align-items:center; gap:5px; font-size:9px; color:var(--text2); font-weight:600; padding:0 2px 7px; }
+  .topbar .grow{ flex:1; }
+  .accent{ color:var(--accent); }
+  .card-lite{ background:var(--panel2); border-radius:9px; padding:8px; margin-bottom:6px; }
+  .ex-name{ font-size:12px; font-weight:700; }
+  .ex-sub{ font-size:9px; color:var(--text2); }
+  .ex-weight{ font-size:11px; font-weight:700; color:var(--accent); }
+  .pips{ display:flex; gap:3px; margin-top:6px; }
+  .pip{ width:13px; height:13px; border-radius:3px; background:var(--ctrl2); }
+  .pip.done{ background:var(--accent); }
+  .btn{
+    background:var(--accent); color:#fff; font-size:10px; font-weight:800;
+    text-align:center; padding:7px; border-radius:8px; margin-top:4px;
+  }
+  .btn.ghost{ background:var(--ctrl); color:var(--text2); }
+  .btn.green{ background:var(--green); color:#06210d; }
+  .pill-row{ display:flex; gap:5px; margin-top:6px; }
+  .pill{ flex:1; text-align:center; font-size:9px; font-weight:700; padding:5px; border-radius:7px; background:var(--ctrl); color:var(--text2); }
+  .pill.on{ background:var(--accent-dim); color:#9cc4ff; }
+  .muted-screen{ filter:saturate(0.4) brightness(0.7); }
+  .ribbon{
+    position:absolute; left:0; right:0; bottom:0; padding:6px 8px;
+    background:rgba(255,69,58,0.92); color:#fff; font-size:8.5px; font-weight:800;
+    text-align:center; letter-spacing:0.3px;
+  }
+  .wtitle{ font-size:10px; font-weight:800; letter-spacing:1px; color:var(--text3); text-align:center; }
+  .big-w{ font-size:20px; font-weight:800; color:var(--accent); text-align:center; }
+  .center-fill{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+  .trophy{ font-size:22px; }
+  .small{ font-size:9px; color:var(--text2); }
+
+  /* ---- transition diagram ---- */
+  .diagram{ margin-top:14px; display:flex; flex-direction:column; align-items:center; gap:0; }
+  .dnode{
+    background:var(--panel2); border:1.5px solid var(--line); border-radius:11px;
+    padding:9px 14px; text-align:center; max-width:330px;
+  }
+  .dnode .dn-title{ font-size:13px; font-weight:700; }
+  .dnode .dn-sub{ font-size:10.5px; color:var(--text2); margin-top:1px; }
+  .dnode.start{ border-color:var(--accent); }
+  .dnode.bug{ border-color:var(--red); background:rgba(255,69,58,0.08); }
+  .dnode.fix{ border-color:var(--green); background:rgba(48,209,88,0.08); }
+  .dnode.reconcile{ border-color:var(--amber); background:rgba(255,159,10,0.07); }
+  .darrow{
+    width:0; height:26px; border-left:2px solid var(--line); position:relative;
+  }
+  .darrow::after{
+    content:""; position:absolute; bottom:-1px; left:-5px;
+    border:5px solid transparent; border-top-color:var(--line); border-bottom:0;
+  }
+  .darrow.red{ border-color:var(--red); } .darrow.red::after{ border-top-color:var(--red); }
+  .darrow.green{ border-color:var(--green); } .darrow.green::after{ border-top-color:var(--green); }
+  .dlabel{
+    font-size:10.5px; color:var(--text2); background:var(--bg); padding:2px 8px;
+    position:relative; z-index:1; max-width:230px; text-align:center;
+  }
+  .darrow-wrap{ display:flex; flex-direction:column; align-items:center; }
+  .dsplit{ display:flex; gap:36px; align-items:flex-start; justify-content:center; flex-wrap:wrap; }
+  .dcol{ display:flex; flex-direction:column; align-items:center; }
+
+  /* ---- reconcile table ---- */
+  table.recon{ width:100%; border-collapse:collapse; margin-top:14px; font-size:13px; }
+  table.recon th, table.recon td{ border:1px solid var(--line); padding:9px 11px; text-align:left; vertical-align:top; }
+  table.recon th{ background:var(--panel2); font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text2); }
+  table.recon td .verdict{ font-weight:700; }
+  table.recon td .verdict.fix{ color:#7ee29a; } table.recon td .verdict.bug{ color:#ff9b93; }
+  .footnote{ margin-top:30px; font-size:12.5px; color:var(--text3); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Watch ↔ iPhone Workout Sync — State Model</h1>
+  <p class="lede">
+    Every state the two apps can be in during a workout, who owns the workout, how they move
+    between states, and where today's bug lives. Reflects the design we landed on.
+  </p>
+
+  <div class="principle">
+    <b>The principle — two separate decisions.</b>
+    &nbsp;<b>Lifecycle</b> (is the workout active or finished?) follows the <b>owner</b> — the iPhone,
+    once it has seen the workout. <b>Progress</b> (which sets are logged) follows whichever device the
+    user was actually using. Today's bug is one timestamp check trying to decide both at once.
+  </div>
+
+  <div class="legend">
+    <div class="grp"><span class="dot green"></span> Connected (reachable)</div>
+    <div class="grp"><span class="dot red"></span> Disconnected (unreachable)</div>
+    <div class="grp"><span class="badge owner">OWNER · iPhone</span> iPhone is lifecycle authority</div>
+    <div class="grp"><span class="badge owner-watch">OWNER · Watch</span> Watch is authority (unsynced only)</div>
+    <div class="grp"><span class="badge">Watch: mirroring</span> reads iPhone state</div>
+    <div class="grp"><span class="badge">Watch: local</span> WatchWorkoutManager runs it</div>
+  </div>
+
+  <h2>The states</h2>
+
+  <!-- S1 IDLE -->
+  <div class="state">
+    <div class="info">
+      <div class="stitle"><span class="snum">1</span><h3>Idle — no workout</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-on">● connected</span>
+        <span class="badge owner-none">owner · —</span>
+        <span class="badge">watch: idle</span>
+      </div>
+      <div class="sdesc">Nothing running. iPhone shows Today; the watch shows its workout picker. Both in sync, nothing to reconcile.</div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen"><div class="istatus"></div><div class="ibody">
+          <div class="topbar"><span>9:41</span><span class="grow"></span><span class="accent">Today</span></div>
+          <div class="card-lite"><div class="ex-name">Barbell 5×5</div><div class="ex-sub">Next: Workout A · Squat, Bench, Row</div></div>
+          <div class="pill-row"><div class="pill on">A</div><div class="pill">B</div></div>
+          <div class="btn">START WORKOUT</div>
+        </div></div></div>
+        <div class="devlabel">iPhone</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen"><div class="wbody">
+          <div class="wtitle">TODAY</div>
+          <div class="small" style="text-align:center;margin:2px 0 6px;">🔥 3w streak</div>
+          <div class="btn">Workout A</div>
+          <div class="btn ghost">Workout B</div>
+        </div></div></div>
+        <div class="devlabel">Watch</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2 ACTIVE CONNECTED -->
+  <div class="state good">
+    <div class="info">
+      <div class="stitle"><span class="snum">2</span><h3>Active · connected</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-on">● connected</span>
+        <span class="badge owner">owner · iPhone</span>
+        <span class="badge">watch: mirroring</span>
+      </div>
+      <div class="sdesc">
+        The healthy state. A workout is running, both devices connected; the iPhone owns the lifecycle and
+        the watch mirrors it. You land here <span class="hl">whether the workout was started on the iPhone, or
+        started on the watch and then synced</span> — once synced, the iPhone owns it.
+      </div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen"><div class="istatus"></div><div class="ibody">
+          <div class="topbar"><span>0:42</span><span class="grow"></span><span>1/3</span><span class="accent">Workout A</span></div>
+          <div class="card-lite">
+            <div style="display:flex;justify-content:space-between;"><div class="ex-name">Squat</div><div class="ex-weight">225 lbs</div></div>
+            <div class="ex-sub">5×5</div>
+            <div class="pips"><span class="pip done"></span><span class="pip done"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+          <div class="card-lite" style="opacity:.6;"><div class="ex-name">Bench Press</div><div class="ex-sub">155 lbs · 5×5</div></div>
+        </div></div></div>
+        <div class="devlabel">iPhone — active workout</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen"><div class="wbody">
+          <div class="topbar"><span>0:42</span><span class="grow"></span><span class="accent">A</span></div>
+          <div class="ex-name" style="text-align:center;">Squat</div>
+          <div class="big-w">225</div>
+          <div class="pips" style="justify-content:center;"><span class="pip done"></span><span class="pip done"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          <div class="center-fill"><div class="small">tap to log set 3</div></div>
+        </div></div></div>
+        <div class="devlabel">Watch — mirroring</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3 WATCH-OWNED -->
+  <div class="state">
+    <div class="info">
+      <div class="stitle"><span class="snum">3</span><h3>Active · watch-owned (unsynced)</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-off">● disconnected</span>
+        <span class="badge owner-watch">owner · Watch</span>
+        <span class="badge">watch: local</span>
+      </div>
+      <div class="sdesc">
+        The watch started a workout while the iPhone was away or unreachable. The iPhone doesn't know it exists yet.
+        This is the <span class="hl">only</span> state where the watch is the lifecycle authority — and only until
+        its first sync, at which point ownership transfers to the iPhone (→ State 2).
+      </div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen muted-screen"><div class="istatus"></div><div class="ibody">
+          <div class="topbar"><span>9:41</span><span class="grow"></span><span class="accent">Today</span></div>
+          <div class="card-lite"><div class="ex-name">Barbell 5×5</div><div class="ex-sub">Next: Workout A</div></div>
+          <div class="btn">START WORKOUT</div>
+        </div></div></div>
+        <div class="devlabel">iPhone — unaware</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen"><div class="wbody">
+          <div class="topbar"><span>0:18</span><span class="grow"></span><span class="badge" style="font-size:7px;padding:1px 4px;">LOCAL</span></div>
+          <div class="ex-name" style="text-align:center;">Squat</div>
+          <div class="big-w">225</div>
+          <div class="pips" style="justify-content:center;"><span class="pip done"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span><span class="pip"></span></div>
+          <div class="center-fill"><div class="small">running on watch only</div></div>
+        </div></div></div>
+        <div class="devlabel">Watch — local, owns it</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4 ACTIVE DISCONNECTED -->
+  <div class="state">
+    <div class="info">
+      <div class="stitle"><span class="snum">4</span><h3>Active · disconnected</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-off">● disconnected</span>
+        <span class="badge owner">owner · iPhone</span>
+        <span class="badge">watch: local (adopted)</span>
+      </div>
+      <div class="sdesc">
+        Was State 2 — then the iPhone became unreachable (locked, in a bag, Bluetooth hiccup). The watch
+        <span class="hl">adopted</span> the workout into local mode so it keeps working. The iPhone still
+        <span class="hl">owns the lifecycle</span> — the watch is just running a local copy of an iPhone-owned workout.
+      </div>
+      <div class="note">Both devices independently show the same workout. They'll need to reconcile on reconnect.</div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen"><div class="istatus"></div><div class="ibody">
+          <div class="topbar"><span>1:30</span><span class="grow"></span><span class="dot red" style="width:7px;height:7px;"></span><span class="accent">Workout A</span></div>
+          <div class="card-lite">
+            <div style="display:flex;justify-content:space-between;"><div class="ex-name">Squat</div><div class="ex-weight">225 lbs</div></div>
+            <div class="ex-sub">5×5</div>
+            <div class="pips"><span class="pip done"></span><span class="pip done"></span><span class="pip done"></span><span class="pip"></span><span class="pip"></span></div>
+          </div>
+          <div class="card-lite" style="opacity:.6;"><div class="ex-name">Bench Press</div><div class="ex-sub">155 lbs · 5×5</div></div>
+        </div></div></div>
+        <div class="devlabel">iPhone — still active</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen"><div class="wbody">
+          <div class="topbar"><span>1:30</span><span class="grow"></span><span class="badge" style="font-size:7px;padding:1px 4px;">LOCAL</span></div>
+          <div class="ex-name" style="text-align:center;">Squat</div>
+          <div class="big-w">225</div>
+          <div class="pips" style="justify-content:center;"><span class="pip done"></span><span class="pip done"></span><span class="pip done"></span><span class="pip"></span><span class="pip"></span></div>
+          <div class="center-fill"><div class="small">offline — kept by watch</div></div>
+        </div></div></div>
+        <div class="devlabel">Watch — local copy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 BUG -->
+  <div class="state bug">
+    <div class="info">
+      <div class="stitle"><span class="snum">5</span><h3>⚠ iPhone finished · watch stale</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-off">● disconnected</span>
+        <span class="badge owner">owner · iPhone</span>
+        <span class="badge" style="background:rgba(255,69,58,0.18);color:#ff9b93;">watch: STALE</span>
+      </div>
+      <div class="sdesc">
+        From State 4 — the user <span class="hl">finished the workout on the iPhone</span> while the watch was
+        still disconnected. The iPhone saved it and went back to idle. But the watch never got the message: it's
+        <span class="hl">still showing the (now dead) workout</span>.
+      </div>
+      <div class="note bad"><b>This is the bug.</b> What happens when the watch reconnects depends entirely on the reconciliation logic — see below.</div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen"><div class="istatus"></div><div class="ibody">
+          <div class="topbar"><span>9:41</span><span class="grow"></span><span class="accent">Today</span></div>
+          <div class="card-lite"><div class="ex-name">Barbell 5×5</div><div class="ex-sub">Last: Workout A ✓ saved</div></div>
+          <div class="pill-row"><div class="pill">A</div><div class="pill on">B</div></div>
+          <div class="btn">START WORKOUT</div>
+        </div></div></div>
+        <div class="devlabel">iPhone — finished &amp; idle</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen" style="position:relative;"><div class="wbody">
+          <div class="topbar"><span>1:55</span><span class="grow"></span><span class="badge" style="font-size:7px;padding:1px 4px;">LOCAL</span></div>
+          <div class="ex-name" style="text-align:center;">Squat</div>
+          <div class="big-w">225</div>
+          <div class="pips" style="justify-content:center;"><span class="pip done"></span><span class="pip done"></span><span class="pip done"></span><span class="pip"></span><span class="pip"></span></div>
+          <div class="center-fill"></div>
+        </div><div class="ribbon">STALE — iPhone already finished this</div></div></div>
+        <div class="devlabel">Watch — doesn't know</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 FINISHED CONNECTED -->
+  <div class="state good">
+    <div class="info">
+      <div class="stitle"><span class="snum">6</span><h3>Finished · connected</h3></div>
+      <div class="sbadges">
+        <span class="badge conn-on">● connected</span>
+        <span class="badge owner">owner · iPhone</span>
+        <span class="badge">watch: summary</span>
+      </div>
+      <div class="sdesc">
+        The healthy finish — both devices connected when the workout ends. The iPhone shows the celebration screen,
+        the watch shows its summary. "Save &amp; Continue" takes both back to <span class="hl">State 1 · Idle</span>.
+      </div>
+    </div>
+    <div class="devices">
+      <div>
+        <div class="iphone"><div class="iscreen"><div class="istatus"></div><div class="ibody">
+          <div class="center-fill" style="height:100%;">
+            <div class="trophy">🏆</div>
+            <div style="font-size:13px;font-weight:800;">WORKOUT COMPLETE</div>
+            <div class="small">Workout A · 42 min · 3 PRs</div>
+            <div class="btn" style="width:120px;margin-top:10px;">Save &amp; Continue</div>
+          </div>
+        </div></div></div>
+        <div class="devlabel">iPhone — celebration</div>
+      </div>
+      <div>
+        <div class="watch"><div class="wscreen"><div class="wbody">
+          <div class="center-fill" style="gap:5px;">
+            <div class="trophy">🏆</div>
+            <div style="font-size:10px;font-weight:800;">WORKOUT COMPLETE</div>
+            <div class="small">42 min</div>
+            <div class="btn green" style="width:100%;margin-top:6px;">SAVE &amp; CONTINUE</div>
+          </div>
+        </div></div></div>
+        <div class="devlabel">Watch — summary</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>How the states connect</h2>
+  <p class="lede" style="margin-bottom:6px;">The happy paths are blue. The bug branch is red; the fixed branch is green.</p>
+
+  <div class="diagram">
+    <div class="dnode start"><div class="dn-title">1 · Idle</div></div>
+
+    <div class="dsplit" style="margin-top:0;">
+      <div class="dcol">
+        <div class="darrow-wrap"><div class="dlabel">start on iPhone</div><div class="darrow"></div></div>
+        <div class="dnode good" style="border-color:var(--green);"><div class="dn-title">2 · Active · connected</div><div class="dn-sub">owner: iPhone · watch mirrors</div></div>
+      </div>
+      <div class="dcol">
+        <div class="darrow-wrap"><div class="dlabel">start on Watch (phone away)</div><div class="darrow"></div></div>
+        <div class="dnode"><div class="dn-title">3 · Active · watch-owned</div><div class="dn-sub">unsynced — watch is authority</div></div>
+        <div class="darrow-wrap"><div class="dlabel">first sync → ownership transfers to iPhone</div><div class="darrow"></div></div>
+        <div class="dnode" style="border-style:dashed;"><div class="dn-title">↻ becomes State 2</div></div>
+      </div>
+    </div>
+
+    <div class="darrow-wrap"><div class="dlabel">from State 2 — iPhone becomes unreachable</div><div class="darrow"></div></div>
+    <div class="dnode"><div class="dn-title">4 · Active · disconnected</div><div class="dn-sub">owner: iPhone · watch runs a local copy</div></div>
+
+    <div class="dsplit">
+      <div class="dcol">
+        <div class="darrow-wrap"><div class="dlabel">watch reconnects, iPhone still active</div><div class="darrow green"></div></div>
+        <div class="dnode fix"><div class="dn-title">↻ back to State 2</div><div class="dn-sub">re-sync; push watch's offline progress up</div></div>
+      </div>
+      <div class="dcol">
+        <div class="darrow-wrap"><div class="dlabel">iPhone finishes while watch still off</div><div class="darrow red"></div></div>
+        <div class="dnode bug"><div class="dn-title">5 · ⚠ iPhone finished · watch stale</div></div>
+        <div class="darrow-wrap"><div class="dlabel">watch reconnects</div><div class="darrow"></div></div>
+        <div class="dnode reconcile"><div class="dn-title">RECONCILE</div><div class="dn-sub">owner = iPhone, iPhone has no active workout</div></div>
+        <div class="dsplit" style="gap:20px;">
+          <div class="dcol">
+            <div class="darrow-wrap"><div class="dlabel">FIXED behavior</div><div class="darrow green"></div></div>
+            <div class="dnode fix"><div class="dn-title">✓ watch ends its copy</div><div class="dn-sub">→ State 1 · Idle</div></div>
+          </div>
+          <div class="dcol">
+            <div class="darrow-wrap"><div class="dlabel">CURRENT behavior</div><div class="darrow red"></div></div>
+            <div class="dnode bug"><div class="dn-title">✗ watch keeps stale workout</div><div class="dn-sub">pushes isActive:true → iPhone re-hydrates → both back in a dead workout</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="darrow-wrap" style="margin-top:8px;"><div class="dlabel">from State 2 — finish workout</div><div class="darrow"></div></div>
+    <div class="dnode good" style="border-color:var(--green);"><div class="dn-title">6 · Finished · connected</div><div class="dn-sub">→ Save &amp; Continue → State 1 · Idle</div></div>
+  </div>
+
+  <h2>The reconnection decision</h2>
+  <p class="lede" style="margin-bottom:4px;">When the watch reconnects holding a local workout, it asks two questions — never one timestamp comparison.</p>
+  <table class="recon">
+    <tr><th>Who owns it?</th><th>iPhone's lifecycle state</th><th>What the watch does</th></tr>
+    <tr>
+      <td><b>iPhone</b><br><span class="small">(iPhone-started, or watch-started &amp; since synced)</span></td>
+      <td>iPhone still has the workout active</td>
+      <td><span class="verdict fix">Re-sync.</span> Push the watch's offline progress up first, then mirror the iPhone. → State&nbsp;2</td>
+    </tr>
+    <tr>
+      <td><b>iPhone</b></td>
+      <td>iPhone has <b>no</b> active workout</td>
+      <td><span class="verdict fix">End the watch's copy.</span> The owner finished it — the watch defers. → State&nbsp;1 &nbsp;<b>(the fix)</b></td>
+    </tr>
+    <tr>
+      <td><b>Watch</b><br><span class="small">(watch-started, never synced)</span></td>
+      <td>iPhone has no active workout (never saw this one)</td>
+      <td><span class="verdict fix">Push it up.</span> The iPhone adopts the workout; ownership transfers to iPhone. → State&nbsp;2</td>
+    </tr>
+    <tr style="background:rgba(255,69,58,0.05);">
+      <td colspan="2"><b>Today's code</b> — one check: <code style="font-size:11px;">phoneTimestamp &gt; localTimestamp</code></td>
+      <td><span class="verdict bug">Guesses.</span> A stale watch always looks "more recent," so it keeps its dead workout and re-infects the iPhone.</td>
+    </tr>
+  </table>
+
+  <p class="footnote">
+    Prevention layer (not shown as a state): an <b>HKWorkoutSession</b> keeps the watch app alive for the whole
+    workout, so it rarely reaches States 3–5 in the first place. The reconciliation above is what makes it correct
+    <i>when</i> a disconnect still happens.
+  </p>
+
+</div>
+</body>
+</html>
